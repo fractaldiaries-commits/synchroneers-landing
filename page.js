@@ -1,0 +1,376 @@
+/**
+ * Page behaviour: the perspective registry, the capture tabs, and the few
+ * animations that explain something rather than decorate it.
+ *
+ * The registry is built in script because it is one list of fourteen records
+ * that has to stay in the same order as the app's own picker. Hand-writing it
+ * into the markup is how the site and the app drift apart.
+ */
+
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+/* ---------------- Perspective registry ----------------
+   Mirrors INTERPRETATION_PERSPECTIVES and PERSPECTIVE_CATEGORIES in
+   src/features/interpretation/domain/perspective.ts. Adding a perspective
+   there means adding it here. */
+
+const PERSPECTIVE_CATEGORIES = [
+  'General',
+  'Depth psychology',
+  'Contemplative',
+  'Story and text',
+  'Evidence first',
+  'The commons',
+  'Symbolic tools',
+];
+
+const PERSPECTIVES = [
+  {
+    category: 'General',
+    symbol: '○',
+    title: 'General interpretation',
+    attribution: 'No named school or tradition',
+    description: 'A plain reading in your own words, before any framework is applied.',
+  },
+  {
+    category: 'Depth psychology',
+    symbol: '◐',
+    title: 'Dream Analyst',
+    attribution: 'Marie-Louise von Franz framework',
+    description: 'Personal associations, compensation, and symbolic development.',
+  },
+  {
+    category: 'Depth psychology',
+    symbol: '◒',
+    title: 'Jungian Analyst',
+    attribution: 'Carl Jung framework',
+    description: 'Archetypes, shadow, and individuation as tentative possibilities.',
+  },
+  {
+    category: 'Depth psychology',
+    symbol: '⌁',
+    title: 'Psychoanalytic Analyst',
+    attribution: 'Sigmund Freud framework',
+    description: 'Associations, conflict, wishes, and defenses without diagnosis.',
+  },
+  {
+    category: 'Depth psychology',
+    symbol: '◌',
+    title: 'Gestalt Analyst',
+    attribution: 'Fritz Perls framework',
+    description: 'Present experience, embodiment, and dialogue between inner parts.',
+  },
+  {
+    category: 'Contemplative',
+    symbol: '✿',
+    title: 'Buddhist Teacher',
+    attribution: 'Thich Nhat Hanh teachings',
+    description: 'Mindfulness, compassion, interbeing, and non-attachment.',
+  },
+  {
+    category: 'Contemplative',
+    symbol: '✦',
+    title: 'Mystical Guide',
+    attribution: 'Ram Dass teachings',
+    description: 'Witnessing, compassion, and meaning without supernatural claims.',
+  },
+  {
+    category: 'Story and text',
+    symbol: '⌘',
+    title: 'Mythologist',
+    attribution: 'Joseph Campbell framework',
+    description: 'Comparative mythology and transformation as narrative possibilities.',
+  },
+  {
+    category: 'Story and text',
+    symbol: '¶',
+    title: 'Biblical Scholar',
+    attribution: 'Historical-literary framework',
+    description: 'Textual, historical, and tradition-aware reflection without prophecy.',
+  },
+  {
+    category: 'Evidence first',
+    symbol: '△',
+    title: 'Skeptical Scientist',
+    attribution: 'Evidence-first framework',
+    description: 'Sleep, memory, emotion, coincidence, and base-rate alternatives.',
+  },
+  {
+    category: 'Evidence first',
+    symbol: '▦',
+    title: 'Pattern Researcher',
+    attribution: 'Your Synchroneers records only',
+    description: 'Owner-scoped patterns, counterexamples, and explicit uncertainty.',
+  },
+  {
+    category: 'The commons',
+    symbol: '◉',
+    title: 'Collective Reading',
+    attribution: 'Aggregated across consenting entries',
+    description: 'How the commons has read similar imagery, with your divergences named.',
+  },
+  {
+    category: 'Symbolic tools',
+    symbol: '☾',
+    title: 'Meditation / Vision',
+    attribution: 'Guided visualization framework',
+    description: 'A quiet visual meditation for noticing felt sense and possibility.',
+  },
+  {
+    category: 'Symbolic tools',
+    symbol: '✧',
+    title: 'Tarot Reading',
+    attribution: 'Tarot-inspired symbolic spread',
+    description: 'A three-card reflection, not a prediction or fixed fate.',
+  },
+];
+
+function buildRegistry() {
+  const host = document.getElementById('registry');
+  if (!host) return;
+
+  const fragment = document.createDocumentFragment();
+
+  for (const category of PERSPECTIVE_CATEGORIES) {
+    const items = PERSPECTIVES.filter((entry) => entry.category === category);
+    if (items.length === 0) continue;
+
+    const group = document.createElement('div');
+    group.className = 'registry-group reveal';
+
+    const label = document.createElement('h3');
+    label.className = 'registry-group__label';
+    label.textContent = category;
+    group.append(label);
+
+    const list = document.createElement('ul');
+    list.className = 'registry-items';
+
+    for (const item of items) {
+      const li = document.createElement('li');
+      li.className = 'registry-item';
+
+      const sigil = document.createElement('span');
+      sigil.className = 'registry-item__sigil';
+      sigil.setAttribute('aria-hidden', 'true');
+      sigil.textContent = item.symbol;
+
+      const name = document.createElement('p');
+      name.className = 'registry-item__name';
+      name.append(document.createTextNode(item.title));
+
+      const from = document.createElement('span');
+      from.className = 'registry-item__from';
+      from.textContent = item.attribution;
+      name.append(from);
+
+      const description = document.createElement('p');
+      description.className = 'registry-item__desc';
+      description.textContent = item.description;
+
+      li.append(sigil, name, description);
+      list.append(li);
+    }
+
+    group.append(list);
+    fragment.append(group);
+  }
+
+  host.append(fragment);
+}
+
+/* ---------------- Capture tabs ----------------
+   A tablist rather than four cards, because picking a kind of experience is
+   exactly the choice the capture screen asks for. Switching is a high-frequency
+   action inside the app, so the panel crossfades in one press-length step and
+   nothing waits on it. */
+
+function initTabs() {
+  const tablist = document.getElementById('typeTabs');
+  const panel = document.getElementById('capturePanel');
+  if (!tablist || !panel) return;
+
+  const tabs = Array.from(tablist.querySelectorAll('[role="tab"]'));
+  const promptTarget = panel.querySelector('[data-capture-prompt]');
+  const nameTarget = panel.querySelector('[data-capture-name]');
+
+  // Each kind carries its own accent from ENTRY_TYPE_PRESENTATION. Without
+  // this every glyph and selected row rendered in the dream violet.
+  for (const tab of tabs) tab.style.setProperty('--accent', tab.dataset.accent);
+
+  function select(tab, { focus = false } = {}) {
+    for (const other of tabs) {
+      const selected = other === tab;
+      other.setAttribute('aria-selected', String(selected));
+      other.tabIndex = selected ? 0 : -1;
+    }
+
+    panel.style.setProperty('--accent', tab.dataset.accent);
+    panel.setAttribute('aria-labelledby', tab.id);
+    if (nameTarget) nameTarget.textContent = tab.dataset.name;
+    if (promptTarget) promptTarget.textContent = tab.dataset.prompt;
+
+    if (focus) tab.focus();
+  }
+
+  tablist.addEventListener('click', (event) => {
+    const tab = event.target.closest('[role="tab"]');
+    if (tab) select(tab);
+  });
+
+  tablist.addEventListener('keydown', (event) => {
+    const current = tabs.indexOf(document.activeElement);
+    if (current === -1) return;
+
+    let next = -1;
+    if (event.key === 'ArrowDown' || event.key === 'ArrowRight') next = (current + 1) % tabs.length;
+    else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') next = (current - 1 + tabs.length) % tabs.length;
+    else if (event.key === 'Home') next = 0;
+    else if (event.key === 'End') next = tabs.length - 1;
+    if (next === -1) return;
+
+    event.preventDefault();
+    select(tabs[next], { focus: true });
+  });
+
+  select(tabs[0]);
+}
+
+/* ---------------- Reveal ----------------
+   Section headers and the loop only. Content that carries the argument is on
+   the page at load; this adds arrival, not availability. */
+
+function initReveal() {
+  const targets = document.querySelectorAll('.reveal');
+
+  if (reduceMotion.matches || !('IntersectionObserver' in window)) {
+    for (const target of targets) target.dataset.shown = 'true';
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.dataset.shown = 'true';
+        observer.unobserve(entry.target);
+      }
+    },
+    { rootMargin: '0px 0px -12% 0px', threshold: 0.12 }
+  );
+
+  for (const target of targets) observer.observe(target);
+}
+
+/* ---------------- Line drawing ----------------
+   Both of these draw a connection that did not exist a moment ago, which is
+   the one idea the page most needs to land. They run once, on first sight.
+
+   The drawn state is the CSS default and script only ever adds and removes a
+   "pending" attribute, so nothing on the page is invisible while it waits for
+   an animation, a throttled timeline, or a script that never ran. */
+
+function whenSeen(element, run) {
+  if (!element) return;
+
+  if (reduceMotion.matches || !('IntersectionObserver' in window)) {
+    run();
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        observer.disconnect();
+        run();
+      }
+    },
+    { threshold: 0.3 }
+  );
+  observer.observe(element);
+}
+
+/** Hold `path` at zero length until `host` is on screen, then let it draw. */
+function drawWhenSeen(host, path) {
+  if (!host || !path) return;
+  if (reduceMotion.matches) return;
+
+  const length = path.getTotalLength();
+  if (!Number.isFinite(length) || length === 0) return;
+
+  host.style.setProperty('--len', String(length));
+  host.dataset.draw = 'pending';
+
+  whenSeen(host, () => {
+    // One frame, so the browser registers the pending state before the
+    // transition to the default state begins.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        delete host.dataset.draw;
+      });
+    });
+  });
+}
+
+function initHeroConstellation() {
+  const svg = document.querySelector('[data-constellation]');
+  if (!svg) return;
+  drawWhenSeen(svg, svg.querySelector('.constellation-line'));
+}
+
+function initLoop() {
+  const loop = document.querySelector('.loop');
+  const steps = Array.from(document.querySelectorAll('.loop-step'));
+  if (!loop || steps.length === 0) return;
+
+  const path = document.getElementById('loopPath');
+  // The track is hidden below 1000px, where the steps stack and a horizontal
+  // line would be describing a layout that is not on screen.
+  if (path && path.getBoundingClientRect().width > 0) {
+    drawWhenSeen(loop, path);
+  }
+
+  whenSeen(loop, () => {
+    steps.forEach((step, index) => {
+      if (reduceMotion.matches) {
+        step.dataset.lit = 'true';
+        return;
+      }
+      window.setTimeout(() => {
+        step.dataset.lit = 'true';
+      }, 180 + index * 190);
+    });
+  });
+}
+
+/* ---------------- Masthead ---------------- */
+
+function initMasthead() {
+  const masthead = document.getElementById('masthead');
+  if (!masthead) return;
+
+  const sentinel = document.createElement('div');
+  sentinel.style.cssText = 'position:absolute;top:0;left:0;width:1px;height:1px;';
+  document.body.prepend(sentinel);
+
+  if (!('IntersectionObserver' in window)) return;
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      masthead.dataset.stuck = String(!entry.isIntersecting);
+    },
+    { threshold: 0 }
+  );
+  observer.observe(sentinel);
+}
+
+/* ---------------- Boot ---------------- */
+
+buildRegistry();
+initTabs();
+initMasthead();
+initHeroConstellation();
+initLoop();
+// Reveal runs last so the registry groups it just built are included.
+initReveal();

@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Synchroneers OG builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap" />
+<style>
+  body { margin: 0; background: #05070f; display: grid; place-items: center; min-height: 100vh; }
+  canvas { box-shadow: 0 20px 60px rgba(0,0,0,.6); max-width: 96vw; height: auto; }
+</style>
+</head>
+<body>
+<canvas id="og" width="1200" height="630"></canvas>
+<script type="module">
+/**
+ * Draws landing/assets/og.jpg from the same catalogue the page uses, so the
+ * share card is the same patch of sky the hero opens on rather than a
+ * separate picture that will drift out of step with it.
+ *
+ * Open this file from the landing server and read `window.__ogDataUrl`.
+ * tools/write-og.mjs does exactly that and writes the file.
+ */
+import { CONSTELLATIONS, SEGMENTS_B64, STARS_B64, STAR_COUNT } from '../sky-data.js';
+
+const W = 1200;
+const H = 630;
+
+// The same field the hero opens on: Orion, with Taurus and Canis Major in frame.
+const RA0 = 84;
+const DEC0 = 4;
+const SCALE = 980;
+
+const canvas = document.getElementById('og');
+const ctx = canvas.getContext('2d');
+
+const rad = (d) => (d * Math.PI) / 180;
+
+function decode(text) {
+  const binary = atob(text);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return bytes;
+}
+
+/** Gnomonic projection about (RA0, DEC0). Returns null behind the tangent plane. */
+function project(ra, dec) {
+  const dRa = rad(ra - RA0);
+  const d = rad(dec);
+  const d0 = rad(DEC0);
+  const cosC = Math.sin(d0) * Math.sin(d) + Math.cos(d0) * Math.cos(d) * Math.cos(dRa);
+  if (cosC <= 0.25) return null;
+  const x = (Math.cos(d) * Math.sin(dRa)) / cosC;
+  const y = (Math.cos(d0) * Math.sin(d) - Math.sin(d0) * Math.cos(d) * Math.cos(dRa)) / cosC;
+  return [W / 2 + x * SCALE, H / 2 - y * SCALE];
+}
+
+const raw = decode(STARS_B64);
+const view = new DataView(raw.buffer);
+const stars = [];
+for (let i = 0; i < STAR_COUNT; i++) {
+  const o = i * 6;
+  stars.push({
+    ra: (view.getUint16(o, true) / 65535) * 360,
+    dec: (view.getInt16(o + 2, true) / 32767) * 90,
+    mag: view.getUint8(o + 4) / 20 - 2,
+  });
+}
+
+const segBytes = decode(SEGMENTS_B64);
+const segments = new Uint16Array(segBytes.buffer, segBytes.byteOffset, segBytes.byteLength / 2);
+
+await document.fonts.ready;
+
+const logo = new Image();
+logo.src = '../assets/logo.png';
+await logo.decode();
+
+/* ---- ground ---- */
+ctx.fillStyle = '#070b1d';
+ctx.fillRect(0, 0, W, H);
+
+const wash = (x, y, r, colour) => {
+  const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+  g.addColorStop(0, colour);
+  g.addColorStop(1, 'rgba(7,11,29,0)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+};
+wash(W * 0.82, H * 0.08, 760, 'rgba(154,124,255,0.3)');
+wash(W * 0.1, H * 0.95, 660, 'rgba(74,91,215,0.2)');
+
+/* ---- stars ---- */
+for (const star of stars) {
+  const point = project(star.ra, star.dec);
+  if (!point) continue;
+  const [x, y] = point;
+  if (x < -40 || x > W + 40 || y < -40 || y > H + 40) continue;
+
+  const rank = Math.max(0, Math.min(1, (7.5 - star.mag) / 9));
+  const radius = 0.7 + 3.6 * Math.pow(rank, 2.1);
+  const alpha = 0.34 + 0.66 * Math.pow(rank, 1.0);
+
+  const g = ctx.createRadialGradient(x, y, 0, x, y, Math.max(1.4, radius * 3));
+  g.addColorStop(0, `rgba(255,255,255,${alpha})`);
+  g.addColorStop(0.35, `rgba(226,234,255,${alpha * 0.35})`);
+  g.addColorStop(1, 'rgba(226,234,255,0)');
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.arc(x, y, Math.max(1.4, radius * 3), 0, Math.PI * 2);
+  ctx.fill();
+}
+
+/* ---- constellation figures ---- */
+ctx.strokeStyle = 'rgba(154,124,255,0.52)';
+ctx.lineWidth = 1;
+ctx.lineCap = 'round';
+for (let i = 0; i < segments.length; i += 2) {
+  const a = project(stars[segments[i]].ra, stars[segments[i]].dec);
+  const b = project(stars[segments[i + 1]].ra, stars[segments[i + 1]].dec);
+  if (!a || !b) continue;
+  ctx.beginPath();
+  ctx.moveTo(a[0], a[1]);
+  ctx.lineTo(b[0], b[1]);
+  ctx.stroke();
+}
+
+/* ---- constellation names ---- */
+ctx.font = '500 15px Inter, system-ui, sans-serif';
+ctx.fillStyle = 'rgba(185,164,255,0.46)';
+ctx.textAlign = 'center';
+for (const constellation of CONSTELLATIONS) {
+  const point = project(constellation.ra, constellation.dec);
+  if (!point) continue;
+  const [x, y] = point;
+  if (x < 90 || x > W - 90 || y < 60 || y > H - 60) continue;
+  ctx.save();
+  ctx.letterSpacing = '2.5px';
+  ctx.fillText(constellation.latin || constellation.name, x, y);
+  ctx.restore();
+}
+
+/* ---- scrim, so the type sits on the darkest part ---- */
+const scrim = ctx.createRadialGradient(W / 2, H * 0.54, 0, W / 2, H * 0.54, W * 0.62);
+scrim.addColorStop(0, 'rgba(7,11,29,0.82)');
+scrim.addColorStop(0.45, 'rgba(7,11,29,0.58)');
+scrim.addColorStop(0.78, 'rgba(7,11,29,0.18)');
+scrim.addColorStop(1, 'rgba(7,11,29,0)');
+ctx.fillStyle = scrim;
+ctx.fillRect(0, 0, W, H);
+
+/* ---- wordmark ---- */
+ctx.drawImage(logo, 54, 46, 44, 44);
+ctx.textAlign = 'left';
+ctx.font = '600 30px Inter, system-ui, sans-serif';
+ctx.fillStyle = '#f7f8ff';
+ctx.fillText('Synchroneers', 112, 79);
+
+/* ---- headline ---- */
+ctx.textAlign = 'center';
+ctx.font = '600 52px Inter, system-ui, sans-serif';
+ctx.fillStyle = '#f7f8ff';
+ctx.fillText('Write down the strange things.', W / 2, H / 2 + 2);
+ctx.fillText('Then find out which ones hold up.', W / 2, H / 2 + 70);
+
+/* ---- footer line ---- */
+ctx.font = '400 17px Inter, system-ui, sans-serif';
+ctx.fillStyle = 'rgba(143,155,194,0.95)';
+ctx.save();
+ctx.letterSpacing = '0.5px';
+ctx.fillText('Dreams · Synchronicities · Visions · Readings', W / 2, H - 62);
+ctx.restore();
+
+window.__ogDataUrl = canvas.toDataURL('image/jpeg', 0.92);
+window.__ogReady = true;
+console.log('og ready', window.__ogDataUrl.length);
+</script>
+</body>
+</html>
