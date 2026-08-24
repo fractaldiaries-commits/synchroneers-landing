@@ -7,12 +7,15 @@
  * into the markup is how the site and the app drift apart.
  */
 
+import { sigilMarkup } from './sigils.js';
+
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 /* ---------------- Perspective registry ----------------
    Mirrors INTERPRETATION_PERSPECTIVES and PERSPECTIVE_CATEGORIES in
-   src/features/interpretation/domain/perspective.ts. Adding a perspective
-   there means adding it here. */
+   src/features/interpretation/domain/perspective.ts, and the ids below key
+   the sigils ported from perspective-sigil.tsx. Adding a perspective there
+   means adding it in both places here. */
 
 const PERSPECTIVE_CATEGORIES = [
   'General',
@@ -26,99 +29,99 @@ const PERSPECTIVE_CATEGORIES = [
 
 const PERSPECTIVES = [
   {
+    id: 'general_interpretation',
     category: 'General',
-    symbol: '○',
     title: 'General interpretation',
     attribution: 'No named school or tradition',
     description: 'A plain reading in your own words, before any framework is applied.',
   },
   {
+    id: 'dream_analyst_von_franz',
     category: 'Depth psychology',
-    symbol: '◐',
     title: 'Dream Analyst',
     attribution: 'Marie-Louise von Franz framework',
     description: 'Personal associations, compensation, and symbolic development.',
   },
   {
+    id: 'jungian',
     category: 'Depth psychology',
-    symbol: '◒',
     title: 'Jungian Analyst',
     attribution: 'Carl Jung framework',
     description: 'Archetypes, shadow, and individuation as tentative possibilities.',
   },
   {
+    id: 'psychoanalytic_freud',
     category: 'Depth psychology',
-    symbol: '⌁',
     title: 'Psychoanalytic Analyst',
     attribution: 'Sigmund Freud framework',
     description: 'Associations, conflict, wishes, and defenses without diagnosis.',
   },
   {
+    id: 'gestalt_perls',
     category: 'Depth psychology',
-    symbol: '◌',
     title: 'Gestalt Analyst',
     attribution: 'Fritz Perls framework',
     description: 'Present experience, embodiment, and dialogue between inner parts.',
   },
   {
+    id: 'buddhist_thich_nhat_hanh',
     category: 'Contemplative',
-    symbol: '✿',
     title: 'Buddhist Teacher',
     attribution: 'Thich Nhat Hanh teachings',
     description: 'Mindfulness, compassion, interbeing, and non-attachment.',
   },
   {
+    id: 'mystical_ram_dass',
     category: 'Contemplative',
-    symbol: '✦',
     title: 'Mystical Guide',
     attribution: 'Ram Dass teachings',
     description: 'Witnessing, compassion, and meaning without supernatural claims.',
   },
   {
+    id: 'mythologist_campbell',
     category: 'Story and text',
-    symbol: '⌘',
     title: 'Mythologist',
     attribution: 'Joseph Campbell framework',
     description: 'Comparative mythology and transformation as narrative possibilities.',
   },
   {
+    id: 'biblical_scholar',
     category: 'Story and text',
-    symbol: '¶',
     title: 'Biblical Scholar',
     attribution: 'Historical-literary framework',
     description: 'Textual, historical, and tradition-aware reflection without prophecy.',
   },
   {
+    id: 'skeptical_scientist',
     category: 'Evidence first',
-    symbol: '△',
     title: 'Skeptical Scientist',
     attribution: 'Evidence-first framework',
     description: 'Sleep, memory, emotion, coincidence, and base-rate alternatives.',
   },
   {
+    id: 'synchroneers_pattern_researcher',
     category: 'Evidence first',
-    symbol: '▦',
     title: 'Pattern Researcher',
     attribution: 'Your Synchroneers records only',
     description: 'Owner-scoped patterns, counterexamples, and explicit uncertainty.',
   },
   {
+    id: 'collective_commons',
     category: 'The commons',
-    symbol: '◉',
     title: 'Collective Reading',
     attribution: 'Aggregated across consenting entries',
     description: 'How the commons has read similar imagery, with your divergences named.',
   },
   {
+    id: 'meditation_vision',
     category: 'Symbolic tools',
-    symbol: '☾',
     title: 'Meditation / Vision',
     attribution: 'Guided visualization framework',
     description: 'A quiet visual meditation for noticing felt sense and possibility.',
   },
   {
+    id: 'tarot_reading',
     category: 'Symbolic tools',
-    symbol: '✧',
     title: 'Tarot Reading',
     attribution: 'Tarot-inspired symbolic spread',
     description: 'A three-card reflection, not a prediction or fixed fate.',
@@ -150,10 +153,12 @@ function buildRegistry() {
       const li = document.createElement('li');
       li.className = 'registry-item';
 
+      // The markup is a static template from sigils.js, not anything a
+      // reader can influence, so innerHTML is the readable way to place it.
       const sigil = document.createElement('span');
       sigil.className = 'registry-item__sigil';
       sigil.setAttribute('aria-hidden', 'true');
-      sigil.textContent = item.symbol;
+      sigil.innerHTML = sigilMarkup(item.id);
 
       const name = document.createElement('p');
       name.className = 'registry-item__name';
