@@ -7,9 +7,9 @@
  * circles and lines rather than illustration assets, which is why they port at
  * all: there is nothing to export and nothing to keep in sync but geometry.
  *
- * Two deliberate differences from the app, both noted where they occur:
- * the accents are remapped off the app's cyan, which the brand guidelines rule
- * out, and the plain-reading circle is centred.
+ * One deliberate difference from the app, noted where it occurs: the accents
+ * are remapped off the app's cyan, which the brand guidelines rule out. The
+ * geometry is otherwise identical.
  */
 
 /**
@@ -59,10 +59,6 @@ const STROKE = 'fill="none" stroke="currentColor" stroke-width="1.6"';
 const GLYPHS = {
   // The general reading has no school behind it, so its mark is the plain
   // circle the other glyphs are all variations on.
-  //
-  // The app draws this one at cx/cy 12 with r 7 while every other glyph is
-  // built around 20,20 in the same 40x40 box, so in the picker it sits high
-  // and left of its own disc. Centred here; the app is worth fixing to match.
   general_interpretation: () => `<circle cx="20" cy="20" r="11" ${STROKE} />`,
 
   // Personal association and symbolic development: a crescent held inside the
