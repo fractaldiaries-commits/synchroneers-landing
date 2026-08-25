@@ -239,8 +239,7 @@ p {
   /* Painted before the sky boots so the first frame is never white. */
   background:
     radial-gradient(120% 80% at 78% 8%, rgba(154, 124, 255, 0.16), transparent 62%),
-    radial-gradient(90% 70% at 12% 92%, rgba(122, 140, 240, 0.1), transparent 60%),
-    var(--ink);
+    radial-gradient(90% 70% at 12% 92%, rgba(122, 140, 240, 0.1), transparent 60%), var(--ink);
 }
 
 /* Constellation names, positioned each frame by sky.js. */
@@ -484,21 +483,11 @@ p {
 /* The veil arrives and leaves on a gradient, so the sky is never cut
    by a ruled horizontal line where the content column begins. */
 .section--enter {
-  background: linear-gradient(
-    180deg,
-    rgba(7, 11, 29, 0) 0,
-    var(--veil) 200px,
-    var(--veil) 100%
-  );
+  background: linear-gradient(180deg, rgba(7, 11, 29, 0) 0, var(--veil) 200px, var(--veil) 100%);
 }
 
 .section--exit {
-  background: linear-gradient(
-    0deg,
-    rgba(7, 11, 29, 0) 0,
-    var(--veil) 200px,
-    var(--veil) 100%
-  );
+  background: linear-gradient(0deg, rgba(7, 11, 29, 0) 0, var(--veil) 200px, var(--veil) 100%);
 }
 
 .wrap {
@@ -792,7 +781,6 @@ p {
   align-items: start;
   margin-top: var(--block-gap);
 }
-
 
 .type-list {
   display: grid;
@@ -1283,13 +1271,27 @@ p {
   transform: scale(0.5);
 }
 
-.constellation-node:nth-child(1) { transition-delay: 180ms; }
-.constellation-node:nth-child(2) { transition-delay: 250ms; }
-.constellation-node:nth-child(3) { transition-delay: 320ms; }
-.constellation-node:nth-child(4) { transition-delay: 390ms; }
-.constellation-node:nth-child(5) { transition-delay: 460ms; }
-.constellation-node:nth-child(6) { transition-delay: 530ms; }
-.constellation-node:nth-child(7) { transition-delay: 600ms; }
+.constellation-node:nth-child(1) {
+  transition-delay: 180ms;
+}
+.constellation-node:nth-child(2) {
+  transition-delay: 250ms;
+}
+.constellation-node:nth-child(3) {
+  transition-delay: 320ms;
+}
+.constellation-node:nth-child(4) {
+  transition-delay: 390ms;
+}
+.constellation-node:nth-child(5) {
+  transition-delay: 460ms;
+}
+.constellation-node:nth-child(6) {
+  transition-delay: 530ms;
+}
+.constellation-node:nth-child(7) {
+  transition-delay: 600ms;
+}
 
 /* ============================================================
    Terms

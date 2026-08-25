@@ -21,7 +21,9 @@ const out = join(root, 'dist', 'site');
 
 const origin = (process.argv[2] ?? '').replace(/\/+$/, '');
 if (!origin) {
-  console.error('usage: node landing/tools/stage.mjs <origin>   e.g. https://synchroneers.pages.dev');
+  console.error(
+    'usage: node landing/tools/stage.mjs <origin>   e.g. https://synchroneers.pages.dev',
+  );
   process.exit(1);
 }
 
@@ -39,7 +41,8 @@ let html = readFileSync(join(root, 'index.html'), 'utf8');
 html = html.replaceAll('content="/assets/og.jpg"', () => `content="${origin}/assets/og.jpg"`);
 html = html.replace(
   '<meta property="og:type" content="website" />',
-  () => `<meta property="og:type" content="website" />\n<meta property="og:url" content="${origin}/" />`
+  () =>
+    `<meta property="og:type" content="website" />\n<meta property="og:url" content="${origin}/" />`,
 );
 
 if (html.includes('content="/assets/og.jpg"')) {
@@ -71,7 +74,7 @@ writeFileSync(
 
 /index.html
   Cache-Control: public, max-age=0, must-revalidate
-`
+`,
 );
 
 console.log(`staged ${out} against ${origin}`);

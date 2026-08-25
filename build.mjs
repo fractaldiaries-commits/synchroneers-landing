@@ -29,7 +29,7 @@ writeFileSync(temporary, "import './../sky.js';\nimport './../page.js';\n");
 const bundle = execFileSync(
   'npx',
   ['--yes', 'esbuild', temporary, '--bundle', '--format=esm', '--minify', '--target=es2022'],
-  { cwd: root, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }
+  { cwd: root, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 },
 );
 rmSync(temporary);
 
@@ -43,14 +43,11 @@ let html = readFileSync(join(root, 'index.html'), 'utf8');
 // URI both contain `$` sequences, and `$\`` in a replacement string splices the
 // rest of the document back in.
 html = html
-  .replace(
-    '<link rel="stylesheet" href="styles.css" />',
-    () => `<style>\n${styles}\n</style>`
-  )
+  .replace('<link rel="stylesheet" href="styles.css" />', () => `<style>\n${styles}\n</style>`)
   .replaceAll('assets/logo.png', () => logoUri)
   .replace(
     /<script type="module" src="sky\.js"><\/script>\s*<script type="module" src="page\.js"><\/script>/,
-    () => `<script type="module">\n${bundle}\n</script>`
+    () => `<script type="module">\n${bundle}\n</script>`,
   );
 
 if (html.includes('src="sky.js"') || html.includes('href="styles.css"')) {

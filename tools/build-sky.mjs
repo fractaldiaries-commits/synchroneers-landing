@@ -199,6 +199,8 @@ export const CONSTELLATIONS = ${JSON.stringify(constellations)};
 writeFileSync(out, module);
 
 console.log(`stars           ${stars.length} (mag <= ${MAG_LIMIT})`);
-console.log(`figure segments ${segments.length / 2} across ${constellations.length} constellations`);
+console.log(
+  `figure segments ${segments.length / 2} across ${constellations.length} constellations`,
+);
 console.log(`unmatched HIPs  ${missing}`);
 console.log(`wrote           ${out} — ${(module.length / 1024).toFixed(0)} KB`);

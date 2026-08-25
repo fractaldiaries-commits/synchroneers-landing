@@ -39,8 +39,7 @@ function decodeBase64(text) {
  */
 function colourFromIndex(bv) {
   const clamped = Math.max(-0.4, Math.min(2.0, bv));
-  const temperature =
-    4600 * (1 / (0.92 * clamped + 1.7) + 1 / (0.92 * clamped + 0.62));
+  const temperature = 4600 * (1 / (0.92 * clamped + 1.7) + 1 / (0.92 * clamped + 0.62));
   const t = temperature / 100;
 
   let r;
@@ -77,7 +76,7 @@ function toVector(raDegrees, decDegrees, radius, target) {
   target.set(
     radius * cosDec * Math.cos(ra),
     radius * Math.sin(dec),
-    -radius * cosDec * Math.sin(ra)
+    -radius * cosDec * Math.sin(ra),
   );
   return target;
 }
@@ -206,7 +205,7 @@ function boot(canvas) {
           gl_FragColor = vec4(color, 1.0);
         }
       `,
-    })
+    }),
   );
   backdrop.frustumCulled = false;
   bgScene.add(backdrop);
@@ -336,14 +335,11 @@ function boot(canvas) {
     const decP = NGP_DEC * toRad;
 
     const sinDec =
-      Math.sin(bRad) * Math.sin(decP) +
-      Math.cos(bRad) * Math.cos(decP) * Math.cos(dLon);
+      Math.sin(bRad) * Math.sin(decP) + Math.cos(bRad) * Math.cos(decP) * Math.cos(dLon);
     const dec = Math.asin(Math.max(-1, Math.min(1, sinDec)));
 
     const y = Math.cos(bRad) * Math.sin(dLon);
-    const x =
-      Math.sin(bRad) * Math.cos(decP) -
-      Math.cos(bRad) * Math.sin(decP) * Math.cos(dLon);
+    const x = Math.sin(bRad) * Math.cos(decP) - Math.cos(bRad) * Math.sin(decP) * Math.cos(dLon);
 
     const ra = NGP_RA + (Math.atan2(y, x) * 180) / Math.PI;
     return [((ra % 360) + 360) % 360, (dec * 180) / Math.PI];
@@ -418,7 +414,7 @@ function boot(canvas) {
           gl_FragColor = vec4(uColor, alpha);
         }
       `,
-    })
+    }),
   );
   dust.frustumCulled = false;
   sky.add(dust);
@@ -431,7 +427,7 @@ function boot(canvas) {
   const segmentIndices = new Uint16Array(
     segmentBytes.buffer,
     segmentBytes.byteOffset,
-    segmentBytes.byteLength / 2
+    segmentBytes.byteLength / 2,
   );
   const SEGMENTS = segmentIndices.length / 2;
 
@@ -479,7 +475,7 @@ function boot(canvas) {
           gl_FragColor = vec4(uColor, alpha);
         }
       `,
-    })
+    }),
   );
   figures.frustumCulled = false;
   sky.add(figures);
@@ -534,10 +530,7 @@ function boot(canvas) {
         continue;
       }
 
-      entry.label.projected
-        .copy(entry.label.world)
-        .multiplyScalar(SPHERE)
-        .project(camera);
+      entry.label.projected.copy(entry.label.world).multiplyScalar(SPHERE).project(camera);
 
       const x = (entry.label.projected.x * 0.5 + 0.5) * width;
       const y = (-entry.label.projected.y * 0.5 + 0.5) * height;
@@ -549,9 +542,7 @@ function boot(canvas) {
 
       node.textContent = entry.label.name;
       node.style.transform = `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
-      node.style.opacity = String(
-        Math.min(0.5, (entry.alignment - 0.9) * 6) * figureOpacity
-      );
+      node.style.opacity = String(Math.min(0.5, (entry.alignment - 0.9) * 6) * figureOpacity);
     }
   }
 
@@ -586,7 +577,7 @@ function boot(canvas) {
           gl_FragColor = vec4(color, alpha);
         }
       `,
-    })
+    }),
   );
   shootingStar.visible = false;
   shootingStar.frustumCulled = false;

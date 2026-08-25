@@ -229,7 +229,8 @@ function initTabs() {
 
     let next = -1;
     if (event.key === 'ArrowDown' || event.key === 'ArrowRight') next = (current + 1) % tabs.length;
-    else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') next = (current - 1 + tabs.length) % tabs.length;
+    else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft')
+      next = (current - 1 + tabs.length) % tabs.length;
     else if (event.key === 'Home') next = 0;
     else if (event.key === 'End') next = tabs.length - 1;
     if (next === -1) return;
@@ -261,7 +262,7 @@ function initReveal() {
         observer.unobserve(entry.target);
       }
     },
-    { rootMargin: '0px 0px -12% 0px', threshold: 0.12 }
+    { rootMargin: '0px 0px -12% 0px', threshold: 0.12 },
   );
 
   for (const target of targets) observer.observe(target);
@@ -291,7 +292,7 @@ function whenSeen(element, run) {
         run();
       }
     },
-    { threshold: 0.3 }
+    { threshold: 0.3 },
   );
   observer.observe(element);
 }
@@ -342,9 +343,12 @@ function initLoop() {
         step.dataset.lit = 'true';
         return;
       }
-      window.setTimeout(() => {
-        step.dataset.lit = 'true';
-      }, 180 + index * 190);
+      window.setTimeout(
+        () => {
+          step.dataset.lit = 'true';
+        },
+        180 + index * 190,
+      );
     });
   });
 }
@@ -365,7 +369,7 @@ function initMasthead() {
     ([entry]) => {
       masthead.dataset.stuck = String(!entry.isIntersecting);
     },
-    { threshold: 0 }
+    { threshold: 0 },
   );
   observer.observe(sentinel);
 }

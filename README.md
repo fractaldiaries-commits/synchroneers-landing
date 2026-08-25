@@ -67,7 +67,8 @@ and has no counterpart in the app yet.
 To check the three rules hold, load the page and run:
 
 ```js
-[...document.querySelectorAll('*')].filter(e => getComputedStyle(e).textTransform === 'uppercase').length
+[...document.querySelectorAll('*')].filter((e) => getComputedStyle(e).textTransform === 'uppercase')
+  .length;
 ```
 
 That must be `0`.
@@ -86,7 +87,7 @@ node landing/tools/write-og.mjs
 Then open `http://localhost:4319/tools/og.html` and run this in its console:
 
 ```js
-fetch('http://localhost:4320/og', { method: 'POST', body: window.__ogDataUrl })
+fetch('http://localhost:4320/og', { method: 'POST', body: window.__ogDataUrl });
 ```
 
 **Before going live**, change the two `og:image` and `twitter:image` values in
@@ -139,10 +140,10 @@ In the Cloudflare dashboard: **Workers & Pages → synchroneers → Custom domai
 Then at GoDaddy: **My Products → Domains → the domain → DNS → Manage Zones**,
 and add what Cloudflare asked for. Typically:
 
-| Type | Name | Value |
-| --- | --- | --- |
-| `CNAME` | `www` | `synchroneers.pages.dev` |
-| `CNAME` or `A` | `@` | whatever Cloudflare specifies for the apex |
+| Type           | Name  | Value                                      |
+| -------------- | ----- | ------------------------------------------ |
+| `CNAME`        | `www` | `synchroneers.pages.dev`                   |
+| `CNAME` or `A` | `@`   | whatever Cloudflare specifies for the apex |
 
 Delete GoDaddy's parked `A` record for `@` first, or the two conflict and the
 old placeholder keeps resolving.

@@ -59,5 +59,5 @@ for (const file of files) {
 
 console.log(
   `\n${files.length} screenshots — ${(before / 1024 / 1024).toFixed(1)} MB in, ` +
-    `${(after / 1024).toFixed(0)} KB out`
+    `${(after / 1024).toFixed(0)} KB out`,
 );
