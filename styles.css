@@ -602,15 +602,6 @@ p {
   gap: var(--s-3) var(--s-6);
 }
 
-.hero-note {
-  max-width: 52ch;
-  margin: 0;
-  font-family: var(--font);
-  font-size: 0.86rem;
-  line-height: 1.6;
-  color: var(--amber);
-}
-
 .scroll-cue {
   position: absolute;
   left: 50%;
