@@ -611,22 +611,6 @@ p {
   color: var(--amber);
 }
 
-.hero-meta {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--s-2) var(--s-5);
-  margin: 0;
-  padding: 0;
-  font-family: var(--font);
-  font-size: 0.86rem;
-  color: var(--text-subtle);
-}
-
-.hero-meta li {
-  list-style: none;
-}
-
 .scroll-cue {
   position: absolute;
   left: 50%;
