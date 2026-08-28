@@ -1613,3 +1613,224 @@ p {
     display: none;
   }
 }
+
+/* ============================================================
+   Store badges
+
+   The marks are Apple's and Google's, inlined as SVG rather than
+   fetched: the page ships self-contained, and a store logo that
+   fails to load is worse than no badge at all.
+
+   The reference for these is a black pill on white. This page is
+   dark, so the fill is inverted rather than copied - a black pill
+   on --ink is invisible. Android is not shipping yet, so its badge
+   is stated as unavailable rather than dressed up as a link.
+   ============================================================ */
+
+.store-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  align-items: stretch;
+}
+
+.store-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  padding: 13px 22px;
+  border: 1px solid transparent;
+  border-radius: var(--r-pill);
+  text-decoration: none;
+  line-height: 1.05;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.store-badge__mark {
+  flex: none;
+  display: block;
+}
+
+.store-badge__name {
+  font-size: 1.06rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+/* Live: the one real call to action, so it carries the solid fill. */
+.store-badge--live {
+  background: var(--white);
+  color: var(--ink);
+}
+
+.store-badge--live:hover,
+.store-badge--live:focus-visible {
+  transform: translateY(-2px);
+  background: #fff;
+}
+
+/* Unavailable: outlined and muted. Not a link, and not focusable,
+   because there is nothing on the other side of it yet. */
+.store-badge--soon {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text-subtle);
+  cursor: default;
+}
+
+.store-badge--soon .store-badge__mark {
+  opacity: 0.55;
+}
+
+.store-badge__soon-tag {
+  margin-left: 3px;
+  padding: 3px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  white-space: nowrap;
+}
+
+@media (max-width: 420px) {
+  .store-badges {
+    width: 100%;
+  }
+
+  .store-badge {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .store-badge:hover,
+  .store-badge:focus-visible {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   App screenshots
+
+   Real captures from the simulator, one per section and never the
+   same shot twice: a landing page that repeats a screenshot is
+   telling you it only has one screen worth showing.
+
+   The frame is drawn in CSS rather than baked into the PNG, so the
+   raw capture stays a plain screen and the bezel can change without
+   re-shooting. Widths are capped in ch-free absolute units because
+   a phone has a real aspect ratio to respect.
+   ============================================================ */
+
+.showcase {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+  gap: var(--s-9);
+  align-items: center;
+}
+
+.showcase--flip .showcase__art {
+  order: -1;
+}
+
+.showcase__art {
+  display: flex;
+  justify-content: center;
+}
+
+/* The device. `--shot-w` is the only knob; height follows the image. */
+.shot {
+  --shot-w: 280px;
+  position: relative;
+  width: var(--shot-w);
+  max-width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 34px;
+  background: linear-gradient(180deg, rgba(154, 124, 255, 0.12), rgba(7, 11, 29, 0.6));
+  box-shadow:
+    0 30px 70px -30px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(154, 124, 255, 0.06);
+}
+
+.shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 27px;
+  /* The capture already has the device's own corners; this keeps the
+     edge crisp where the bezel meets it. */
+  background: var(--ink);
+}
+
+.shot__caption {
+  margin-top: var(--s-4);
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: var(--text-subtle);
+  text-align: center;
+}
+
+/* A row of shots, for sections that show a sequence rather than one
+   screen. Scrolls sideways on small screens instead of shrinking the
+   phones past legibility. */
+.shot-row {
+  display: flex;
+  gap: var(--s-6);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.shot-row .shot {
+  --shot-w: 240px;
+}
+
+@media (max-width: 1000px) {
+  .showcase {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-8);
+  }
+
+  /* Stacked, the art always follows the words it illustrates. */
+  .showcase--flip .showcase__art {
+    order: 0;
+  }
+
+  .shot {
+    --shot-w: 260px;
+  }
+}
+
+@media (max-width: 720px) {
+  .shot-row {
+    gap: var(--s-5);
+  }
+
+  .shot-row .shot {
+    --shot-w: 200px;
+  }
+}
+
+@media (max-width: 420px) {
+  .shot {
+    --shot-w: min(240px, 78vw);
+    padding: 6px;
+    border-radius: 28px;
+  }
+
+  .shot img {
+    border-radius: 23px;
+  }
+
+  .shot-row .shot {
+    --shot-w: min(220px, 70vw);
+  }
+}

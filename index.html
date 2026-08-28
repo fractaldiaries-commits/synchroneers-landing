@@ -81,18 +81,59 @@
             </p>
 
             <div class="hero-actions">
-              <a class="btn btn--primary" href="https://apps.apple.com/app/id6751279447">
-                Download free
-                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <path
-                    d="M3 8h10M9 4l4 4-4 4"
-                    stroke="currentColor"
-                    stroke-width="1.7"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </a>
+              <div class="store-badges">
+                <a
+                  class="store-badge store-badge--live"
+                  href="https://apps.apple.com/app/id6751279447"
+                >
+                  <svg
+                    class="store-badge__mark"
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M17.564 12.75c-.024-2.69 2.196-3.98 2.296-4.043-1.25-1.83-3.194-2.08-3.885-2.108-1.654-.167-3.23.974-4.07.974-.837 0-2.132-.95-3.505-.924-1.803.026-3.466 1.048-4.394 2.66-1.874 3.25-.479 8.062 1.345 10.7.891 1.29 1.954 2.74 3.35 2.688 1.345-.053 1.853-.87 3.478-.87 1.626 0 2.083.87 3.505.844 1.447-.024 2.363-1.315 3.248-2.61 1.024-1.497 1.446-2.946 1.47-3.02-.032-.014-2.82-1.083-2.848-4.29zM14.95 4.9c.742-.9 1.243-2.152 1.106-3.4-1.07.043-2.365.712-3.132 1.61-.688.796-1.29 2.07-1.128 3.292 1.194.092 2.412-.607 3.154-1.502z"
+                    />
+                  </svg>
+                  <span class="store-badge__name">App Store</span>
+                </a>
+
+                <span
+                  class="store-badge store-badge--soon"
+                  role="note"
+                  aria-label="Google Play: coming soon"
+                >
+                  <svg
+                    class="store-badge__mark"
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M3.32 1.7A1.62 1.62 0 0 0 3 2.67v18.66c0 .36.11.69.3.96l10.03-10.3z"
+                      fill="#00A0FF"
+                    />
+                    <path
+                      d="M17.02 15.3l-3.69-3.31 3.7-3.3 4.16 2.36c1.08.62 1.08 2.18 0 2.8z"
+                      fill="#FFBC00"
+                    />
+                    <path
+                      d="M17.03 15.3L13.33 12l-10.03 10.3c.44.43 1.11.49 1.65.18z"
+                      fill="#FF3A44"
+                    />
+                    <path
+                      d="M17.03 8.7L4.95 1.83a1.23 1.23 0 0 0-1.63.17L13.33 12z"
+                      fill="#00C853"
+                    />
+                  </svg>
+                  <span class="store-badge__name">Google Play</span>
+                  <span class="store-badge__soon-tag">Coming soon</span>
+                </span>
+              </div>
               <a class="text-link" href="#loop">
                 What is a synchronicity?
                 <span class="arrow" aria-hidden="true">↓</span>
@@ -173,6 +214,22 @@
                   <p>You record the outcome. The journal keeps score, not the app.</p>
                 </li>
               </ol>
+            </div>
+
+            <div class="showcase__art reveal" data-delay="2">
+              <figure class="shot">
+                <img
+                  src="assets/app/01-home.webp"
+                  alt="The app's home screen: tonight's moon phase, and the four kinds of experience you can record - dream, synchronicity, vision, and reading."
+                  width="640"
+                  height="1391"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <figcaption class="shot__caption">
+                  Where the loop starts: the sky tonight, and four ways in.
+                </figcaption>
+              </figure>
             </div>
           </div>
         </section>
@@ -294,6 +351,22 @@
                 </div>
               </div>
             </div>
+
+            <div class="showcase__art reveal" data-delay="2">
+              <figure class="shot">
+                <img
+                  src="assets/app/04-journal.webp"
+                  alt="The journal: ten entries on a timeline, each tagged by kind, with the time it happened and the time it was logged."
+                  width="640"
+                  height="1391"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <figcaption class="shot__caption">
+                  What the record looks like afterwards: kind, when it happened, when you wrote it.
+                </figcaption>
+              </figure>
+            </div>
           </div>
         </section>
 
@@ -302,14 +375,33 @@
           <div class="wrap">
             <div class="section-head reveal">
               <p class="kicker kicker--rule">Perspectives</p>
-              <h2>Fourteen frameworks. Not one of them pretends to be a person.</h2>
+              <h2>Thirteen frameworks. Not one of them pretends to be a person.</h2>
               <p>
-                The plain reading comes first, in your own words. A school is something you opt into
-                afterwards, and the app tells you exactly which one it applied.
+                The plain reading comes first, in your own words, and belongs to no school at all. A
+                framework is something you opt into afterwards, and the app tells you exactly which
+                one it applied.
               </p>
             </div>
 
-            <div class="registry" id="registry"></div>
+            <div class="showcase showcase--flip">
+              <div class="showcase__art reveal" data-delay="1">
+                <figure class="shot">
+                  <img
+                    src="assets/app/05-perspectives.webp"
+                    alt="The perspective picker: thirteen named frameworks, each credited to the school it comes from."
+                    width="640"
+                    height="1391"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <figcaption class="shot__caption">
+                    The same entry, read thirteen ways. You pick which, and the app says whose.
+                  </figcaption>
+                </figure>
+              </div>
+
+              <div class="registry" id="registry"></div>
+            </div>
 
             <div class="disclosure reveal">
               <p class="kicker">Printed on every result</p>
@@ -333,24 +425,39 @@
               </p>
             </div>
 
-            <article class="panel panel--wide reveal">
-              <div class="panel__head">
-                <p class="kicker">Pattern Researcher · your records only</p>
-                <p class="quota"><b>17</b><span>left today</span></p>
+            <div class="showcase">
+              <article class="panel panel--wide reveal">
+                <div class="panel__head">
+                  <p class="kicker">Pattern Researcher · your records only</p>
+                  <p class="quota"><b>17</b><span>left today</span></p>
+                </div>
+                <p class="claim">
+                  Water appears in six entries and is described as calm or slow in five of them.
+                  Where it rises, the feeling you recorded is patience rather than fear.
+                </p>
+                <ul class="cites">
+                  <li class="cite">Dream · 4 Aug</li>
+                  <li class="cite">Dream · 11 Aug</li>
+                  <li class="cite">Synchronicity · 12 Aug</li>
+                  <li class="cite">Dream · 17 Aug</li>
+                  <li class="cite">Vision · 19 Aug</li>
+                  <li class="cite">Dream · 21 Aug</li>
+                </ul>
+              </article>
+
+              <div class="showcase__art reveal" data-delay="1">
+                <figure class="shot">
+                  <img
+                    src="assets/app/03-insights-timeline.webp"
+                    alt="The Insights screen: ten entries counted by kind, and a timeline placing each one against the moon's phase."
+                    width="640"
+                    height="1391"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </figure>
               </div>
-              <p class="claim">
-                Water appears in six entries and is described as calm or slow in five of them. Where
-                it rises, the feeling you recorded is patience rather than fear.
-              </p>
-              <ul class="cites">
-                <li class="cite">Dream · 4 Aug</li>
-                <li class="cite">Dream · 11 Aug</li>
-                <li class="cite">Synchronicity · 12 Aug</li>
-                <li class="cite">Dream · 17 Aug</li>
-                <li class="cite">Vision · 19 Aug</li>
-                <li class="cite">Dream · 21 Aug</li>
-              </ul>
-            </article>
+            </div>
 
             <div class="evidence">
               <figure class="panel pattern-card reveal">
@@ -517,6 +624,24 @@
               </div>
             </div>
           </div>
+
+          <div class="wrap">
+            <div class="showcase__art reveal" data-delay="2">
+              <figure class="shot">
+                <img
+                  src="assets/app/02-follow-filled-heart.webp"
+                  alt="The Social screen: people you can follow in the shared sky, each row a name and a follow control."
+                  width="640"
+                  height="1391"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <figcaption class="shot__caption">
+                  Following happens between people. The entry behind a post is never part of it.
+                </figcaption>
+              </figure>
+            </div>
+          </div>
         </section>
 
         <!-- ============ Closing ============ -->
@@ -531,22 +656,50 @@
             The App Store version is free to download today. The rewrite above lands there when it
             is ready.
           </p>
-          <a
-            class="btn btn--primary reveal"
-            data-delay="2"
-            href="https://apps.apple.com/app/id6751279447"
-          >
-            Download free
-            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path
-                d="M3 8h10M9 4l4 4-4 4"
-                stroke="currentColor"
-                stroke-width="1.7"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </a>
+          <div class="store-badges reveal" data-delay="2">
+            <a class="store-badge store-badge--live" href="https://apps.apple.com/app/id6751279447">
+              <svg
+                class="store-badge__mark"
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  d="M17.564 12.75c-.024-2.69 2.196-3.98 2.296-4.043-1.25-1.83-3.194-2.08-3.885-2.108-1.654-.167-3.23.974-4.07.974-.837 0-2.132-.95-3.505-.924-1.803.026-3.466 1.048-4.394 2.66-1.874 3.25-.479 8.062 1.345 10.7.891 1.29 1.954 2.74 3.35 2.688 1.345-.053 1.853-.87 3.478-.87 1.626 0 2.083.87 3.505.844 1.447-.024 2.363-1.315 3.248-2.61 1.024-1.497 1.446-2.946 1.47-3.02-.032-.014-2.82-1.083-2.848-4.29zM14.95 4.9c.742-.9 1.243-2.152 1.106-3.4-1.07.043-2.365.712-3.132 1.61-.688.796-1.29 2.07-1.128 3.292 1.194.092 2.412-.607 3.154-1.502z"
+                />
+              </svg>
+              <span class="store-badge__name">App Store</span>
+            </a>
+
+            <span
+              class="store-badge store-badge--soon"
+              role="note"
+              aria-label="Google Play: coming soon"
+            >
+              <svg
+                class="store-badge__mark"
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  d="M3.32 1.7A1.62 1.62 0 0 0 3 2.67v18.66c0 .36.11.69.3.96l10.03-10.3z"
+                  fill="#00A0FF"
+                />
+                <path
+                  d="M17.02 15.3l-3.69-3.31 3.7-3.3 4.16 2.36c1.08.62 1.08 2.18 0 2.8z"
+                  fill="#FFBC00"
+                />
+                <path d="M17.03 15.3L13.33 12l-10.03 10.3c.44.43 1.11.49 1.65.18z" fill="#FF3A44" />
+                <path d="M17.03 8.7L4.95 1.83a1.23 1.23 0 0 0-1.63.17L13.33 12z" fill="#00C853" />
+              </svg>
+              <span class="store-badge__name">Google Play</span>
+              <span class="store-badge__soon-tag">Coming soon</span>
+            </span>
+          </div>
         </section>
       </main>
 
