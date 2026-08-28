@@ -1691,10 +1691,8 @@ p {
   padding: 3px 8px;
   border: 1px solid var(--border);
   border-radius: var(--r-pill);
-  font-size: 0.62rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
   color: var(--text-subtle);
   white-space: nowrap;
 }
