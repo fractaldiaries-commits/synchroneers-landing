@@ -29,13 +29,6 @@ const PERSPECTIVE_CATEGORIES = [
 
 const PERSPECTIVES = [
   {
-    id: 'general_interpretation',
-    category: 'General',
-    title: 'General interpretation',
-    attribution: 'No named school or tradition',
-    description: 'A plain reading in your own words, before any framework is applied.',
-  },
-  {
     id: 'dream_analyst_von_franz',
     category: 'Depth psychology',
     title: 'Dream Analyst',
@@ -47,14 +40,14 @@ const PERSPECTIVES = [
     category: 'Depth psychology',
     title: 'Jungian Analyst',
     attribution: 'Carl Jung framework',
-    description: 'Archetypes, shadow, and individuation as tentative possibilities.',
+    description: 'Archetypes, shadow, individuation, and symbolic meaning.',
   },
   {
     id: 'psychoanalytic_freud',
     category: 'Depth psychology',
     title: 'Psychoanalytic Analyst',
     attribution: 'Sigmund Freud framework',
-    description: 'Associations, conflict, wishes, and defenses without diagnosis.',
+    description: 'Associations, conflict, wishes, and unconscious patterns.',
   },
   {
     id: 'gestalt_perls',
@@ -66,65 +59,67 @@ const PERSPECTIVES = [
   {
     id: 'buddhist_thich_nhat_hanh',
     category: 'Contemplative',
-    title: 'Buddhist Teacher',
-    attribution: 'Thich Nhat Hanh teachings',
+    title: 'Buddhist Perspective',
+    attribution: 'Inspired by the teachings of Thich Nhat Hanh',
     description: 'Mindfulness, compassion, interbeing, and non-attachment.',
   },
   {
     id: 'mystical_ram_dass',
     category: 'Contemplative',
-    title: 'Mystical Guide',
-    attribution: 'Ram Dass teachings',
-    description: 'Witnessing, compassion, and meaning without supernatural claims.',
+    title: 'Mystical Perspective',
+    attribution: 'Inspired by the teachings of Ram Dass',
+    description: 'Witnessing, compassion, spiritual meaning, and expanded awareness.',
   },
   {
     id: 'mythologist_campbell',
     category: 'Story and text',
     title: 'Mythologist',
     attribution: 'Joseph Campbell framework',
-    description: 'Comparative mythology and transformation as narrative possibilities.',
+    description: 'Myth, archetype, transformation, and the stories shaping your experience.',
   },
   {
     id: 'biblical_scholar',
     category: 'Story and text',
     title: 'Biblical Scholar',
     attribution: 'Historical-literary framework',
-    description: 'Textual, historical, and tradition-aware reflection without prophecy.',
+    description: 'Scripture, symbolism, historical context, and spiritual interpretation.',
   },
   {
     id: 'skeptical_scientist',
     category: 'Evidence first',
     title: 'Skeptical Scientist',
     attribution: 'Evidence-first framework',
-    description: 'Sleep, memory, emotion, coincidence, and base-rate alternatives.',
+    description:
+      'Explore psychological, statistical, and everyday explanations for your experiences.',
   },
   {
     id: 'synchroneers_pattern_researcher',
     category: 'Evidence first',
     title: 'Pattern Researcher',
-    attribution: 'Your Synchroneers records only',
-    description: 'Owner-scoped patterns, counterexamples, and explicit uncertainty.',
+    attribution: 'Your Synchroneers records',
+    description: 'Discover patterns, repetitions, and connections across your experiences.',
   },
   {
     id: 'collective_commons',
     category: 'The commons',
     title: 'Collective Reading',
-    attribution: 'Aggregated across consenting entries',
-    description: 'How the commons has read similar imagery, with your divergences named.',
+    attribution: 'Insights from shared experiences',
+    description:
+      'See the patterns and symbols others are noticing - and how they connect with yours.',
   },
   {
     id: 'meditation_vision',
     category: 'Symbolic tools',
     title: 'Meditation / Vision',
     attribution: 'Guided visualization framework',
-    description: 'A quiet visual meditation for noticing felt sense and possibility.',
+    description: 'A quiet visual meditation for exploring imagery, intuition, and possibility.',
   },
   {
     id: 'tarot_reading',
     category: 'Symbolic tools',
     title: 'Tarot Reading',
     attribution: 'Tarot-inspired symbolic spread',
-    description: 'A three-card reflection, not a prediction or fixed fate.',
+    description: 'A three-card reflection exploring themes, symbols, and possible meanings.',
   },
 ];
 
