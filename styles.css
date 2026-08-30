@@ -328,7 +328,6 @@ p {
 .brand img {
   width: 32px;
   height: 32px;
-  filter: drop-shadow(0 0 14px rgba(154, 124, 255, 0.55));
 }
 
 .brand span {
@@ -586,8 +585,6 @@ p {
 
 .hero h1 .glow {
   color: var(--violet-soft);
-  font-style: italic;
-  font-weight: 500;
 }
 
 .hero .lede {
@@ -1831,4 +1828,43 @@ p {
   .shot-row .shot {
     --shot-w: min(220px, 70vw);
   }
+}
+
+/* ============================================================
+   Copy written a line at a time
+
+   The client writes this copy one idea per line, and the line breaks are
+   the design rather than an accident of the document: reflowing them into
+   a paragraph loses the cadence the words were written for. Each line is
+   its own <p>, so a narrow screen wraps within a line instead of running
+   two ideas together.
+   ============================================================ */
+
+.lines {
+  display: grid;
+  gap: var(--s-3);
+  max-width: 46ch;
+}
+
+.lines p {
+  margin: 0;
+}
+
+/* The quiet line in a block - the one that is an aside rather than a beat. */
+.lines .soft {
+  color: var(--text-subtle);
+}
+
+/* The framework disclaimer.
+
+   It was a bordered panel with its own heading, which gave a legal footnote
+   the same weight as the perspectives it qualifies. Small and italic, sitting
+   under the registry, says the same thing without taking the section over. */
+.disclosure-note {
+  margin-top: var(--s-6);
+  max-width: 64ch;
+  font-size: 0.82rem;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--text-subtle);
 }
