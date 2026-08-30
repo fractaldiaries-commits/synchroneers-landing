@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Privacy Policy · Synchroneers</title>
+    <meta name="robots" content="index, follow" />
+    <meta
+      name="description"
+      content="What Synchroneers collects, where it goes, and how to get it back or delete it."
+    />
+    <link rel="icon" href="/assets/logo.png" />
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      /* A document, not a landing page: one column, generous measure, no sky. */
+      body {
+        background: var(--ink);
+      }
+      .doc {
+        max-width: 68ch;
+        margin: 0 auto;
+        padding: var(--s-9) var(--s-6) var(--s-9);
+      }
+      .doc h1 {
+        font-size: clamp(1.9rem, 5vw, 2.6rem);
+        line-height: 1.12;
+        letter-spacing: -0.02em;
+        color: var(--white);
+        margin-bottom: var(--s-3);
+      }
+      .doc h2 {
+        font-size: 1.15rem;
+        color: var(--white);
+        margin-top: var(--s-8);
+        margin-bottom: var(--s-3);
+      }
+      .doc p,
+      .doc li {
+        color: var(--text-muted);
+        line-height: 1.65;
+      }
+      .doc ul {
+        padding-left: 1.15rem;
+        display: grid;
+        gap: var(--s-2);
+      }
+      .doc a {
+        color: var(--accent);
+      }
+      .doc .meta {
+        color: var(--text-subtle);
+        font-size: 0.9rem;
+      }
+      .doc .back {
+        display: inline-block;
+        margin-bottom: var(--s-7);
+        color: var(--text-muted);
+        text-decoration: none;
+      }
+      .doc table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: var(--s-3);
+      }
+      .doc th,
+      .doc td {
+        text-align: left;
+        padding: var(--s-3) var(--s-3) var(--s-3) 0;
+        border-bottom: 1px solid var(--hairline);
+        color: var(--text-muted);
+        vertical-align: top;
+        font-size: 0.95rem;
+      }
+      .doc th {
+        color: var(--white);
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="doc">
+      <a class="back" href="/">← Synchroneers</a>
+
+      <h1>Privacy Policy</h1>
+      <p class="meta">Last updated 29 August 2026.</p>
+
+      <p>
+        Synchroneers is a private journal for dreams, synchronicities, visions and readings. This
+        page describes what the app collects, where it is processed, and how to get it back or
+        delete it. It describes the app as it actually behaves; where a guarantee is enforced by the
+        server rather than by the app, that is said plainly.
+      </p>
+
+      <h2>What we collect</h2>
+      <table>
+        <tr>
+          <th>Data</th>
+          <th>Why</th>
+        </tr>
+        <tr>
+          <td>Email address, display name, and the identifier from your sign-in provider</td>
+          <td>To create and authenticate your account.</td>
+        </tr>
+        <tr>
+          <td>Your entries — title, body, kind, the time it happened, attachments</td>
+          <td>They are the product. They are stored so you can read them back.</td>
+        </tr>
+        <tr>
+          <td>Interpretations you request, and a count of how many you have used</td>
+          <td>To return the reading and to enforce the monthly allowance.</td>
+        </tr>
+        <tr>
+          <td>Birth date, time and place, if you enter them</td>
+          <td>
+            To place the Moon in a house on the home screen. This is stored
+            <strong>on your device only</strong> and is never uploaded.
+          </td>
+        </tr>
+        <tr>
+          <td>Posts, comments and follows, if you use Collectives</td>
+          <td>To show them to the people you shared them with.</td>
+        </tr>
+      </table>
+
+      <h2>Who processes it</h2>
+      <ul>
+        <li>
+          <strong>Google Firebase</strong> — authentication and app attestation. Holds your sign-in
+          identity.
+        </li>
+        <li>
+          <strong>Supabase</strong> — the database and file storage holding your entries. Hosted in
+          the EU.
+        </li>
+        <li>
+          <strong>OpenAI</strong> — generates interpretations. It receives the text of the entry you
+          asked to have interpreted, and nothing else. See the next section for what is excluded.
+        </li>
+      </ul>
+
+      <h2>What never reaches AI</h2>
+      <p>
+        An entry marked private is never sent for interpretation. This is enforced on the server, in
+        the database, not by a switch the app could forget to send: the function that reserves an
+        interpretation refuses any entry that is private or not AI-eligible, and a trigger deletes
+        derived material if an entry is made private after the fact.
+      </p>
+      <p>
+        Your birth details are never sent for interpretation. They never leave your device at all.
+      </p>
+
+      <h2>The free allowance</h2>
+      <p>
+        Every account gets twenty interpretations per calendar month, counted on the server.
+        Reopening a reading you already have costs nothing.
+      </p>
+
+      <h2>Sharing is a copy</h2>
+      <p>
+        Posting to a Collective creates a separate, redacted record that you confirm before it
+        leaves. The Collective never gains access to the entry the post was made from. Deleting the
+        post does not delete your entry, and deleting your entry does not delete the post.
+      </p>
+
+      <h2>Deleting your account</h2>
+      <p>
+        Settings → Delete account removes, in this order: every file you own across all three
+        storage buckets (attachments, avatars and exports); every row keyed to you in the database,
+        by cascade from your profile; and finally the sign-in identity itself. The order is
+        deliberate — if any step fails, the account still signs in and the deletion can be retried,
+        rather than leaving you locked out of data that still exists.
+      </p>
+
+      <h2>Your rights</h2>
+      <p>
+        If you are in the UK or the EU, you have the right to access, correct, export, restrict, or
+        delete your personal data, and to object to processing. Deletion and export are available in
+        the app. For anything else, or to raise a complaint, contact us at the address below. You
+        may also complain to your national supervisory authority; in the UK that is the
+        <a href="https://ico.org.uk/">Information Commissioner's Office</a>.
+      </p>
+
+      <h2>Retention</h2>
+      <p>
+        Entries are kept until you delete them or delete your account. Interpretation usage counters
+        are kept per calendar month. Deleted accounts are removed at the time of the request, not on
+        a schedule.
+      </p>
+
+      <h2>Children</h2>
+      <p>
+        Synchroneers is not intended for children under 13, and we do not knowingly collect their
+        data.
+      </p>
+
+      <h2>Changes</h2>
+      <p>
+        If this policy changes in a way that affects how your data is handled, the date at the top
+        changes with it.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        <a href="mailto:hello@synchroneers.io">hello@synchroneers.io</a>
+      </p>
+    </main>
+  </body>
+</html>

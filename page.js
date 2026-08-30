@@ -96,14 +96,14 @@ const PERSPECTIVES = [
     id: 'synchroneers_pattern_researcher',
     category: 'Evidence first',
     title: 'Pattern Researcher',
-    attribution: 'Your Synchroneers records',
+    attribution: 'Your Synchroneers records only',
     description: 'Discover patterns, repetitions, and connections across your experiences.',
   },
   {
     id: 'collective_commons',
     category: 'The commons',
     title: 'Collective Reading',
-    attribution: 'Insights from shared experiences',
+    attribution: 'Insights from consenting shared experiences',
     description:
       'See the patterns and symbols others are noticing - and how they connect with yours.',
   },

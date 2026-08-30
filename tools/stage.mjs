@@ -30,7 +30,15 @@ if (!origin) {
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
 
-for (const file of ['styles.css', 'sky.js', 'sky-data.js', 'page.js', 'sigils.js']) {
+for (const file of [
+  'styles.css',
+  'sky.js',
+  'sky-data.js',
+  'page.js',
+  'sigils.js',
+  'privacy.html',
+  'terms.html',
+]) {
   cpSync(join(root, file), join(out, file));
 }
 cpSync(join(root, 'vendor'), join(out, 'vendor'), { recursive: true });
