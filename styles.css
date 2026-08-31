@@ -1580,6 +1580,10 @@ p {
   flex-wrap: wrap;
   gap: var(--s-3);
   align-items: stretch;
+  /* Centred at every width. Left-aligned they sat off to one side of a centred
+     block above them, and the two badges read as a ragged edge rather than a
+     pair. */
+  justify-content: center;
 }
 
 .store-badge {
@@ -1645,13 +1649,19 @@ p {
   white-space: nowrap;
 }
 
-@media (max-width: 420px) {
+/* Stacked below 560px rather than 420px: the two badges only fit abreast on
+   the widest phones, and at 480px they wrapped to one wide and one narrow.
+   Matching widths and a shared cap keeps the pair reading as one control. */
+@media (max-width: 560px) {
   .store-badges {
     width: 100%;
+    flex-direction: column;
+    align-items: center;
   }
 
   .store-badge {
-    flex: 1 1 100%;
+    width: 100%;
+    max-width: 320px;
     justify-content: center;
   }
 }
