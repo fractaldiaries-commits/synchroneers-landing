@@ -2143,3 +2143,62 @@ p {
     right: 0;
   }
 }
+
+/* ============================================================
+   The loop timeline, centred, and its phone given room
+
+   Each dot sat at the start of its column, so the four of them spanned only
+   the first three quarters of the row: thirteen pixels of space on the left
+   against two hundred and sixty on the right. Centring each dot in its own
+   column, and its label under it, makes the run symmetric - equal air at both
+   ends - which is what a timeline is supposed to look like.
+
+   The phone below it was eighteen pixels clear of the last label, close enough
+   to read as part of the same block rather than the thing the block leads to.
+   ============================================================ */
+
+@media (min-width: 1001px) {
+  /* Declared on the shared parent: the track is a sibling of the steps, so a
+     variable set on .loop-steps would not resolve for it and the whole
+     declaration would be dropped. */
+  .loop {
+    --loop-gap: clamp(16px, 2vw, 28px);
+  }
+
+  .loop-steps {
+    gap: var(--loop-gap);
+  }
+
+  .loop-step {
+    text-align: center;
+  }
+
+  .loop-step__dot {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /*
+   * The centre of the first column to the centre of the last. A column is
+   * (100% - 3 gaps) / 4, so half of one is that over eight - which is where
+   * the first dot sits, and the same distance in from the right edge.
+   */
+  .loop-track {
+    left: calc((100% - 3 * var(--loop-gap)) / 8);
+    right: calc((100% - 3 * var(--loop-gap)) / 8);
+  }
+
+  /* Air between the steps and the screen they describe. Eighteen pixels read
+     as part of the same block rather than the thing it leads to. */
+  #loop .shot,
+  #loop .showcase,
+  #loop figure {
+    margin-top: clamp(56px, 6vw, 96px);
+  }
+}
+
+/* The phone art carries its own margin at every size, so a section that puts
+   it under copy does not leave it touching the last line. */
+.shot {
+  margin-inline: auto;
+}
