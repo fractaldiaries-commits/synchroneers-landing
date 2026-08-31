@@ -59,14 +59,14 @@ const PERSPECTIVES = [
     id: 'buddhist_thich_nhat_hanh',
     category: 'Contemplative',
     title: 'Buddhist Perspective',
-    attribution: 'Inspired by the teachings of Thich Nhat Hanh',
+    attribution: 'Zen and mindfulness tradition',
     description: 'Mindfulness, compassion, interbeing, and non-attachment.',
   },
   {
     id: 'mystical_ram_dass',
     category: 'Contemplative',
     title: 'Mystical Perspective',
-    attribution: 'Inspired by the teachings of Ram Dass',
+    attribution: 'Bhakti and non-dual tradition',
     description: 'Witnessing, compassion, spiritual meaning, and expanded awareness.',
   },
   {
