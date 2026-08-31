@@ -434,16 +434,6 @@ p {
   }
 }
 
-.text-link {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--s-2);
-  padding-block: 6px;
-  color: var(--text-muted);
-  font-size: 0.98rem;
-  text-decoration: none;
-}
-
 .text-link .arrow {
   color: var(--accent);
   transition: transform var(--press) var(--ease-out);
@@ -999,8 +989,12 @@ p {
 .registry-item__from {
   font-family: var(--font);
   font-size: 0.86rem;
-  font-weight: 400;
-  color: var(--text-subtle);
+  font-weight: 500;
+  /* The lineage is the reason to choose one perspective over another, so it
+     carries the accent rather than sitting a shade below the description it
+     precedes. It was the quietest line in the card and should have been the
+     second loudest. */
+  color: var(--violet-soft);
 }
 
 .registry-item__desc {
@@ -1017,21 +1011,6 @@ p {
   .registry-item:hover .registry-item__sigil {
     transform: scale(1.08);
   }
-}
-
-.disclosure {
-  display: grid;
-  gap: var(--s-3);
-  max-width: 74ch;
-  margin-top: var(--s-7);
-  padding: var(--s-6);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  background: rgba(13, 20, 48, 0.55);
-}
-
-.disclosure .kicker {
-  color: var(--amber);
 }
 
 .disclosure p:not(.kicker) {
@@ -1282,21 +1261,6 @@ p {
    every definition past a comfortable line length.
    ============================================================ */
 
-.terms {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 clamp(28px, 5vw, 72px);
-  margin: var(--block-gap) 0 0;
-}
-
-.term {
-  display: grid;
-  gap: var(--s-2);
-  align-content: start;
-  padding: var(--s-6) 0;
-  border-top: 1px solid var(--hairline);
-}
-
 /* The first row of each column carries the rule that opens the block. */
 .term:last-child {
   border-bottom: 1px solid var(--hairline);
@@ -1304,22 +1268,6 @@ p {
 
 .term:nth-last-child(2) {
   border-bottom: 1px solid var(--hairline);
-}
-
-.term dt {
-  font-family: var(--font);
-  font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: -0.005em;
-  color: var(--white);
-}
-
-.term dd {
-  max-width: 46ch;
-  margin: 0;
-  color: var(--text-muted);
-  font-size: 0.96rem;
-  line-height: 1.55;
 }
 
 /* ============================================================
@@ -1766,14 +1714,6 @@ p {
   background: var(--ink);
 }
 
-.shot__caption {
-  margin-top: var(--s-4);
-  font-size: 0.84rem;
-  line-height: 1.45;
-  color: var(--text-subtle);
-  text-align: center;
-}
-
 /* A row of shots, for sections that show a sequence rather than one
    screen. Scrolls sideways on small screens instead of shrinking the
    phones past legibility. */
@@ -1855,16 +1795,288 @@ p {
   color: var(--text-subtle);
 }
 
-/* The framework disclaimer.
+/* ============================================================
+   Emphasis inside the line-per-idea copy
 
-   It was a bordered panel with its own heading, which gave a legal footnote
-   the same weight as the perspectives it qualifies. Small and italic, sitting
-   under the registry, says the same thing without taking the section over. */
-.disclosure-note {
-  margin-top: var(--s-6);
-  max-width: 64ch;
-  font-size: 0.82rem;
-  font-style: italic;
-  line-height: 1.5;
-  color: var(--text-subtle);
+   Set flat, this copy reads as a list of equal statements. It is not:
+   each block has a turn in it - the quoted thought, the line that names
+   the thing, the line that lands. These carry that weight without
+   shouting, because the sections around them are already dark and quiet.
+   ============================================================ */
+
+/* The remembered thought, in the person's own voice. */
+.lines .said {
+  color: var(--violet-soft);
+  font-size: 1.06em;
+}
+
+/* The line the block turns on. */
+.lines .lands {
+  color: var(--white);
+  font-weight: 600;
+}
+
+/* A word that carries the idea, marked under rather than over: a hairline
+   in the accent, offset far enough not to collide with a descender. */
+.mark {
+  color: var(--white);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+/* The single-word beats - Dreams. Symbols. Synchronicities. Intuition. -
+   read as a chant rather than a list. Each is given the accent and set a
+   size up, and they arrive one after another rather than together. */
+.lines .beat {
+  color: var(--violet-soft);
+  font-size: 1.22em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .lines.stagger p {
+    animation: line-in 0.5s var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)) both;
+  }
+
+  .lines.stagger p:nth-child(1) {
+    animation-delay: 0.04s;
+  }
+  .lines.stagger p:nth-child(2) {
+    animation-delay: 0.12s;
+  }
+  .lines.stagger p:nth-child(3) {
+    animation-delay: 0.2s;
+  }
+  .lines.stagger p:nth-child(4) {
+    animation-delay: 0.28s;
+  }
+  .lines.stagger p:nth-child(5) {
+    animation-delay: 0.36s;
+  }
+  .lines.stagger p:nth-child(6) {
+    animation-delay: 0.44s;
+  }
+  .lines.stagger p:nth-child(7) {
+    animation-delay: 0.52s;
+  }
+
+  @keyframes line-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* The section-head is a two-column grid, so a button placed in it stretched
+   to fill its whole column and read as a banner rather than a control. The
+   copy block takes column two the way the paragraph it replaced did; the
+   button sits under the heading at its own width. */
+.section-head .lines {
+  grid-column: 2;
+}
+
+.section-head .btn {
+  grid-column: 1;
+  justify-self: start;
+  width: fit-content;
+}
+
+@media (max-width: 1000px) {
+  .section-head .lines,
+  .section-head .btn {
+    grid-column: 1 / -1;
+  }
+}
+
+/* The question that replaced the scroll cue. Centred under the hero, with the
+   arrow doing the beckoning the cue used to do. */
+.hero-jump {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(24px, 5vh, 48px);
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: 10px var(--s-5);
+  border-radius: var(--r-pill);
+  border: 1px solid var(--border);
+  background: rgba(7, 11, 29, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.94rem;
+  white-space: nowrap;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.hero-jump:hover,
+.hero-jump:focus-visible {
+  color: var(--white);
+  border-color: var(--accent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-jump .arrow {
+    animation: jump-nudge 2.4s ease-in-out infinite;
+  }
+
+  @keyframes jump-nudge {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(3px);
+    }
+  }
+}
+
+/* ============================================================
+   Section heads holding line-per-idea copy
+
+   The head was built for a short heading beside a short paragraph, and
+   bottom-aligned them so their baselines met. A seven-line block is not a
+   paragraph: bottom-alignment pushed the heading down the page and opened a
+   void above it, and inside `.split` - a single-column grid - the copy was
+   being placed in a column that does not exist, so it landed on top of the
+   heading. Both are fixed here rather than by special-casing each section.
+   ============================================================ */
+
+.section-head {
+  align-items: start;
+}
+
+/* The heading cap was tuned for two or three short words. "Collective
+   Unconscious" is neither, and 16ch broke it one word to a line. */
+.section-head:has(.lines) h2 {
+  max-width: 20ch;
+}
+
+.split .section-head .lines {
+  grid-column: 1;
+  max-width: 46ch;
+}
+
+.split .section-head:has(.lines) h2 {
+  max-width: 24ch;
+}
+
+/* Stacked, the head reads top to bottom and nothing needs holding apart. */
+@media (max-width: 1000px) {
+  .section-head:has(.lines) h2,
+  .split .section-head:has(.lines) h2 {
+    max-width: 24ch;
+  }
+}
+
+/* The accent inside a section heading. The hero already uses `.glow` for the
+   word its headline turns on; the section headings borrow it so one device
+   carries emphasis through the whole page rather than each section inventing
+   its own. */
+.section-head h2 .glow {
+  color: var(--violet-soft);
+}
+
+/* ============================================================
+   The perspectives registry
+
+   The registry was pinned into the narrow half of a two-column showcase, so
+   thirteen entries stacked into a thin ribbon while the other half of a very
+   tall section held one phone and a lot of empty sky. The registry is the
+   substance of this section, so it takes the width: the phone sits beside it
+   at its own size rather than claiming half the page.
+   ============================================================ */
+
+#perspectives .showcase {
+  grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(28px, 4vw, 64px);
+}
+
+/* The phone stays with the reader while the list scrolls past it - the list
+   is long, and the picker it shows is what the list is describing. */
+#perspectives .showcase__art {
+  position: sticky;
+  top: calc(78px + var(--s-6));
+}
+
+#perspectives .shot {
+  --shot-w: 300px;
+}
+
+/* Two entries abreast once there is room, so the groups read as a table of
+   options rather than a column that will not end. */
+@media (min-width: 1180px) {
+  #perspectives .registry-group ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-5) clamp(24px, 3vw, 40px);
+  }
+}
+
+@media (max-width: 1000px) {
+  #perspectives .showcase {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #perspectives .showcase__art {
+    position: static;
+  }
+}
+
+/* The masthead call to action wrapped to two lines on a phone and left the
+   pill half empty around it. It is two words: it should stay on one line and
+   the pill should close around them. */
+.masthead .btn {
+  white-space: nowrap;
+}
+
+@media (max-width: 520px) {
+  .masthead .btn {
+    padding-inline: var(--s-4);
+    font-size: 0.9rem;
+  }
+}
+
+/* Two phones in the perspectives column: the picker, then a reading made
+   through one of them. The second is stepped down and in so the pair reads as
+   a sequence rather than a row, and so the column has something to hold at
+   the height the registry reaches. */
+#perspectives .showcase__art {
+  display: grid;
+  gap: var(--s-6);
+}
+
+.shot--offset {
+  margin-left: clamp(16px, 3vw, 40px);
+}
+
+@media (max-width: 1000px) {
+  #perspectives .showcase__art {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  .shot--offset {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 620px) {
+  #perspectives .showcase__art {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+  }
 }

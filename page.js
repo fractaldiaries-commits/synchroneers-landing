@@ -2,7 +2,7 @@
  * Page behaviour: the perspective registry, the capture tabs, and the few
  * animations that explain something rather than decorate it.
  *
- * The registry is built in script because it is one list of fourteen records
+ * The registry is built in script because it is one list of thirteen records
  * that has to stay in the same order as the app's own picker. Hand-writing it
  * into the markup is how the site and the app drift apart.
  */
@@ -18,7 +18,6 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
    means adding it in both places here. */
 
 const PERSPECTIVE_CATEGORIES = [
-  'General',
   'Depth psychology',
   'Contemplative',
   'Story and text',
