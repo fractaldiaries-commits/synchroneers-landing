@@ -2188,11 +2188,19 @@ p {
     right: calc((100% - 3 * var(--loop-gap)) / 8);
   }
 
-  /* Air between the steps and the screen they describe. Eighteen pixels read
-     as part of the same block rather than the thing it leads to. */
-  #loop .shot,
-  #loop .showcase,
-  #loop figure {
+  /*
+   * Air above every stacked phone, not just the loop's.
+   *
+   * A section that puts the screen under its copy gave it eighteen pixels of
+   * clearance and then a hundred of section padding below, so the phone read as
+   * stuck to the paragraph above it with a hole underneath. Matching the top to
+   * the bottom balances the block.
+   *
+   * Sections built as two columns are excluded: there the art sits beside the
+   * copy and is already centred against it, so a top margin would push it out
+   * of line.
+   */
+  section:not(:has(.showcase)) .showcase__art {
     margin-top: clamp(56px, 6vw, 96px);
   }
 }
