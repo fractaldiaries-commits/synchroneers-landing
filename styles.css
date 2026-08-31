@@ -690,7 +690,10 @@ p {
 .loop-steps {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  /* One column per step. This said five while there were five moves; the
+     fourth then sat at three fifths of the width and the track ran on past
+     it into nothing. */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: clamp(16px, 2vw, 28px);
   margin: 0;
   padding: 0;
@@ -2078,5 +2081,55 @@ p {
   #perspectives .showcase__art {
     grid-template-columns: minmax(0, 1fr);
     justify-items: center;
+  }
+}
+
+/* ============================================================
+   Balancing a head whose two columns are unequal
+
+   The heading side holds three short things and the copy side holds five or
+   seven lines, so the left column ended a long way above the right and left a
+   pocket of dead space under the button. Giving the head a stretching middle
+   row puts the heading at the top of it and the button at the foot, so both
+   columns finish together and the block reads as one shape.
+   ============================================================ */
+
+@media (min-width: 1001px) {
+  .section-head:has(.lines):has(.btn) {
+    grid-template-rows: auto 1fr auto;
+  }
+
+  .section-head:has(.lines):has(.btn) h2 {
+    grid-row: 2;
+    grid-column: 1;
+    align-self: start;
+  }
+
+  .section-head:has(.lines):has(.btn) .lines {
+    grid-row: 2 / span 2;
+    grid-column: 2;
+  }
+
+  .section-head:has(.lines):has(.btn) .btn {
+    grid-row: 3;
+    grid-column: 1;
+    align-self: end;
+  }
+}
+
+/* The track should stop at the last step, not run past it.
+
+   Each step owns a quarter of the row and its dot sits at that quarter's
+   start, so the fourth dot lands three quarters along and the line carried on
+   into empty space for the remaining quarter. Pulling the right edge in by a
+   quarter, less the dot's own offset, lands it on the last dot at any width. */
+.loop-track {
+  right: calc(25% - 32px);
+}
+
+@media (max-width: 1000px) {
+  /* Two abreast: the track is hidden at this size, so nothing to trim. */
+  .loop-track {
+    right: 0;
   }
 }
