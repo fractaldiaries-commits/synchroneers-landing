@@ -113,7 +113,8 @@ Cloudflare account `sebastian110420@gmail.com`
 (`75440b2fea491108005baff4ccebf1d6`). The domain stays at GoDaddy and does DNS
 only; GoDaddy hosting is not used.
 
-Production URL: <https://synchroneers.pages.dev>
+Production URL: <https://synchroneers.com>
+(The Pages project also answers on <https://synchroneers.pages.dev>.)
 
 ### Redeploy
 
@@ -122,15 +123,16 @@ generators and the single-file builds, none of which should be served, and
 because the Open Graph URLs have to be made absolute:
 
 ```bash
-node landing/tools/stage.mjs https://synchroneers.pages.dev
+node landing/tools/stage.mjs https://synchroneers.com
 ```
 
 ```bash
 npx wrangler pages deploy landing/dist/site --project-name synchroneers --branch main
 ```
 
-Once a custom domain is attached, pass that origin to `stage.mjs` instead so the
-link previews point at the real domain rather than at `pages.dev`.
+The origin passed to `stage.mjs` is what the link previews point at, so it has
+to be the domain people actually visit. Note that `synchroneers.io` is a
+separate Framer site and is not this project - do not stage against it.
 
 ### Point the domain at it
 
