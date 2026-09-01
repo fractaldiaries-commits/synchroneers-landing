@@ -1374,6 +1374,15 @@ p {
   max-width: 48ch;
 }
 
+/* One quiet line under the badges. It has to be findable, but it is not
+   a second call to action, so it takes the footer's size and colour
+   rather than the lede's. */
+.closing-support {
+  max-width: 48ch;
+  font-size: 0.86rem;
+  color: var(--text-subtle);
+}
+
 .site-foot {
   padding: var(--s-7) var(--gutter) var(--s-9);
   border-top: 1px solid var(--hairline);
