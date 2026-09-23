@@ -31,28 +31,28 @@ const PERSPECTIVES = [
     id: 'dream_analyst_von_franz',
     category: 'Depth psychology',
     title: 'Dream Analyst',
-    attribution: 'Marie-Louise von Franz framework',
+    attribution: 'Inspired by the Marie-Louise von Franz framework',
     description: 'Personal associations, compensation, and symbolic development.',
   },
   {
     id: 'jungian',
     category: 'Depth psychology',
     title: 'Jungian Analyst',
-    attribution: 'Carl Jung framework',
+    attribution: "Inspired by Carl Jung's analytical psychology",
     description: 'Archetypes, shadow, individuation, and symbolic meaning.',
   },
   {
     id: 'psychoanalytic_freud',
     category: 'Depth psychology',
     title: 'Psychoanalytic Analyst',
-    attribution: 'Sigmund Freud framework',
+    attribution: "Inspired by Sigmund Freud's psychoanalysis",
     description: 'Associations, conflict, wishes, and unconscious patterns.',
   },
   {
     id: 'gestalt_perls',
     category: 'Depth psychology',
     title: 'Gestalt Analyst',
-    attribution: 'Fritz Perls framework',
+    attribution: "Inspired by Fritz Perls's Gestalt therapy",
     description: 'Present experience, embodiment, and dialogue between inner parts.',
   },
   {
@@ -72,8 +72,8 @@ const PERSPECTIVES = [
   {
     id: 'mythologist_campbell',
     category: 'Story and text',
-    title: 'Mythologist',
-    attribution: 'Joseph Campbell framework',
+    title: 'The Mythologist',
+    attribution: "Inspired by Joseph Campbell's work on myth",
     description: 'Myth, archetype, transformation, and the stories shaping your experience.',
   },
   {
