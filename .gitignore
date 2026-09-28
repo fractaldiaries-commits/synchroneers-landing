@@ -1,3 +1,6 @@
 dist/
 node_modules/
 .DS_Store
+
+# Raw device captures the landing shots are cropped from.
+tools/shots-raw/
