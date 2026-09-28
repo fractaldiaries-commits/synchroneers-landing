@@ -115,7 +115,7 @@ Every push to `main` deploys to production; `vercel.json` holds all the settings
 - Output directory: `dist/site`
 - No install step and no framework.
 - `cleanUrls` serves `privacy.html` at `/privacy` and `terms.html` at `/terms`, which are the links the app uses.
-- `synchroneers.io`, `www.synchroneers.io` and `www.synchroneers.com` redirect permanently to `https://synchroneers.com`, keeping the path.
+- `synchroneers.io` and `www.synchroneers.io` redirect permanently to `https://synchroneers.com`, keeping the path. Which of `synchroneers.com` and `www.synchroneers.com` is primary is set in Vercel under Settings -> Domains, not here, so the two can never loop.
 
 Production URL: <https://synchroneers.com>
 
