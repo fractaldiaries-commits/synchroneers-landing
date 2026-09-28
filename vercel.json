@@ -8,21 +8,21 @@
   "trailingSlash": false,
   "redirects": [
     {
-      "source": "/:path*",
+      "source": "/(.*)",
       "has": [{ "type": "host", "value": "synchroneers.io" }],
-      "destination": "https://synchroneers.com/:path*",
+      "destination": "https://synchroneers.com/$1",
       "permanent": true
     },
     {
-      "source": "/:path*",
+      "source": "/(.*)",
       "has": [{ "type": "host", "value": "www.synchroneers.io" }],
-      "destination": "https://synchroneers.com/:path*",
+      "destination": "https://synchroneers.com/$1",
       "permanent": true
     },
     {
-      "source": "/:path*",
+      "source": "/(.*)",
       "has": [{ "type": "host", "value": "www.synchroneers.com" }],
-      "destination": "https://synchroneers.com/:path*",
+      "destination": "https://synchroneers.com/$1",
       "permanent": true
     }
   ],
