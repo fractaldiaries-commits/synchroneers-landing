@@ -1,7 +1,7 @@
 /**
  * Turns raw simulator captures into the web assets the page ships.
  *
- *   node landing/tools/shots.mjs
+ *   node tools/shots.mjs
  *
  * Reads every PNG in `tools/shots-raw` and writes a WebP of the same name to
  * `assets/app`. Raw captures are around 1200x2600 and 2 MB each; the page

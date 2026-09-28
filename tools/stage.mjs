@@ -1,9 +1,9 @@
 /**
- * Assembles landing/dist/site: exactly the files that should be served, and
+ * Assembles dist/site: exactly the files that should be served, and
  * nothing else. The source folder also holds the generators, the single-file
  * builds, and this script, none of which belong on a public origin.
  *
- *   node landing/tools/stage.mjs https://synchroneers.pages.dev
+ *   node tools/stage.mjs https://synchroneers.pages.dev
  *
  * The origin argument is not decoration. Open Graph and Twitter image URLs
  * must be absolute: X and most messaging apps will not resolve a relative
@@ -22,7 +22,7 @@ const out = join(root, 'dist', 'site');
 const origin = (process.argv[2] ?? '').replace(/\/+$/, '');
 if (!origin) {
   console.error(
-    'usage: node landing/tools/stage.mjs <origin>   e.g. https://synchroneers.pages.dev',
+    'usage: node tools/stage.mjs <origin>   e.g. https://synchroneers.pages.dev',
   );
   process.exit(1);
 }

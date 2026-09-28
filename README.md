@@ -5,9 +5,9 @@ A static page. No build step is needed to deploy it: upload the folder.
 ## What is here
 
 ```
-landing/
+./
   index.html      the page
-  styles.css      colour tokens mirrored from src/constants/theme.ts,
+  styles.css      colour tokens mirrored from the app repo's src/constants/theme.ts,
                   plus the space, radius, and type scales
   sky.js          the three.js night sky
   sky-data.js     generated: 25,791 real stars and 88 constellations
@@ -34,7 +34,7 @@ To regenerate after a catalogue update:
 ```bash
 curl -sLO https://raw.githubusercontent.com/astronexus/HYG-Database/main/hyg/CURRENT/hygdata_v41.csv
 curl -sLo modern.json https://raw.githubusercontent.com/Stellarium/stellarium/master/skycultures/modern/index.json
-node landing/tools/build-sky.mjs hygdata_v41.csv modern.json
+node tools/build-sky.mjs hygdata_v41.csv modern.json
 ```
 
 HYG is CC BY-SA 4.0. The Stellarium sky culture is GPL-2.0. Neither source file
@@ -61,7 +61,7 @@ of `styles.css`, and each one is easy to break by accident:
 
 The document does not carry hex values, so the tokens are derived: midnight blue
 is the app's own `Palette.ink`, and the violets come from `Palette.violet` and
-`Palette.violetSoft` in `src/constants/theme.ts`. Deep indigo (`#4a5bd7`) is new
+`Palette.violetSoft` in the app repo's `src/constants/theme.ts`. Deep indigo (`#4a5bd7`) is new
 and has no counterpart in the app yet.
 
 To check the three rules hold, load the page and run:
@@ -81,7 +81,7 @@ so the share card shows the patch of sky the hero opens on.
 To redraw it:
 
 ```bash
-node landing/tools/write-og.mjs
+node tools/write-og.mjs
 ```
 
 Then open `http://localhost:4319/tools/og.html` and run this in its console:
@@ -108,26 +108,20 @@ Opening `index.html` from the file system will not work, because the scripts are
 
 ## Deploy
 
-The site is live on Cloudflare Pages, project `synchroneers`, under the
-Cloudflare account `sebastian110420@gmail.com`
-(`75440b2fea491108005baff4ccebf1d6`). The domain stays at GoDaddy and does DNS
-only; GoDaddy hosting is not used.
+The site is hosted on GitHub Pages from this repository.
+Every push to `main` runs `.github/workflows/pages.yml`, which stages the site and publishes it.
+There is nothing to run by hand.
 
 Production URL: <https://synchroneers.com>
-(The Pages project also answers on <https://synchroneers.pages.dev>.)
 
-### Redeploy
-
-Two commands. Staging first, because the source folder also holds the
-generators and the single-file builds, none of which should be served, and
-because the Open Graph URLs have to be made absolute:
+To stage it locally and look at exactly what will be served:
 
 ```bash
-node landing/tools/stage.mjs https://synchroneers.com
+node tools/stage.mjs https://synchroneers.com
 ```
 
 ```bash
-npx wrangler pages deploy landing/dist/site --project-name synchroneers --branch main
+npx serve dist/site
 ```
 
 The origin passed to `stage.mjs` is what the link previews point at, so it has
@@ -136,46 +130,51 @@ separate Framer site and is not this project - do not stage against it.
 
 ### Point the domain at it
 
-In the Cloudflare dashboard: **Workers & Pages → synchroneers → Custom domains
-→ Set up a custom domain**. Cloudflare will tell you which records it wants.
+In this repository: **Settings -> Pages -> Custom domain** is `synchroneers.com`.
+Tick **Enforce HTTPS** once the certificate has been issued.
 
-Then at GoDaddy: **My Products → Domains → the domain → DNS → Manage Zones**,
-and add what Cloudflare asked for. Typically:
+At the DNS provider for `synchroneers.com`, replace the old records with:
 
-| Type           | Name  | Value                                      |
-| -------------- | ----- | ------------------------------------------ |
-| `CNAME`        | `www` | `synchroneers.pages.dev`                   |
-| `CNAME` or `A` | `@`   | whatever Cloudflare specifies for the apex |
+| Type    | Name  | Value                                  |
+| ------- | ----- | -------------------------------------- |
+| `A`     | `@`   | `185.199.108.153`                      |
+| `A`     | `@`   | `185.199.109.153`                      |
+| `A`     | `@`   | `185.199.110.153`                      |
+| `A`     | `@`   | `185.199.111.153`                      |
+| `AAAA`  | `@`   | `2606:50c0:8000::153`                  |
+| `AAAA`  | `@`   | `2606:50c0:8001::153`                  |
+| `AAAA`  | `@`   | `2606:50c0:8002::153`                  |
+| `AAAA`  | `@`   | `2606:50c0:8003::153`                  |
+| `CNAME` | `www` | `fractaldiaries-commits.github.io`     |
 
-Delete GoDaddy's parked `A` record for `@` first, or the two conflict and the
-old placeholder keeps resolving.
+Delete any other `A`, `AAAA` or `CNAME` records for `@` and `www` first, or the
+old host keeps answering. GitHub issues the TLS certificate itself once DNS
+points here; propagation is usually well under an hour and can take up to 48.
+To prove ownership and stop anyone else claiming the domain on GitHub, add the
+TXT record GitHub shows under **Settings -> Pages -> Verified domains** in the
+organisation or account settings.
 
-If you would rather move the whole zone to Cloudflare, change the nameservers at
-GoDaddy to the pair Cloudflare gives you when you add the site. That makes the
-apex record work cleanly and is the simpler long-term arrangement, but it moves
-DNS management out of GoDaddy entirely.
-
-Cloudflare issues the TLS certificate itself. Propagation is usually well under
-an hour and can take up to 48.
+The app links to `https://synchroneers.com/privacy` and `/terms`. GitHub Pages
+serves `privacy.html` and `terms.html` at those paths, so the links keep working.
 
 ### What is deployed
 
-`stage.mjs` writes `landing/dist/site`, which contains only `index.html`,
+`stage.mjs` writes `dist/site`, which contains only `index.html`,
 `styles.css`, `sky.js`, `sky-data.js`, `page.js`, `vendor/`, `assets/`, and a
-`_headers` file. The `_headers` file caches `vendor/` and `assets/` for a year,
-`sky-data.js` for a week, and revalidates the HTML every time, and sets
-`X-Content-Type-Options`, `Referrer-Policy`, and `X-Frame-Options`.
+`_headers` file. `_headers` is read by Cloudflare Pages and Netlify, which
+cache `vendor/` and `assets/` for a year and set security headers from it.
+GitHub Pages ignores it and applies its own caching.
 
 ### Hosting it somewhere else
 
 The folder is plain static files, so any static host works: Netlify, Vercel,
 GitHub Pages, or a cPanel `public_html` if you do add GoDaddy hosting later.
-Upload the contents of `landing/dist/site`, not the folder itself, so
+Upload the contents of `dist/site`, not the folder itself, so
 `index.html` sits at the web root.
 
 ### Optional: deploy the single-file build
 
-`node landing/build.mjs` writes `landing/dist/index.html`, the whole page as one
+`node build.mjs` writes `dist/index.html`, the whole page as one
 self-contained file with the styles, scripts, three.js, and the logo inlined.
 Upload just that one file when a host will only take a single document. Do not
 mix the two: upload the folder or the single file, not both.

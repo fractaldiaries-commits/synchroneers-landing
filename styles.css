@@ -1,7 +1,7 @@
 /* ============================================================
    Synchroneers landing page
 
-   Colour tokens mirror src/constants/theme.ts so the site and the
+   Colour tokens mirror src/constants/theme.ts in the app repo so the site and the
    app stay one palette. Space, radius, and type are scales: every
    value below comes off one of them, so a section cannot quietly
    invent its own rhythm.

@@ -1,7 +1,7 @@
 /**
- * Receives the OG image from tools/og.html and writes landing/assets/og.jpg.
+ * Receives the OG image from tools/og.html and writes assets/og.jpg.
  *
- *   node landing/tools/write-og.mjs
+ *   node tools/write-og.mjs
  *
  * Then open http://localhost:4319/tools/og.html and, from its console:
  *   fetch('http://localhost:4320/og', { method: 'POST', body: window.__ogDataUrl })

@@ -1,0 +1,39 @@
+# Publishes the site to GitHub Pages on every push to main.
+# stage.mjs copies only the files that should be served into dist/site and
+# makes the link-preview URLs absolute against the production origin.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node tools/stage.mjs https://synchroneers.com
+      # The custom domain lives in the artifact, so every deploy keeps it.
+      - run: echo synchroneers.com > dist/site/CNAME
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/site
+      - id: deployment
+        uses: actions/deploy-pages@v4

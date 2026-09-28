@@ -6,7 +6,7 @@
  * exists for places that will only take one document, and for anywhere a
  * strict content policy blocks scripts loaded from other files.
  *
- *   node landing/build.mjs
+ *   node build.mjs
  *
  * Google Fonts stays as a link. It is the one external request the page makes,
  * and the stack falls back to Georgia and the system sans if it is blocked.

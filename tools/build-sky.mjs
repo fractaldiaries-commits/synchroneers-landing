@@ -1,7 +1,7 @@
 /**
  * Turns the real star catalogue into the compact module the sky loads.
  *
- *   node landing/tools/build-sky.mjs <hygdata_v41.csv> <stellarium-modern.json>
+ *   node tools/build-sky.mjs <hygdata_v41.csv> <stellarium-modern.json>
  *
  * Sources, both re-downloadable and neither committed here because of size:
  *   HYG v41         https://github.com/astronexus/HYG-Database  (CC BY-SA 4.0)
@@ -9,7 +9,7 @@
  *                   under skycultures/modern; figures are the IAU/Stellarium
  *                   modern sky culture)
  *
- * Output is `landing/sky-data.js`: two base64 blobs and a small label table.
+ * Output is `sky-data.js`: two base64 blobs and a small label table.
  * Base64 rather than a fetched binary so the single-file build in build.mjs
  * keeps working without a second network request.
  *
@@ -28,7 +28,7 @@ const MAG_LIMIT = 7.5;
 
 const [, , hygPath, stellariumPath] = process.argv;
 if (!hygPath || !stellariumPath) {
-  console.error('usage: node landing/tools/build-sky.mjs <hyg.csv> <stellarium-modern.json>');
+  console.error('usage: node tools/build-sky.mjs <hyg.csv> <stellarium-modern.json>');
   process.exit(1);
 }
 
