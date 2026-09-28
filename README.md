@@ -108,9 +108,14 @@ Opening `index.html` from the file system will not work, because the scripts are
 
 ## Deploy
 
-The site is hosted on GitHub Pages from this repository.
-Every push to `main` runs `.github/workflows/pages.yml`, which stages the site and publishes it.
-There is nothing to run by hand.
+The site is hosted on Vercel, imported from this repository.
+Every push to `main` deploys to production; `vercel.json` holds all the settings.
+
+- Build command: `node tools/stage.mjs https://synchroneers.com`
+- Output directory: `dist/site`
+- No install step and no framework.
+- `cleanUrls` serves `privacy.html` at `/privacy` and `terms.html` at `/terms`, which are the links the app uses.
+- `synchroneers.io`, `www.synchroneers.io` and `www.synchroneers.com` redirect permanently to `https://synchroneers.com`, keeping the path.
 
 Production URL: <https://synchroneers.com>
 
@@ -125,45 +130,26 @@ npx serve dist/site
 ```
 
 The origin passed to `stage.mjs` is what the link previews point at, so it has
-to be the domain people actually visit. Note that `synchroneers.io` is a
-separate Framer site and is not this project - do not stage against it.
+to be the domain people actually visit.
 
-### Point the domain at it
+### Point the domains at it
 
-In this repository: **Settings -> Pages -> Custom domain** is `synchroneers.com`.
-Tick **Enforce HTTPS** once the certificate has been issued.
+In the Vercel project: **Settings -> Domains**, add `synchroneers.com`,
+`www.synchroneers.com`, `synchroneers.io` and `www.synchroneers.io`.
+Vercel shows the DNS records each one needs (an `A` record for the apex and a
+`CNAME` to Vercel for `www`). Create them at the DNS provider, with any proxy
+turned off, and remove the old web records for the same names first.
 
-At the DNS provider for `synchroneers.com`, replace the old records with:
-
-| Type    | Name  | Value                                  |
-| ------- | ----- | -------------------------------------- |
-| `A`     | `@`   | `185.199.108.153`                      |
-| `A`     | `@`   | `185.199.109.153`                      |
-| `A`     | `@`   | `185.199.110.153`                      |
-| `A`     | `@`   | `185.199.111.153`                      |
-| `AAAA`  | `@`   | `2606:50c0:8000::153`                  |
-| `AAAA`  | `@`   | `2606:50c0:8001::153`                  |
-| `AAAA`  | `@`   | `2606:50c0:8002::153`                  |
-| `AAAA`  | `@`   | `2606:50c0:8003::153`                  |
-| `CNAME` | `www` | `fractaldiaries-commits.github.io`     |
-
-Delete any other `A`, `AAAA` or `CNAME` records for `@` and `www` first, or the
-old host keeps answering. GitHub issues the TLS certificate itself once DNS
-points here; propagation is usually well under an hour and can take up to 48.
-To prove ownership and stop anyone else claiming the domain on GitHub, add the
-TXT record GitHub shows under **Settings -> Pages -> Verified domains** in the
-organisation or account settings.
-
-The app links to `https://synchroneers.com/privacy` and `/terms`. GitHub Pages
-serves `privacy.html` and `terms.html` at those paths, so the links keep working.
+`synchroneers.io` carries the Outlook mail for `admin@synchroneers.io`: leave
+its `MX`, `TXT` and `autodiscover` records exactly as they are.
 
 ### What is deployed
 
 `stage.mjs` writes `dist/site`, which contains only `index.html`,
 `styles.css`, `sky.js`, `sky-data.js`, `page.js`, `vendor/`, `assets/`, and a
-`_headers` file. `_headers` is read by Cloudflare Pages and Netlify, which
-cache `vendor/` and `assets/` for a year and set security headers from it.
-GitHub Pages ignores it and applies its own caching.
+`_headers` file. `_headers` is for hosts that read it, such as Cloudflare Pages and Netlify.
+Vercel ignores it and takes the same caching and security headers from
+`vercel.json`; keep the two in step.
 
 ### Hosting it somewhere else
 
