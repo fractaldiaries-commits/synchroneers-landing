@@ -34,6 +34,12 @@
         margin-top: var(--s-8);
         margin-bottom: var(--s-3);
       }
+      .doc h3 {
+        font-size: 1rem;
+        color: var(--white);
+        margin-top: var(--s-6);
+        margin-bottom: var(--s-2);
+      }
       .doc p,
       .doc li {
         color: var(--text-muted);
@@ -82,7 +88,7 @@
       <a class="back" href="/">← Synchroneers</a>
 
       <h1>Privacy Policy</h1>
-      <p class="meta">Last updated 30 September 2026.</p>
+      <p class="meta">Last updated 1 October 2026.</p>
 
       <p>
         Synchroneers is a private journal for dreams, synchronicities, visions and readings. This
@@ -165,35 +171,30 @@
       </p>
 
       <h2>Who processes it</h2>
+      <p>
+        We use three groups of providers. Each one processes your data only on our instructions.
+        The app does not name them; this page is where every provider is listed.
+      </p>
+
+      <h3>Essential: needed for every account</h3>
+      <p>
+        These run the app itself. We rely on our contract with you to provide the app, so there is
+        no switch to turn them off; without them there is no account to keep your journal in.
+      </p>
       <ul>
+        <li>
+          <strong>Supabase</strong> - the database and file storage holding your entries. Hosted in
+          the EU (Ireland).
+        </li>
         <li>
           <strong>Google Firebase</strong> - authentication and app attestation. Holds your sign-in
           identity, and on Android delivers the daily reminder through Firebase Cloud Messaging.
           Firebase Authentication is processed in the United States.
         </li>
         <li>
-          <strong>Supabase</strong> - the database and file storage holding your entries. Hosted in
-          the EU (Ireland).
-        </li>
-        <li>
-          <strong>OpenAI</strong> - generates readings, dream images, transcriptions and tag
-          suggestions, processed in the United States, and only if you agree to AI reflections. It
-          receives the text of the entry involved; for the Pattern Researcher lens, which
-          looks for patterns across your journal, it also receives your recent entries. It never
-          receives your email address or name. OpenAI does not use this text to train its models,
-          and keeps it for up to 30 days for safety checks before deleting it.
-        </li>
-        <li>
-          <strong>RevenueCat</strong> - keeps track of whether your membership is active. It
-          receives your account identifier and what the store tells it about the purchase. It never
-          sees a card number; Apple and Google take the payment, and we never see one either.
-          Processed in the United States.
-        </li>
-        <li>
-          <strong>Mixpanel</strong> - product analytics, processed in the United States, and only if
-          you agree to it. It receives the usage events listed below, your account identifier, and
-          your email address and display name so support can find you. Nothing you write is sent to
-          it.
+          <strong>Apple and Google sign-in</strong> - if you choose to sign in with Apple or Google,
+          they confirm who you are and pass us your name and email address, under their own
+          privacy policies.
         </li>
         <li>
           <strong>Expo</strong> - delivers the daily reminder notification, if you turn it on. It
@@ -204,6 +205,48 @@
           <strong>OpenStreetMap Foundation</strong> - its place search looks up the birth place you
           type, if you add birth details. It receives the place name only. The foundation is based
           in the United Kingdom.
+        </li>
+      </ul>
+
+      <h3>Payments and membership</h3>
+      <p>
+        These handle buying and keeping a membership. We rely on our contract with you.
+      </p>
+      <ul>
+        <li>
+          <strong>Apple (App Store) and Google (Google Play)</strong> - take the payment and manage
+          the subscription, under their own terms and privacy policies. Neither we nor RevenueCat
+          ever see a card number.
+        </li>
+        <li>
+          <strong>RevenueCat</strong> - keeps track of whether your membership is active, and shows
+          the prices on the membership screen. When you sign in, every account is registered with
+          it, including free accounts, so a purchase made later is tied to the right person. It
+          receives your account identifier, your email address and display name so support can find
+          you, and what the store tells it about any purchase. Processed in the United States.
+        </li>
+      </ul>
+
+      <h3>Optional: only if you agree</h3>
+      <p>
+        These are used only after you say yes in the app, and you can say no, or change your mind,
+        at any time in Settings. Saying no does not affect anything else in the app. We rely on your
+        consent.
+      </p>
+      <ul>
+        <li>
+          <strong>OpenAI</strong> - our AI provider. It generates readings, dream images,
+          transcriptions and tag suggestions, processed in the United States, and only if you turn
+          on AI reflections. It receives the text of the entry involved; for the Pattern Researcher
+          lens, which looks for patterns across your journal, it also receives your recent entries.
+          It never receives your email address or name. OpenAI does not use this text to train its
+          models, and keeps it for up to 30 days for safety checks before deleting it.
+        </li>
+        <li>
+          <strong>Mixpanel</strong> - our analytics service, processed in the United States, and
+          only if you tick Allow usage analytics. It receives the usage events listed below, your
+          account identifier, and your email address and display name so support can find you.
+          Nothing you write is sent to it.
         </li>
       </ul>
 
