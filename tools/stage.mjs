@@ -38,7 +38,10 @@ for (const file of [
   'sigils.js',
   'director.js',
   'dream.js',
+  'hero.js',
+  'phone.js',
   'tarot.js',
+  'patterns.js',
   'privacy.html',
   'terms.html',
 ]) {

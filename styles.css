@@ -2322,42 +2322,48 @@ p {
   }
 }
 
-/* Live 3D: the cards are drawn on the canvas behind the page, so the section
-   lets the sky through, and the images keep only their layout. opacity (not
-   visibility) so they stay in the accessibility tree. */
-.tarot--3d {
-  height: 290vh;
-  padding: 0;
-  background: linear-gradient(
-    180deg,
-    var(--veil) 0,
-    rgba(7, 11, 29, 0) 220px,
-    rgba(7, 11, 29, 0) calc(100% - 220px),
-    var(--veil) 100%
-  );
-}
+/* Pinned layout. Applied as soon as the canvas is live (html.webgl), not
+   when the cards finish loading, so the section is already its final height
+   before anyone scrolls to it and nothing below it jumps when it arrives.
+   If the 3D module fails, tarot--failed puts the plain section back. */
+@media (prefers-reduced-motion: no-preference) {
+  html.webgl .tarot:not(.tarot--failed) {
+    height: 290vh;
+    padding: 0;
+    background: linear-gradient(
+      180deg,
+      var(--veil) 0,
+      rgba(7, 11, 29, 0) 220px,
+      rgba(7, 11, 29, 0) calc(100% - 220px),
+      var(--veil) 100%
+    );
+  }
 
-@supports (height: 100svh) {
-  .tarot--3d {
-    height: 290svh;
+  @supports (height: 100svh) {
+    html.webgl .tarot:not(.tarot--failed) {
+      height: 290svh;
+    }
+  }
+
+  html.webgl .tarot:not(.tarot--failed) .tarot-pin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 88px var(--gutter) var(--s-6);
+  }
+
+  @supports (height: 100svh) {
+    html.webgl .tarot:not(.tarot--failed) .tarot-pin {
+      height: 100svh;
+    }
   }
 }
 
-.tarot--3d .tarot-pin {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  padding: 88px var(--gutter) var(--s-6);
-}
-
-@supports (height: 100svh) {
-  .tarot--3d .tarot-pin {
-    height: 100svh;
-  }
-}
-
+/* Live 3D: the cards are drawn on the canvas behind the page, so the images
+   keep only their layout. opacity (not visibility) so they stay in the
+   accessibility tree. */
 .tarot--3d .tarot-layout {
   width: 100%;
 }
@@ -2405,7 +2411,7 @@ p {
 }
 
 @media (max-width: 900px) {
-  .tarot--3d .tarot-pin {
+  html.webgl .tarot:not(.tarot--failed) .tarot-pin {
     align-items: flex-start;
     padding-top: 76px;
   }
@@ -2640,5 +2646,442 @@ p {
 
   .phone-tap {
     display: none;
+  }
+}
+
+/* ============================================================
+   Pattern constellation and sample insights (patterns.js)
+
+   The default state is a complete, working picture: dots, lines, and a card.
+   With the 3D layer live (.patterns--3d) the dots and lines are drawn by
+   three.js on the canvas behind the page, and the buttons stay on top as
+   invisible-ish hit targets that carry the labels.
+   ============================================================ */
+
+.patterns,
+.insights {
+  margin-top: var(--block-gap);
+}
+
+.patterns-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+  gap: clamp(20px, 3vw, 40px);
+  align-items: stretch;
+}
+
+.patterns-title,
+.insights__cap h3 {
+  margin: var(--s-2) 0 var(--s-4);
+  font-size: clamp(1.25rem, 1.2vw + 1rem, 1.7rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.patterns-stage {
+  position: relative;
+  height: clamp(360px, 42vw, 470px);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  /* Transparent in 3D so the glow behind shows; a soft well otherwise. */
+  background: radial-gradient(70% 70% at 50% 50%, rgba(74, 91, 215, 0.12), rgba(7, 11, 29, 0.2));
+  overflow: hidden;
+}
+
+.patterns--3d .patterns-stage {
+  background: transparent;
+}
+
+.patterns-nodes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.patterns-nodes li {
+  display: contents;
+}
+
+.patterns-fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.patterns-fallback line {
+  stroke: rgba(185, 164, 255, 0.4);
+  stroke-width: 1.2;
+  transition:
+    stroke var(--enter) var(--ease-out),
+    opacity var(--enter) var(--ease-out);
+}
+
+.patterns-fallback line[data-state='active'] {
+  stroke: var(--white);
+  stroke-width: 2;
+}
+
+.patterns-fallback line[data-state='dim'] {
+  opacity: 0.25;
+}
+
+.patterns--3d .patterns-fallback {
+  display: none;
+}
+
+.pattern-node {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px;
+  border: 0;
+  background: none;
+  color: var(--white);
+  font: inherit;
+  cursor: pointer;
+  /* Default placement is left/top in percent; the 3D layer swaps it for a
+     transform, so a fallback node is centred on its point. */
+  translate: -50% calc(-12px - var(--size, 18px) / 2);
+}
+
+.pattern-node__dot {
+  width: var(--size, 18px);
+  height: var(--size, 18px);
+  border-radius: 50%;
+  background: var(--tint, var(--violet));
+  box-shadow:
+    0 0 14px 2px var(--tint, var(--violet)),
+    0 0 40px 8px color-mix(in srgb, var(--tint, var(--violet)) 40%, transparent);
+  transition:
+    transform var(--enter) var(--ease-out),
+    opacity var(--enter) var(--ease-out);
+}
+
+/* Three.js draws the glow, so the button's own dot steps aside. */
+.patterns--3d .pattern-node__dot {
+  opacity: 0;
+}
+
+.pattern-node__label {
+  font-size: 0.82rem;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--text-muted);
+  text-shadow: 0 1px 8px rgba(7, 11, 29, 0.9);
+  transition: color var(--press) var(--ease-out);
+}
+
+.pattern-node__label small {
+  font-size: 0.75rem;
+  color: var(--text-subtle);
+}
+
+.pattern-node:hover .pattern-node__label,
+.pattern-node[data-state='active'] .pattern-node__label {
+  color: var(--white);
+}
+
+.pattern-node[data-state='active'] .pattern-node__dot {
+  transform: scale(1.35);
+}
+
+.pattern-node[data-state='dim'] {
+  opacity: 0.55;
+}
+
+.pattern-node:focus-visible {
+  outline: none;
+}
+
+.pattern-node:focus-visible .pattern-node__label {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: var(--s-1);
+}
+
+/* Scrolled out of view, the 3D layer stops moving buttons; keep them put. */
+.patterns-stage.is-offscreen .pattern-node {
+  pointer-events: none;
+}
+
+.pattern-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--s-5);
+  padding: var(--pad-panel);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--r-lg);
+  background: var(--card);
+}
+
+.pattern-card[data-live='true'] [data-body] {
+  animation: line-in 0.35s var(--ease-out) both;
+}
+
+.pattern-card__empty,
+.pattern-card__note {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.pattern-card__note {
+  font-size: 0.8rem;
+  color: var(--text-subtle);
+}
+
+.pattern-card__title {
+  margin: var(--s-2) 0 var(--s-1);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.pattern-card__meta {
+  margin: 0 0 var(--s-4);
+  color: var(--violet-soft);
+  font-size: 0.9rem;
+}
+
+.pattern-card__entries {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--s-4);
+}
+
+.pattern-card__entries p {
+  margin: var(--s-2) 0 0;
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .patterns-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .patterns-stage {
+    height: 380px;
+  }
+
+  .pattern-node {
+    padding: 12px 6px;
+  }
+
+  .pattern-node__label {
+    font-size: 0.74rem;
+  }
+}
+
+/* ---------- Insights timeline ---------- */
+
+.insights {
+  margin-inline: 0;
+}
+
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 2.4vw, 28px);
+}
+
+.insights-panel {
+  padding: var(--pad-panel);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  background: var(--card);
+}
+
+.insights-panel__title {
+  margin: 0 0 var(--s-4);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.insights-panel__title--mood {
+  margin-top: var(--s-6);
+}
+
+.k--dream {
+  --k: var(--violet);
+}
+.k--sync {
+  --k: var(--amber);
+}
+.k--vision {
+  --k: var(--indigo-light);
+}
+.k--reading {
+  --k: var(--violet-soft);
+}
+
+.insights-bars {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  height: 190px;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: clamp(6px, 1.2vw, 14px);
+  align-items: end;
+}
+
+.week {
+  display: grid;
+  justify-items: center;
+  align-content: end;
+  gap: 4px;
+  height: 100%;
+}
+
+.week__total {
+  font-size: 0.75rem;
+  color: var(--text-subtle);
+  font-variant-numeric: tabular-nums;
+  transition: opacity 500ms var(--ease-out) calc(var(--i) * 90ms + 500ms);
+}
+
+.week__stack {
+  width: 100%;
+  max-width: 30px;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 2px;
+  transform-origin: bottom;
+  transition: transform 800ms var(--ease-out) calc(var(--i) * 90ms);
+}
+
+.week__stack .k {
+  display: block;
+  height: calc(var(--v) * 13px);
+  border-radius: 3px;
+  background: var(--k);
+  opacity: 0.9;
+}
+
+.week__label {
+  font-size: 0.72rem;
+  color: var(--text-subtle);
+}
+
+.insights-key {
+  list-style: none;
+  margin: var(--s-4) 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2) var(--s-4);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.insights-key .k {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: var(--k);
+  margin-right: 6px;
+}
+
+.insights-symbols {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--s-3);
+}
+
+.insights-symbols li {
+  display: grid;
+  grid-template-columns: minmax(0, 8.5em) 1fr;
+  align-items: center;
+  gap: var(--s-3);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.sym__cells {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.sym__cells i {
+  height: 14px;
+  border-radius: 4px;
+  background: rgba(174, 184, 216, 0.1);
+  transition:
+    background-color 450ms var(--ease-out) calc(var(--i) * 110ms + 300ms),
+    box-shadow 450ms var(--ease-out) calc(var(--i) * 110ms + 300ms);
+}
+
+.sym__cells i.on {
+  background: var(--violet);
+  box-shadow: 0 0 12px rgba(154, 124, 255, 0.55);
+}
+
+.insights-mood {
+  display: block;
+  width: 100%;
+  max-height: 96px;
+  height: auto;
+  overflow: visible;
+}
+
+.insights-mood__line {
+  fill: none;
+  stroke: var(--violet-soft);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1600ms var(--ease-in-out);
+}
+
+.insights-mood circle {
+  r: 2px;
+  fill: var(--white);
+  transition: opacity 400ms var(--ease-out) calc(var(--i) * 190ms + 200ms);
+}
+
+/* Held back until the chart is seen: bars flat, cells dark, line undrawn. */
+[data-grow='pending'] .week__stack {
+  transform: scaleY(0);
+}
+
+[data-grow='pending'] .week__total,
+[data-grow='pending'] .insights-mood circle {
+  opacity: 0;
+}
+
+[data-grow='pending'] .sym__cells i.on {
+  background: rgba(174, 184, 216, 0.1);
+  box-shadow: none;
+}
+
+[data-grow='pending'] .insights-mood__line {
+  stroke-dashoffset: 1;
+}
+
+@media (max-width: 900px) {
+  .insights-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .insights-symbols li {
+    grid-template-columns: minmax(0, 7em) 1fr;
+    font-size: 0.8rem;
   }
 }

@@ -641,6 +641,7 @@ function boot(canvas) {
   const dream = createDream(THREE, { quality: isSmall ? 1 : 2 });
 
   let tarot = null;
+  let patterns = null;
 
   /* ---------------- View ----------------
      Opens on Orion: the most recognisable figure in either hemisphere, with
@@ -724,6 +725,7 @@ function boot(canvas) {
 
     dream.resize(width, height, pixelRatio);
     if (tarot) tarot.resize(width, height);
+    if (patterns) patterns.resize(width, height, pixelRatio);
 
     if (reduceMotion.matches && raf === 0) drawFrame(0);
   }
@@ -742,6 +744,7 @@ function boot(canvas) {
     renderer.render(scene, camera);
     dream.render(renderer, camera, director.state);
     if (tarot) tarot.render(director.state);
+    if (patterns) patterns.render(renderer, director.state);
 
     updateLabels(window.innerWidth, window.innerHeight);
   }
@@ -864,7 +867,34 @@ function boot(canvas) {
       .catch((error) => {
         // The module or a texture failed. The DOM cards remain, face-up.
         console.warn('Tarot spread unavailable, showing the plain cards.', error);
+        section.classList.add('tarot--failed');
       });
+  }
+
+  /* The pattern constellation, on the same terms as the tarot spread. */
+
+  function loadPatterns(stage) {
+    import('./patterns.js')
+      .then(({ createPatterns }) => {
+        patterns = createPatterns(THREE, { stage });
+        patterns.resize(window.innerWidth, window.innerHeight, renderer.getPixelRatio());
+      })
+      .catch((error) => {
+        console.warn('Pattern constellation unavailable, showing the plain version.', error);
+      });
+  }
+
+  const patternStage = document.getElementById('patternStage');
+  if (patternStage && 'IntersectionObserver' in window && !reduceMotion.matches) {
+    const watcher = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        watcher.disconnect();
+        loadPatterns(patternStage);
+      },
+      { rootMargin: '100% 0px 100% 0px' },
+    );
+    watcher.observe(patternStage);
   }
 
   const tarotSection = document.getElementById('tarot');

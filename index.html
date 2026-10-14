@@ -528,6 +528,127 @@
               </div>
             </div>
 
+
+            <!-- ---- Interactive patterns and sample insights. Sample data, labelled as such. ---- -->
+            <div class="patterns reveal" id="patterns">
+              <div class="patterns-layout">
+                <div class="patterns-main">
+                  <p class="kicker">Sample journal · for illustration</p>
+                  <h3 class="patterns-title">Six themes that kept coming back</h3>
+                  <div
+                    class="patterns-stage"
+                    id="patternStage"
+                    role="group"
+                    aria-label="A constellation of six recurring themes from a sample journal. Choose a theme to read two of its entries."
+                  ></div>
+                </div>
+
+                <aside class="pattern-card" id="patternCard" aria-live="polite">
+                  <p class="pattern-card__empty" data-empty>
+                    Hover, tap, or tab to a theme to see how often it came up and the entries behind it.
+                  </p>
+                  <div data-body hidden>
+                    <p class="kicker">A pattern, not a verdict</p>
+                    <h4 class="pattern-card__title" data-title></h4>
+                    <p class="pattern-card__meta" data-meta></p>
+                    <ul class="pattern-card__entries" data-entries></ul>
+                  </div>
+                  <p class="pattern-card__note">
+                    A pattern needs at least two supporting entries, and links back to them. These
+                    entries are made up for illustration.
+                  </p>
+                </aside>
+              </div>
+            </div>
+
+            <figure class="insights reveal" id="insights">
+              <figcaption class="insights__cap">
+                <p class="kicker">Sample insights · for illustration</p>
+                <h3>Eight weeks in the journal</h3>
+              </figcaption>
+
+              <div class="insights-grid">
+                <div
+                  class="insights-panel"
+                  role="img"
+                  aria-label="Sample chart: entries per week rise from 3 in the first week to 10 in the eighth, mostly dreams, with some synchronicities, visions and readings."
+                >
+                  <p class="insights-panel__title">Entries each week</p>
+                  <ol class="insights-bars">
+                    <li class="week" style="--i:0">
+                      <span class="week__total">3</span>
+                      <span class="week__stack"><i class="k k--dream" style="--v:2"></i><i class="k k--sync" style="--v:1"></i></span>
+                      <span class="week__label">W1</span>
+                    </li>
+                    <li class="week" style="--i:1">
+                      <span class="week__total">5</span>
+                      <span class="week__stack"><i class="k k--dream" style="--v:3"></i><i class="k k--sync" style="--v:1"></i><i class="k k--vision" style="--v:1"></i></span>
+                      <span class="week__label">W2</span>
+                    </li>
+                    <li class="week" style="--i:2">
+                      <span class="week__total">4</span>
+                      <span class="week__stack"><i class="k k--dream" style="--v:2"></i><i class="k k--sync" style="--v:1"></i><i class="k k--vision" style="--v:1"></i></span>
+                      <span class="week__label">W3</span>
+                    </li>
+                    <li class="week" style="--i:3">
+                      <span class="week__total">7</span>
+                      <span class="week__stack"><i class="k k--dream" style="--v:4"></i><i class="k k--sync" style="--v:2"></i><i class="k k--vision" style="--v:1"></i></span>
+                      <span class="week__label">W4</span>
+                    </li>
+                    <li class="week" style="--i:4">
+                      <span class="week__total">6</span>
+                      <span class="week__stack"><i class="k k--dream" style="--v:3"></i><i class="k k--sync" style="--v:2"></i><i class="k k--reading" style="--v:1"></i></span>
+                      <span class="week__label">W5</span>
+                    </li>
+                    <li class="week" style="--i:5">
+                      <span class="week__total">9</span>
+                      <span class="week__stack"><i class="k k--dream" style="--v:5"></i><i class="k k--sync" style="--v:2"></i><i class="k k--vision" style="--v:1"></i><i class="k k--reading" style="--v:1"></i></span>
+                      <span class="week__label">W6</span>
+                    </li>
+                    <li class="week" style="--i:6">
+                      <span class="week__total">8</span>
+                      <span class="week__stack"><i class="k k--dream" style="--v:4"></i><i class="k k--sync" style="--v:2"></i><i class="k k--vision" style="--v:1"></i><i class="k k--reading" style="--v:1"></i></span>
+                      <span class="week__label">W7</span>
+                    </li>
+                    <li class="week" style="--i:7">
+                      <span class="week__total">10</span>
+                      <span class="week__stack"><i class="k k--dream" style="--v:5"></i><i class="k k--sync" style="--v:3"></i><i class="k k--vision" style="--v:1"></i><i class="k k--reading" style="--v:1"></i></span>
+                      <span class="week__label">W8</span>
+                    </li>
+                  </ol>
+                  <ul class="insights-key" aria-hidden="true">
+                    <li><i class="k k--dream"></i>Dream</li>
+                    <li><i class="k k--sync"></i>Synchronicity</li>
+                    <li><i class="k k--vision"></i>Vision</li>
+                    <li><i class="k k--reading"></i>Reading</li>
+                  </ul>
+                </div>
+
+                <div class="insights-panel">
+                  <p class="insights-panel__title">Symbols, week by week</p>
+                  <ul class="insights-symbols" role="img" aria-label="Sample chart: water appears in six of eight weeks, 11:11 in five, flying and keys in four, a recurring person and owls in three.">
+                    <li><span class="sym__name">Water</span><span class="sym__cells" aria-hidden="true"><i class="" style="--i:0"></i><i class="on" style="--i:1"></i><i class="on" style="--i:2"></i><i class="" style="--i:3"></i><i class="on" style="--i:4"></i><i class="on" style="--i:5"></i><i class="on" style="--i:6"></i><i class="on" style="--i:7"></i></span></li>
+                    <li><span class="sym__name">Flying</span><span class="sym__cells" aria-hidden="true"><i class="" style="--i:0"></i><i class="" style="--i:1"></i><i class="on" style="--i:2"></i><i class="" style="--i:3"></i><i class="" style="--i:4"></i><i class="on" style="--i:5"></i><i class="on" style="--i:6"></i><i class="on" style="--i:7"></i></span></li>
+                    <li><span class="sym__name">11:11</span><span class="sym__cells" aria-hidden="true"><i class="" style="--i:0"></i><i class="on" style="--i:1"></i><i class="" style="--i:2"></i><i class="on" style="--i:3"></i><i class="on" style="--i:4"></i><i class="" style="--i:5"></i><i class="on" style="--i:6"></i><i class="on" style="--i:7"></i></span></li>
+                    <li><span class="sym__name">Keys</span><span class="sym__cells" aria-hidden="true"><i class="on" style="--i:0"></i><i class="" style="--i:1"></i><i class="" style="--i:2"></i><i class="on" style="--i:3"></i><i class="" style="--i:4"></i><i class="on" style="--i:5"></i><i class="" style="--i:6"></i><i class="on" style="--i:7"></i></span></li>
+                    <li><span class="sym__name">A recurring person</span><span class="sym__cells" aria-hidden="true"><i class="on" style="--i:0"></i><i class="" style="--i:1"></i><i class="" style="--i:2"></i><i class="on" style="--i:3"></i><i class="" style="--i:4"></i><i class="" style="--i:5"></i><i class="on" style="--i:6"></i><i class="" style="--i:7"></i></span></li>
+                    <li><span class="sym__name">Owls</span><span class="sym__cells" aria-hidden="true"><i class="" style="--i:0"></i><i class="on" style="--i:1"></i><i class="" style="--i:2"></i><i class="" style="--i:3"></i><i class="on" style="--i:4"></i><i class="" style="--i:5"></i><i class="" style="--i:6"></i><i class="on" style="--i:7"></i></span></li>
+                  </ul>
+
+                  <p class="insights-panel__title insights-panel__title--mood">Mood across entries</p>
+                  <svg
+                    class="insights-mood"
+                    viewBox="0 0 168 40"
+                    role="img"
+                    aria-label="Sample chart: mood across entries trends upward over the eight weeks."
+                  >
+                    <polyline class="insights-mood__line" pathLength="1" points="8.0,24.2 28.5,20.0 49.0,22.2 69.5,15.5 90.0,17.8 110.5,13.3 131.0,14.4 151.5,11.0" />
+                    <g class="insights-mood__dots"><circle cx="8.0" cy="24.2" r="2.6" style="--i:0"/><circle cx="28.5" cy="20.0" r="2.6" style="--i:1"/><circle cx="49.0" cy="22.2" r="2.6" style="--i:2"/><circle cx="69.5" cy="15.5" r="2.6" style="--i:3"/><circle cx="90.0" cy="17.8" r="2.6" style="--i:4"/><circle cx="110.5" cy="13.3" r="2.6" style="--i:5"/><circle cx="131.0" cy="14.4" r="2.6" style="--i:6"/><circle cx="151.5" cy="11.0" r="2.6" style="--i:7"/></g>
+                  </svg>
+                </div>
+              </div>
+            </figure>
+
             <div class="showcase">
               <article class="panel panel--wide reveal">
                 <div class="panel__head">

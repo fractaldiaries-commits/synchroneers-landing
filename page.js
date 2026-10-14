@@ -10,6 +10,7 @@
 import { sigilMarkup } from './sigils.js';
 import { subscribe } from './director.js';
 import { initPhones } from './phone.js';
+import { initPatternsUI } from './patterns.js';
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -349,6 +350,25 @@ function initLoop() {
   });
 }
 
+/* ---------------- Insights timeline ----------------
+   Sample data, drawn in markup. The bars, the symbol cells and the mood line
+   are all in their finished state by default; this only holds them back until
+   the chart is on screen and then lets them grow, in order. */
+
+function initInsights() {
+  const chart = document.querySelector('.insights');
+  if (!chart || reduceMotion.matches) return;
+
+  chart.dataset.grow = 'pending';
+  whenSeen(chart, () => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        delete chart.dataset.grow;
+      });
+    });
+  });
+}
+
 /* ---------------- Masthead ---------------- */
 
 function initMasthead() {
@@ -451,6 +471,8 @@ function initDepth() {
 buildRegistry();
 initTabs();
 initPhones();
+initPatternsUI();
+initInsights();
 initMasthead();
 initHeroConstellation();
 initLoop();
