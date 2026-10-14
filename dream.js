@@ -40,8 +40,6 @@
  * when frames run long: fewer motes, a smaller mist target, one fewer octave.
  */
 
-import { createHero } from './hero.js';
-
 export const QUALITY = {
   // [mote count, mist target scale, fbm octaves]
   0: [220, 0.32, 3],
@@ -59,7 +57,6 @@ const scratchB = [0, 0, 0];
 
 export function createDream(THREE, { quality }) {
   const ortho = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-  const hero = createHero(THREE, { small: quality < 2 });
 
   /* ---------------- Mist ---------------- */
 
@@ -502,7 +499,6 @@ export function createDream(THREE, { quality }) {
       moteUniforms.uAspect.value = w / h;
       moteUniforms.uResolution.value.set(w * ratio, h * ratio);
       moteUniforms.uPixelRatio.value = ratio;
-      hero.resize(w, h, ratio);
       moteCamera.aspect = w / h;
       moteCamera.updateProjectionMatrix();
       applyQuality();
@@ -525,7 +521,12 @@ export function createDream(THREE, { quality }) {
       mistUniforms.uSpeed.value = director.velocity;
       // The journey recolours the section palette: warm while in the body and
       // again while waking, pale and cloudlike while the view rises.
-      const warm = Math.min(1, director.body * 0.7 + director.wake * 0.5);
+      // While the film is up it is the picture: the room and the cord are in
+      // it already, so the journey's own haze steps back and the mist and
+      // motes thin to a light touch that adds depth without muddying it.
+      const film = director.film;
+      const room = director.body * (1 - film);
+      const warm = Math.min(1, room * 0.7 + director.wake * 0.5);
       const cloud = director.cloud * 0.55;
       const mixTint = (source, out) => {
         for (let i = 0; i < 3; i++) {
@@ -540,12 +541,12 @@ export function createDream(THREE, { quality }) {
       mistUniforms.uTintA.value.set(scratchA[0], scratchA[1], scratchA[2]);
       mistUniforms.uTintB.value.set(scratchB[0], scratchB[1], scratchB[2]);
       // Cloud is denser mist; the body is dim, dream-thick air.
-      mistUniforms.uGain.value = 1 + director.cloud * 0.9 + director.body * 0.2;
-      moteUniforms.uGain.value = 1 - director.body * 0.7;
+      mistUniforms.uGain.value = (1 + director.cloud * 0.9 + room * 0.2) * (1 - 0.72 * film);
+      moteUniforms.uGain.value = (1 - room * 0.7) * (1 - 0.62 * film);
 
       veilUniforms.uTime.value = director.time;
-      veilUniforms.uBody.value = director.body;
-      veilUniforms.uCord.value = director.cord * 0.35;
+      veilUniforms.uBody.value = room;
+      veilUniforms.uCord.value = director.cord * 0.35 * (1 - film);
       veilUniforms.uWake.value = director.wake;
       veilUniforms.uSpeed.value = director.velocity;
       compositeQuad.material.uniforms.uShimmer.value =
@@ -569,8 +570,6 @@ export function createDream(THREE, { quality }) {
 
       renderer.render(veilScene, ortho);
       renderer.render(compositeScene, ortho);
-      hero.update(director, moteCamera);
-      hero.render(renderer, moteCamera);
       renderer.render(moteScene, moteCamera);
     },
   };
