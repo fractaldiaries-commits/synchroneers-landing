@@ -43,33 +43,33 @@ const CLIPS = {
     label: 'Capture',
     still: 'assets/app/04-journal.webp',
     alt: "The journal: ten entries on a timeline, each tagged by kind, with the time it happened and the time it was logged.",
-    tap: [50, 91],
+    tap: [29, 46],
   },
   reading: {
     label: 'Reading',
     still: 'assets/app/07-deepdive.webp',
     alt: 'A reading through one chosen framework, marked tentative, with the question it leaves you holding.',
-    tap: [50, 34],
+    tap: [50, 55],
   },
   tarot: {
     label: 'Tarot',
     // The lead's dedicated tarot capture, if it has been dropped in.
     prefer: 'assets/app/08-tarot.webp',
     still: 'assets/app/05-perspectives.webp',
-    alt: 'The perspective picker: thirteen named frameworks, each credited to the school or teacher it draws on.',
-    tap: [50, 62],
+    alt: 'A three-card tarot draw for a dream: the Queen of Pentacles, the Hermit and the Hanged Man, for what is emerging, hidden and invited.',
+    tap: [17, 49],
   },
   patterns: {
     label: 'Patterns',
     still: 'assets/app/03-insights-timeline.webp',
     alt: "The Insights screen: ten entries counted by kind, and a timeline placing each one against the moon's phase.",
-    tap: [74, 88],
+    tap: [70, 90],
   },
   collectives: {
     label: 'Collectives',
     still: 'assets/app/02-follow-filled-heart.webp',
     alt: 'The Social screen: people you can follow in the shared sky, each row a name and a follow control.',
-    tap: [88, 30],
+    tap: [90, 90],
   },
 };
 
