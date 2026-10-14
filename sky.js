@@ -554,7 +554,8 @@ function boot(canvas) {
 
       node.textContent = entry.label.name;
       node.style.transform = `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
-      node.style.opacity = String(Math.min(0.5, (entry.alignment - 0.9) * 6) * figureOpacity);
+      const strength = Math.min(0.5, (entry.alignment - 0.9) * 6);
+      node.style.opacity = String(strength * figureOpacity * (1 - director.state.film));
     }
   }
 
@@ -732,6 +733,19 @@ function boot(canvas) {
 
   /* ---------------- Frame ---------------- */
 
+  // A black sheet, drawn over the sky while the film is up.
+  const holdBackMaterial = new THREE.MeshBasicMaterial({
+    color: 0x000000,
+    transparent: true,
+    depthTest: false,
+    depthWrite: false,
+  });
+  const holdBack = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), holdBackMaterial);
+  holdBack.position.z = -0.5;
+  holdBack.frustumCulled = false;
+  const holdBackScene = new THREE.Scene();
+  holdBackScene.add(holdBack);
+
   function drawFrame(time) {
     aim(time);
 
@@ -739,9 +753,21 @@ function boot(canvas) {
     figures.material.uniforms.uForward.value.copy(forward);
     figures.material.uniforms.uOpacity.value = figureOpacity;
 
+    // While the hero film is up the canvas is blended over it with `screen`,
+    // so the catalogue sky is held back (fully, then fading in as the film
+    // fades out) and only the dream layers add light. Past the film, this is
+    // the ordinary opaque sky.
+    const film = director.state.film;
+    renderer.setClearColor(film < 0.999 ? 0x070b1d : 0x000000, 1);
     renderer.clear();
-    renderer.render(bgScene, bgCamera);
-    renderer.render(scene, camera);
+    if (film < 0.999) {
+      renderer.render(bgScene, bgCamera);
+      renderer.render(scene, camera);
+      if (film > 0.001) {
+        holdBackMaterial.opacity = film;
+        renderer.render(holdBackScene, bgCamera);
+      }
+    }
     dream.render(renderer, camera, director.state);
     if (tarot) tarot.render(director.state);
     if (patterns) patterns.render(renderer, director.state);
