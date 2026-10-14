@@ -8,6 +8,7 @@
  */
 
 import { sigilMarkup } from './sigils.js';
+import './film.js';
 import { subscribe } from './director.js';
 import { initPhones } from './phone.js';
 import { initPatternsUI } from './patterns.js';
