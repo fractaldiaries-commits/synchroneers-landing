@@ -36,6 +36,9 @@ for (const file of [
   'sky-data.js',
   'page.js',
   'sigils.js',
+  'director.js',
+  'dream.js',
+  'tarot.js',
   'privacy.html',
   'terms.html',
 ]) {

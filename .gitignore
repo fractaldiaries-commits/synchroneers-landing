@@ -4,3 +4,4 @@ node_modules/
 
 # Raw device captures the landing shots are cropped from.
 tools/shots-raw/
+docs-preview/
