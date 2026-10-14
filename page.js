@@ -15,6 +15,13 @@ import { initPatternsUI } from './patterns.js';
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+// The masthead button points at the App Store in markup; Android visitors get Play instead.
+if (/Android/i.test(navigator.userAgent)) {
+  for (const a of document.querySelectorAll('[data-store-cta]')) {
+    a.href = 'https://play.google.com/store/apps/details?id=com.synchroneers.android';
+  }
+}
+
 /* ---------------- Perspective registry ----------------
    Mirrors INTERPRETATION_PERSPECTIVES and PERSPECTIVE_CATEGORIES in
    src/features/interpretation/domain/perspective.ts, and the ids below key
