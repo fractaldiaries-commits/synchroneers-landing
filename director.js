@@ -30,6 +30,8 @@
  * rest values and every consumer renders its static frame.
  */
 
+import { filmAt } from './film.js';
+
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 /**
@@ -82,6 +84,8 @@ export const state = {
   cord: 0,
   cloud: 0,
   wake: 0,
+  /** How much of the hero film is showing: 1 at the top, 0 once it has faded out. */
+  film: 0,
   /**
    * The opening, which runs on the clock rather than on scroll: the reader
    * arrives in the body and the double separates over the first few seconds.
@@ -163,6 +167,8 @@ function applyPalette(position) {
 
 /* ---------------- Journey ---------------- */
 
+const hasFilm = Boolean(document.getElementById('film'));
+
 const ease = (a, b, x) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
   return t * t * (3 - 2 * t);
@@ -182,6 +188,8 @@ function updateJourney(y, progress) {
   state.cord = ease(0.15, 0.7, h) * (1 - ease(2.2, 4.4, h));
   state.cloud = ease(0.5, 1.4, h) * (1 - ease(2.6, 4.6, h));
   state.wake = ease(0.93, 1, progress);
+  // The poster-only case under reduced motion has no film layer to blend with.
+  state.film = reduceMotion.matches || !hasFilm ? 0 : filmAt(y, window.innerHeight);
 }
 
 /* ---------------- Frame ---------------- */
