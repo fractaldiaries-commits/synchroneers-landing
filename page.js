@@ -8,6 +8,8 @@
  */
 
 import { sigilMarkup } from './sigils.js';
+import { subscribe } from './director.js';
+import { initPhones } from './phone.js';
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -368,12 +370,90 @@ function initMasthead() {
   observer.observe(sentinel);
 }
 
+/* ---------------- Depth: phones and copy ----------------
+   Each phone is tilted and floated from where it sits in the viewport, and
+   blocks of copy drift a few pixels against the scroll. Both are written as
+   custom properties that the stylesheet turns into transforms, so under
+   reduced motion, with this script absent, or before it runs, nothing is
+   displaced.
+
+   Only elements near the viewport are touched each frame. The set is kept by
+   an IntersectionObserver rather than by measuring all of them, which is what
+   keeps a page with seven phones and a dozen panels cheap. */
+
+const DRIFT_SELECTOR = '.section-head, .loop, .panel, .flow, .tarot-copy, .registry-group';
+
+function initDepth() {
+  if (reduceMotion.matches) return;
+
+  const phones = Array.from(document.querySelectorAll('.shot'));
+  const drifters = Array.from(document.querySelectorAll(DRIFT_SELECTOR));
+  if (phones.length + drifters.length === 0) return;
+
+  const near = new Set();
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) near.add(entry.target);
+        else near.delete(entry.target);
+      }
+    },
+    { rootMargin: '25% 0px 25% 0px' },
+  );
+
+  phones.forEach((phone) => {
+    phone.dataset.live = '';
+    phone.style.setProperty('--sheen-on', '1');
+    observer.observe(phone);
+  });
+  for (const element of drifters) {
+    element.dataset.drift = '';
+    observer.observe(element);
+  }
+
+  const clamp = (value, limit) => Math.max(-limit, Math.min(limit, value));
+
+  subscribe((state) => {
+    const height = window.innerHeight;
+
+    near.forEach((element) => {
+      const box = element.getBoundingClientRect();
+      // -1 a screen above centre, 0 centred, 1 a screen below.
+      const offset = clamp(((box.top + box.height / 2) - height / 2) / height, 1.2);
+
+      if (element.classList.contains('shot')) {
+        const index = phones.indexOf(element);
+        // Neighbouring phones lean opposite ways, so a pair reads as a pair.
+        const side = index % 2 === 0 ? 1 : -1;
+        const float = Math.sin(state.time * 0.6 + index * 1.7) * 6;
+
+        // Pointer-over tilt, eased here so it never snaps.
+        if (element.hoverTargetX !== undefined) {
+          element.hoverX += (element.hoverTargetX - element.hoverX) * 0.14;
+          element.hoverY += (element.hoverTargetY - element.hoverY) * 0.14;
+        }
+        const hx = element.hoverX || 0;
+        const hy = element.hoverY || 0;
+
+        element.style.setProperty('--ry', `${(offset * -15 * side + state.pointer.x * 5 + hx * 9).toFixed(2)}deg`);
+        element.style.setProperty('--rx', `${(offset * 7 - state.pointer.y * 4 - hy * 7).toFixed(2)}deg`);
+        element.style.setProperty('--ty', `${(offset * -34 + float).toFixed(1)}px`);
+        element.style.setProperty('--sheen', `${(50 + offset * 70 + state.pointer.x * 20).toFixed(1)}%`);
+      } else {
+        element.style.setProperty('--drift', (offset * 22).toFixed(1));
+      }
+    });
+  });
+}
+
 /* ---------------- Boot ---------------- */
 
 buildRegistry();
 initTabs();
+initPhones();
 initMasthead();
 initHeroConstellation();
 initLoop();
+initDepth();
 // Reveal runs last so the registry groups it just built are included.
 initReveal();
