@@ -38,7 +38,7 @@ for (const file of [
   'sigils.js',
   'director.js',
   'dream.js',
-  'hero.js',
+  'film.js',
   'phone.js',
   'tarot.js',
   'patterns.js',
