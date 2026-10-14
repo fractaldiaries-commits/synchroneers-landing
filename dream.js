@@ -502,7 +502,7 @@ export function createDream(THREE, { quality }) {
       moteUniforms.uAspect.value = w / h;
       moteUniforms.uResolution.value.set(w * ratio, h * ratio);
       moteUniforms.uPixelRatio.value = ratio;
-      hero.resize(w, h);
+      hero.resize(w, h, ratio);
       moteCamera.aspect = w / h;
       moteCamera.updateProjectionMatrix();
       applyQuality();

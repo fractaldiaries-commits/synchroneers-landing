@@ -3085,3 +3085,29 @@ p {
     font-size: 0.8rem;
   }
 }
+
+/* ---------- Hero figure band ----------
+   hero.js draws the astral figure in light. On wide screens it has its own
+   column to the right of the copy. Below that there is no room beside the
+   headline, so the copy is pushed down to leave a band above it, and the
+   figure sits there instead of behind the words. */
+
+@media (max-width: 1099px) {
+  html.webgl .hero-copy {
+    padding-top: 196px;
+  }
+
+  html.webgl .hero {
+    padding-bottom: 150px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.webgl .hero-copy {
+    padding-top: 0;
+  }
+
+  html.webgl .hero {
+    padding-bottom: clamp(72px, 9vw, 128px);
+  }
+}
