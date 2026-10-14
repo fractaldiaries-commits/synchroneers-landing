@@ -3249,3 +3249,49 @@ p {
     ),
     linear-gradient(to bottom, rgba(7, 11, 29, 0.9) 0%, transparent 24%);
 }
+
+/* ---------- Phone hero: film, headline and both stores on the first screen ----------
+   The lede used to sit between the headline and the store buttons, which put
+   both buttons below the fold on a 375 x 812 phone. Below 768px the buttons
+   follow the headline and the lede reads after them. */
+@media (max-width: 767px) {
+  .hero {
+    padding-top: clamp(250px, 38svh, 360px);
+    padding-bottom: 56px;
+  }
+
+  .hero-copy {
+    gap: 18px;
+  }
+
+  .hero-copy .kicker {
+    order: 0;
+  }
+
+  .hero-copy h1 {
+    order: 1;
+  }
+
+  .hero-copy .hero-actions {
+    order: 2;
+  }
+
+  .hero-copy .lede {
+    order: 3;
+    margin-top: 8px;
+  }
+
+  .hero .store-badges {
+    width: 100%;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .hero .store-badge {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 180px;
+    padding-inline: 12px;
+  }
+}
