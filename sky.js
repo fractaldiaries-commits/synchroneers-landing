@@ -12,12 +12,20 @@
  * actually has. Scrolling walks the view east along the ecliptic plane, so the
  * constellations passing behind the copy change as the page is read.
  *
+ * The same canvas also carries the foreground the reader drifts through (mist
+ * and luminous motes, dream.js) and the 3D tarot spread (tarot.js, loaded only
+ * when its section is near). One renderer, one context, one frame loop; the
+ * scroll director (director.js) supplies the shared scroll, velocity and
+ * per-section colour so all of it moves together.
+ *
  * Reduced motion renders one frame: the sky is still there, it stops moving.
  * Nothing on the page depends on it having rendered at all.
  */
 
 import * as THREE from './vendor/three.module.min.js';
 import { CONSTELLATIONS, SEGMENTS_B64, STARS_B64, STAR_COUNT } from './sky-data.js';
+import * as director from './director.js';
+import { createDream } from './dream.js';
 
 const canvas = document.getElementById('sky');
 if (canvas) boot(canvas);
@@ -102,6 +110,10 @@ function boot(canvas) {
 
   renderer.setClearColor(0x070b1d, 1);
   renderer.autoClear = false;
+
+  // Tells the stylesheet that the canvas is live, so the 3D tarot spread can
+  // take over from its plain image fallback. Absent, the page is unchanged.
+  document.documentElement.classList.add('webgl');
 
   const SPHERE = 100;
 
@@ -621,6 +633,15 @@ function boot(canvas) {
     if (shootProgress >= 1) shootingStar.visible = false;
   }
 
+  /* ---------------- Dream layers and quality ----------------
+     Mist and motes draw over the sky. Quality starts by screen class and is
+     lowered, never raised, by the frame governor below. */
+
+  const isSmall = window.innerWidth < 760;
+  const dream = createDream(THREE, { quality: isSmall ? 1 : 2 });
+
+  let tarot = null;
+
   /* ---------------- View ----------------
      Opens on Orion: the most recognisable figure in either hemisphere, with
      Taurus, Canis Major and the winter Milky Way in the same field. */
@@ -635,6 +656,7 @@ function boot(canvas) {
   let scrollSmooth = 0;
   let figureOpacity = 0;
   let raf = 0;
+  let pixelPenalty = 0;
 
   const lookAt = new THREE.Vector3();
 
@@ -644,10 +666,23 @@ function boot(canvas) {
     sky.rotation.y = time * 0.0018;
 
     const ra = VIEW_RA + scrollSmooth * SCROLL_SWEEP + pointerSmooth.x * 5.5;
-    const dec = Math.max(-72, Math.min(72, VIEW_DEC - scrollSmooth * 16 + pointerSmooth.y * 4.5));
+    // While "in the body" the view starts low and tilted down; it lifts
+    // into the real sky over the first screen of scroll.
+    const lift = director.state.body * 14;
+    const dec = Math.max(-72, Math.min(72, VIEW_DEC - lift - scrollSmooth * 16 + pointerSmooth.y * 4.5));
 
     toVector(ra, dec, SPHERE, lookAt);
     camera.lookAt(lookAt);
+
+    // The dolly. Fast scrolling opens the lens and rolls the horizon a
+    // touch, which reads as speed through space without moving the copy.
+    const speed = director.state.velocity;
+    const fov = 62 + Math.min(Math.abs(speed), 2) * 3.2;
+    if (Math.abs(camera.fov - fov) > 0.01) {
+      camera.fov = fov;
+      camera.updateProjectionMatrix();
+    }
+    camera.rotateZ(-speed * 0.012);
   }
 
   function onPointerMove(event) {
@@ -664,7 +699,10 @@ function boot(canvas) {
     const width = window.innerWidth;
     const height = window.innerHeight;
     // Capped so a 3x phone does not shade nine times the pixels it needs to.
-    const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.75);
+    // Phones get a lower cap than desktops, and the governor can lower it
+    // further when frames run long.
+    const cap = (width < 760 ? 1.5 : 1.75) - pixelPenalty;
+    const pixelRatio = Math.max(1, Math.min(window.devicePixelRatio || 1, cap));
 
     renderer.setPixelRatio(pixelRatio);
     renderer.setSize(width, height, false);
@@ -684,6 +722,9 @@ function boot(canvas) {
     dust.material.uniforms.uPixelRatio.value = pixelRatio;
     dust.material.uniforms.uScale.value = scale;
 
+    dream.resize(width, height, pixelRatio);
+    if (tarot) tarot.resize(width, height);
+
     if (reduceMotion.matches && raf === 0) drawFrame(0);
   }
 
@@ -699,8 +740,45 @@ function boot(canvas) {
     renderer.clear();
     renderer.render(bgScene, bgCamera);
     renderer.render(scene, camera);
+    dream.render(renderer, camera, director.state);
+    if (tarot) tarot.render(director.state);
 
     updateLabels(window.innerWidth, window.innerHeight);
+  }
+
+  /* ---------------- Frame governor ----------------
+     Averages the frame interval over a window. If the page is not holding
+     roughly 40fps it steps down one notch: first the resolution of everything,
+     then the dream layers. It never steps back up, because a page that
+     oscillates between two qualities looks worse than either. */
+
+  let windowStart = 0;
+  let windowFrames = 0;
+  let settled = 0;
+
+  function govern(now) {
+    // Ignore the first seconds: shader compiles and texture uploads are not
+    // a sign that the machine is slow.
+    if (now < 3000) return;
+    if (windowStart === 0) windowStart = now;
+    windowFrames++;
+
+    if (now - windowStart < 1500) return;
+    const average = (now - windowStart) / windowFrames;
+    windowStart = now;
+    windowFrames = 0;
+
+    // A scroll-free, idle page legitimately renders at the display rate; only
+    // act on a window that is clearly slow.
+    if (average < 25 || settled >= 3) return;
+
+    settled++;
+    if (pixelPenalty < 0.5) {
+      pixelPenalty += 0.25;
+    } else if (dream.quality > 0) {
+      dream.setQuality(dream.quality - 1);
+    }
+    resize();
   }
 
   let previous = performance.now();
@@ -712,6 +790,9 @@ function boot(canvas) {
     // by however long the reader was away.
     const dt = Math.min((now - previous) / 1000, 0.05);
     previous = now;
+
+    director.tick(now);
+    govern(now);
 
     const time = now / 1000;
     backdropUniforms.uTime.value = time;
@@ -755,6 +836,48 @@ function boot(canvas) {
     }
 
     start();
+  }
+
+  /* ---------------- Tarot, on demand ----------------
+     The module, the card textures and the geometry are only fetched once the
+     tarot section is within a screen of the viewport. Reduced motion never
+     loads it: the section's own face-up images are its static form. */
+
+  function loadTarot(section) {
+    import('./tarot.js')
+      .then(({ createTarot }) => {
+        const slots = Array.from(section.querySelectorAll('.tarot-card img'));
+        const captions = Array.from(section.querySelectorAll('.tarot-card'));
+        for (const slot of slots) slot.loading = 'eager';
+
+        tarot = createTarot(THREE, renderer, {
+          section,
+          slots,
+          captions,
+          extras: ['the-high-priestess', 'the-lovers', 'death'].map(
+            (name) => `assets/tarot/${name}.webp`,
+          ),
+        });
+        tarot.resize(window.innerWidth, window.innerHeight);
+        section.classList.add('tarot--3d');
+      })
+      .catch((error) => {
+        // The module or a texture failed. The DOM cards remain, face-up.
+        console.warn('Tarot spread unavailable, showing the plain cards.', error);
+      });
+  }
+
+  const tarotSection = document.getElementById('tarot');
+  if (tarotSection && 'IntersectionObserver' in window && !reduceMotion.matches) {
+    const watcher = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        watcher.disconnect();
+        loadTarot(tarotSection);
+      },
+      { rootMargin: '100% 0px 100% 0px' },
+    );
+    watcher.observe(tarotSection);
   }
 
   resize();
