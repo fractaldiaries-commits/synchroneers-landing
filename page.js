@@ -247,6 +247,70 @@ function initTabs() {
   select(tabs[0]);
 }
 
+/* ---------------- Spoken readings ----------------
+   One dream, read aloud by three perspectives in turn. The speaker changes
+   on its own every few seconds while the block is on screen, and stops
+   changing for good once someone picks a tab. Reduced motion: no rotation. */
+
+function initVoices() {
+  const host = document.getElementById('voices');
+  if (!host) return;
+  const tabs = Array.from(host.querySelectorAll('[role="tab"]'));
+  const panels = tabs.map((tab) => document.getElementById(tab.getAttribute('aria-controls')));
+  let current = 0;
+  let timer = 0;
+  let pinned = false;
+
+  function select(index, { focus = false } = {}) {
+    current = index;
+    tabs.forEach((tab, i) => {
+      const on = i === index;
+      tab.setAttribute('aria-selected', String(on));
+      tab.tabIndex = on ? 0 : -1;
+      panels[i].classList.toggle('is-active', on);
+    });
+    if (focus) tabs[index].focus();
+  }
+
+  function stop() {
+    window.clearInterval(timer);
+    timer = 0;
+  }
+
+  function start() {
+    if (pinned || timer || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    timer = window.setInterval(() => select((current + 1) % tabs.length), 9000);
+  }
+
+  host.addEventListener('click', (event) => {
+    const tab = event.target.closest('[role="tab"]');
+    if (!tab) return;
+    pinned = true;
+    stop();
+    select(tabs.indexOf(tab));
+  });
+
+  host.addEventListener('keydown', (event) => {
+    const i = tabs.indexOf(document.activeElement);
+    if (i === -1) return;
+    let next = -1;
+    if (event.key === 'ArrowRight') next = (i + 1) % tabs.length;
+    else if (event.key === 'ArrowLeft') next = (i - 1 + tabs.length) % tabs.length;
+    if (next === -1) return;
+    event.preventDefault();
+    pinned = true;
+    stop();
+    select(next, { focus: true });
+  });
+
+  new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) start();
+    else stop();
+  }).observe(host);
+
+  select(0);
+}
+
 /* ---------------- Reveal ----------------
    Section headers and the loop only. Content that carries the argument is on
    the page at load; this adds arrival, not availability. */
@@ -478,6 +542,7 @@ function initDepth() {
 
 buildRegistry();
 initTabs();
+initVoices();
 initPhones();
 initPatternsUI();
 initInsights();
