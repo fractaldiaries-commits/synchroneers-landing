@@ -38,24 +38,6 @@
       href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..600&display=swap"
     />
     <link rel="stylesheet" href="styles.css" />
-    <!-- Only the poster for this screen size is fetched, and early. The video
-         itself is attached by film.js after the page has loaded. -->
-    <link
-      rel="preload"
-      as="image"
-      type="image/webp"
-      href="assets/hero/astral-portrait.webp"
-      media="(max-width: 767px)"
-      fetchpriority="high"
-    />
-    <link
-      rel="preload"
-      as="image"
-      type="image/webp"
-      href="assets/hero/astral-1080.webp"
-      media="(min-width: 768px)"
-      fetchpriority="high"
-    />
     <script>
       // Marks a fresh arrival at the top of the page, so the hero can play its
       // opening. Skipped under reduced motion and when the page restores a
@@ -67,37 +49,6 @@
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-
-    <!-- The hero film. Poster first; film.js attaches the video once the page
-         has loaded, choosing the portrait cut on narrow screens. -->
-    <div class="film" id="film" aria-hidden="true">
-      <div class="film__stage">
-        <div class="film__media">
-          <picture class="film__poster">
-            <source media="(max-width: 767px)" srcset="assets/hero/astral-portrait.webp" />
-            <img
-              src="assets/hero/astral-1080.webp"
-              alt=""
-              width="1920"
-              height="1080"
-              decoding="async"
-              fetchpriority="high"
-            />
-          </picture>
-          <video
-            class="film__video"
-            muted
-            playsinline
-            loop
-            autoplay
-            preload="metadata"
-            tabindex="-1"
-            disablepictureinpicture
-          ></video>
-        </div>
-        <div class="film__shade"></div>
-      </div>
-    </div>
 
     <canvas id="sky" aria-hidden="true"></canvas>
 
