@@ -3177,14 +3177,6 @@ p {
   }
 }
 
-/* ---------- Hero copy over the film ---------- */
-
-.hero {
-  align-items: flex-end;
-  padding-top: clamp(350px, 51svh, 600px);
-  padding-bottom: clamp(88px, 12vw, 128px);
-}
-
 @media (min-width: 1000px) {
   .film__shade {
     background:
@@ -3197,28 +3189,6 @@ p {
         rgba(7, 11, 29, 0.26) 57%,
         rgba(7, 11, 29, 0) 68%
       );
-  }
-
-  .hero {
-    align-items: center;
-    padding-top: clamp(48px, 8vw, 104px);
-  }
-
-  .hero-copy {
-    justify-items: start;
-    text-align: left;
-  }
-
-  .hero-copy > * {
-    max-width: min(100%, 38rem);
-  }
-
-  .hero .store-badges {
-    justify-content: flex-start;
-  }
-
-  .hero-actions {
-    justify-content: flex-start;
   }
 }
 
@@ -3267,13 +3237,12 @@ p {
     linear-gradient(to bottom, rgba(7, 11, 29, 0.9) 0%, transparent 24%);
 }
 
-/* ---------- Phone hero: film, headline and both stores on the first screen ----------
+/* ---------- Phone hero: headline and both stores on the first screen ----------
    The lede used to sit between the headline and the store buttons, which put
    both buttons below the fold on a 375 x 812 phone. Below 768px the buttons
    follow the headline and the lede reads after them. */
 @media (max-width: 767px) {
   .hero {
-    padding-top: clamp(250px, 38svh, 360px);
     padding-bottom: 56px;
   }
 
