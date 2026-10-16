@@ -580,6 +580,14 @@ p {
   gap: var(--s-3) var(--s-6);
 }
 
+.hero-actions__line {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 1.08rem;
+  font-weight: 600;
+  color: var(--white);
+}
+
 .scroll-cue {
   position: absolute;
   left: 50%;
@@ -3325,7 +3333,7 @@ p {
   color: var(--white);
 }
 
-/* Side by side even on a phone: nine stacked pairs of full-width buttons
+/* Side by side even on a phone: stacked pairs of full-width buttons
    would bury the page. */
 @media (max-width: 560px) {
   .section-cta .store-badges {
