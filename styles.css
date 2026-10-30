@@ -325,6 +325,22 @@ p {
   opacity: 1;
 }
 
+/* At the top the masthead sits on the hero's lit sky, so it takes the hero's
+   dark text and a coral call to action. Keyed on 'false' rather than on the
+   absence of 'true', so without the script it keeps the night styling. */
+.masthead[data-stuck='false'] .brand,
+.masthead[data-stuck='false'] .nav-links a,
+.masthead[data-stuck='false'] .nav-links a:hover {
+  color: #161a45;
+}
+
+.masthead[data-stuck='false'] .btn--primary,
+.masthead[data-stuck='false'] .btn--primary:hover {
+  background: #f0595d;
+  color: #fff;
+  box-shadow: 0 8px 24px -10px rgba(217, 45, 106, 0.55);
+}
+
 .brand {
   display: flex;
   align-items: center;
@@ -546,10 +562,63 @@ p {
      flow. A plain 100svh pushed the scroll cue below the fold. */
   min-height: min(calc(100svh - 78px), 1040px);
   padding: clamp(48px, 8vw, 104px) var(--gutter) clamp(72px, 9vw, 128px);
+  /* Twilight: the page opens on a lit sky and darkens to night below the
+     fold, where the star canvas takes over. Text on it is dark. */
+  --dusk-text: #161a45;
+  --dusk-text-soft: #34386c;
+  --dusk-said: #4f2f82;
+  --dusk-glow: #d92d6a;
+  --accent: var(--dusk-glow);
+}
+
+/* Runs up under the masthead and down past the hero, so the fade to
+   night happens under the first section rather than at a hard edge. The
+   last stops are translucent, so the stars come through as it darkens. */
+.hero::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: -120px 0 -50vh;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    #6c84e8 0%,
+    #9ea7ef 20%,
+    #c6aff0 36%,
+    #ec9fbb 54%,
+    #b863a4 64%,
+    rgba(96, 50, 146, 0.94) 74%,
+    rgba(48, 28, 98, 0.75) 86%,
+    rgba(7, 11, 29, 0) 100%
+  );
 }
 
 .hero > * {
   position: relative;
+}
+
+.hero .kicker {
+  color: var(--dusk-text-soft);
+}
+
+.hero h1 {
+  color: var(--dusk-text);
+}
+
+.hero .lede {
+  color: var(--dusk-text-soft);
+}
+
+.hero .lines .said {
+  color: var(--dusk-said);
+}
+
+.hero .lines .lands {
+  color: var(--dusk-text);
+}
+
+.hero .store-badge--live {
+  box-shadow: 0 12px 28px -14px rgba(40, 20, 90, 0.5);
 }
 
 .hero-copy {
@@ -565,7 +634,7 @@ p {
 }
 
 .hero h1 .glow {
-  color: var(--violet-soft);
+  color: var(--dusk-glow);
 }
 
 .hero .lede {
@@ -585,7 +654,7 @@ p {
   margin: 0;
   font-size: 1.08rem;
   font-weight: 600;
-  color: var(--white);
+  color: var(--dusk-text);
 }
 
 .scroll-cue {
