@@ -6,14 +6,14 @@
     <title>Synchroneers</title>
     <meta
       name="description"
-      content="When symbols keep repeating, it's worth asking why. A private journal for dreams, synchronicities, visions, and readings — read any entry through a perspective you choose, and build an archive of the moments that matter."
+      content="A collective research map of dreams, symbols and synchronicities. When symbols keep repeating, it's worth asking why. A private journal for dreams, synchronicities, visions, and readings — read any entry through a perspective you choose, and build an archive of the moments that matter."
     />
     <meta name="theme-color" content="#070b1d" />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Synchroneers" />
     <meta property="og:title" content="Synchroneers" />
-    <meta property="og:description" content="When symbols keep repeating, it's worth asking why." />
+    <meta property="og:description" content="A collective research map of dreams, symbols and synchronicities." />
     <meta property="og:image" content="/assets/og.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -26,7 +26,7 @@
     <meta name="twitter:title" content="Synchroneers" />
     <meta
       name="twitter:description"
-      content="When symbols keep repeating, it's worth asking why."
+      content="A collective research map of dreams, symbols and synchronicities."
     />
     <meta name="twitter:image" content="/assets/og.jpg" />
 
@@ -67,7 +67,7 @@
           </ul>
         </nav>
         <a class="btn btn--primary btn--sm" data-store-cta href="https://apps.apple.com/app/id6751279447"
-          >Download free</a
+          >Start free</a
         >
       </header>
 
@@ -78,9 +78,8 @@
             <p class="kicker kicker--rule">Dreams · Symbols · Synchronicities</p>
 
             <h1>
-              <span class="line">When symbols keep</span>
-              <span class="line"><span class="glow">repeating</span>, it's worth</span>
-              <span class="line">asking why.</span>
+              <span class="line">Connect the dots.</span>
+              <span class="line"><span class="glow">Together</span>.</span>
             </h1>
 
             <div class="lede lines stagger">
@@ -148,25 +147,233 @@
 
           <!-- The question sits where the scroll cue was: it does the same job
                of pulling the eye down, and says something while it does it. -->
-          <a class="hero-jump" href="#loop">
-            What is a synchronicity?
+          <a class="hero-jump" href="#evidence">
+            See your patterns
             <span class="arrow" aria-hidden="true">↓</span>
           </a>
         </section>
 
-        <!-- ============ The loop ============ -->
-        <section class="section section--enter" id="loop">
+        <!-- ============ Evidence ============ -->
+        <section class="section section--enter" id="evidence">
           <div class="wrap">
             <div class="section-head reveal">
-              <p class="kicker kicker--rule">What is a synchronicity?</p>
-              <h2>A synchronicity is a <span class="glow">meaningful coincidence</span>.</h2>
+              <p class="kicker kicker--rule">Analysis</p>
+              <h2>Your <span class="glow">patterns</span> are trying to tell you something.</h2>
               <div class="lines stagger">
-                <p>Glancing at the clock and seeing 11:11.</p>
-                <p>A stranger repeating a phrase from last night's dream.</p>
-                <p>A symbol that keeps appearing, again and again.</p>
-                <p>Some people ignore them.</p>
-                <p class="lands">Others take note.</p>
+                <p>
+                  Hundreds of dreams. Thousands of details. One evolving intelligence map.
+                  Synchroneers analyses the whole picture, so you can see patterns no single dream
+                  could reveal on its own.
+                </p>
               </div>
+            </div>
+
+
+            <!-- ---- Interactive patterns and sample insights. Sample data, labelled as such. ---- -->
+            <div class="patterns reveal" id="patterns">
+              <div class="patterns-layout">
+                <div class="patterns-main">
+                  <p class="kicker">Sample journal · for illustration</p>
+                  <h3 class="patterns-title">Six themes that kept coming back</h3>
+                  <div
+                    class="patterns-stage"
+                    id="patternStage"
+                    role="group"
+                    aria-label="A constellation of six recurring themes from a sample journal. Choose a theme to read two of its entries."
+                  ></div>
+                </div>
+
+                <aside class="pattern-card" id="patternCard" aria-live="polite">
+                  <p class="pattern-card__empty" data-empty>
+                    Hover, tap, or tab to a theme to see how often it came up and the entries behind it.
+                  </p>
+                  <div data-body hidden>
+                    <p class="kicker">A pattern, not a verdict</p>
+                    <h4 class="pattern-card__title" data-title></h4>
+                    <p class="pattern-card__meta" data-meta></p>
+                    <ul class="pattern-card__entries" data-entries></ul>
+                  </div>
+                  <p class="pattern-card__note">
+                    A pattern needs at least two supporting entries, and links back to them. These
+                    entries are made up for illustration.
+                  </p>
+                </aside>
+              </div>
+            </div>
+
+            <figure class="insights reveal" id="insights">
+              <figcaption class="insights__cap">
+                <p class="kicker">Sample insights · for illustration</p>
+                <h3>Eight weeks in the journal</h3>
+              </figcaption>
+
+              <div class="insights-grid">
+                <div
+                  class="insights-panel"
+                  role="img"
+                  aria-label="Sample chart: entries per week rise from 3 in the first week to 10 in the eighth, mostly dreams, with some synchronicities, visions and readings."
+                >
+                  <p class="insights-panel__title">Entries each week</p>
+                  <ol class="insights-bars">
+                    <li class="week" style="--i:0">
+                      <span class="week__total">3</span>
+                      <span class="week__stack"><i class="k k--dream" style="--v:2"></i><i class="k k--sync" style="--v:1"></i></span>
+                      <span class="week__label">W1</span>
+                    </li>
+                    <li class="week" style="--i:1">
+                      <span class="week__total">5</span>
+                      <span class="week__stack"><i class="k k--dream" style="--v:3"></i><i class="k k--sync" style="--v:1"></i><i class="k k--vision" style="--v:1"></i></span>
+                      <span class="week__label">W2</span>
+                    </li>
+                    <li class="week" style="--i:2">
+                      <span class="week__total">4</span>
+                      <span class="week__stack"><i class="k k--dream" style="--v:2"></i><i class="k k--sync" style="--v:1"></i><i class="k k--vision" style="--v:1"></i></span>
+                      <span class="week__label">W3</span>
+                    </li>
+                    <li class="week" style="--i:3">
+                      <span class="week__total">7</span>
+                      <span class="week__stack"><i class="k k--dream" style="--v:4"></i><i class="k k--sync" style="--v:2"></i><i class="k k--vision" style="--v:1"></i></span>
+                      <span class="week__label">W4</span>
+                    </li>
+                    <li class="week" style="--i:4">
+                      <span class="week__total">6</span>
+                      <span class="week__stack"><i class="k k--dream" style="--v:3"></i><i class="k k--sync" style="--v:2"></i><i class="k k--reading" style="--v:1"></i></span>
+                      <span class="week__label">W5</span>
+                    </li>
+                    <li class="week" style="--i:5">
+                      <span class="week__total">9</span>
+                      <span class="week__stack"><i class="k k--dream" style="--v:5"></i><i class="k k--sync" style="--v:2"></i><i class="k k--vision" style="--v:1"></i><i class="k k--reading" style="--v:1"></i></span>
+                      <span class="week__label">W6</span>
+                    </li>
+                    <li class="week" style="--i:6">
+                      <span class="week__total">8</span>
+                      <span class="week__stack"><i class="k k--dream" style="--v:4"></i><i class="k k--sync" style="--v:2"></i><i class="k k--vision" style="--v:1"></i><i class="k k--reading" style="--v:1"></i></span>
+                      <span class="week__label">W7</span>
+                    </li>
+                    <li class="week" style="--i:7">
+                      <span class="week__total">10</span>
+                      <span class="week__stack"><i class="k k--dream" style="--v:5"></i><i class="k k--sync" style="--v:3"></i><i class="k k--vision" style="--v:1"></i><i class="k k--reading" style="--v:1"></i></span>
+                      <span class="week__label">W8</span>
+                    </li>
+                  </ol>
+                  <ul class="insights-key" aria-hidden="true">
+                    <li><i class="k k--dream"></i>Dream</li>
+                    <li><i class="k k--sync"></i>Synchronicity</li>
+                    <li><i class="k k--vision"></i>Vision</li>
+                    <li><i class="k k--reading"></i>Reading</li>
+                  </ul>
+                </div>
+
+                <div class="insights-panel">
+                  <p class="insights-panel__title">Symbols, week by week</p>
+                  <ul class="insights-symbols" role="img" aria-label="Sample chart: water appears in six of eight weeks, 11:11 in five, flying and keys in four, a recurring person and owls in three.">
+                    <li><span class="sym__name">Water</span><span class="sym__cells" aria-hidden="true"><i class="" style="--i:0"></i><i class="on" style="--i:1"></i><i class="on" style="--i:2"></i><i class="" style="--i:3"></i><i class="on" style="--i:4"></i><i class="on" style="--i:5"></i><i class="on" style="--i:6"></i><i class="on" style="--i:7"></i></span></li>
+                    <li><span class="sym__name">Flying</span><span class="sym__cells" aria-hidden="true"><i class="" style="--i:0"></i><i class="" style="--i:1"></i><i class="on" style="--i:2"></i><i class="" style="--i:3"></i><i class="" style="--i:4"></i><i class="on" style="--i:5"></i><i class="on" style="--i:6"></i><i class="on" style="--i:7"></i></span></li>
+                    <li><span class="sym__name">11:11</span><span class="sym__cells" aria-hidden="true"><i class="" style="--i:0"></i><i class="on" style="--i:1"></i><i class="" style="--i:2"></i><i class="on" style="--i:3"></i><i class="on" style="--i:4"></i><i class="" style="--i:5"></i><i class="on" style="--i:6"></i><i class="on" style="--i:7"></i></span></li>
+                    <li><span class="sym__name">Keys</span><span class="sym__cells" aria-hidden="true"><i class="on" style="--i:0"></i><i class="" style="--i:1"></i><i class="" style="--i:2"></i><i class="on" style="--i:3"></i><i class="" style="--i:4"></i><i class="on" style="--i:5"></i><i class="" style="--i:6"></i><i class="on" style="--i:7"></i></span></li>
+                    <li><span class="sym__name">A recurring person</span><span class="sym__cells" aria-hidden="true"><i class="on" style="--i:0"></i><i class="" style="--i:1"></i><i class="" style="--i:2"></i><i class="on" style="--i:3"></i><i class="" style="--i:4"></i><i class="" style="--i:5"></i><i class="on" style="--i:6"></i><i class="" style="--i:7"></i></span></li>
+                    <li><span class="sym__name">Owls</span><span class="sym__cells" aria-hidden="true"><i class="" style="--i:0"></i><i class="on" style="--i:1"></i><i class="" style="--i:2"></i><i class="" style="--i:3"></i><i class="on" style="--i:4"></i><i class="" style="--i:5"></i><i class="" style="--i:6"></i><i class="on" style="--i:7"></i></span></li>
+                  </ul>
+
+                  <p class="insights-panel__title insights-panel__title--mood">Mood across entries</p>
+                  <svg
+                    class="insights-mood"
+                    viewBox="0 0 168 40"
+                    role="img"
+                    aria-label="Sample chart: mood across entries trends upward over the eight weeks."
+                  >
+                    <polyline class="insights-mood__line" pathLength="1" points="8.0,24.2 28.5,20.0 49.0,22.2 69.5,15.5 90.0,17.8 110.5,13.3 131.0,14.4 151.5,11.0" />
+                    <g class="insights-mood__dots"><circle cx="8.0" cy="24.2" r="2.6" style="--i:0"/><circle cx="28.5" cy="20.0" r="2.6" style="--i:1"/><circle cx="49.0" cy="22.2" r="2.6" style="--i:2"/><circle cx="69.5" cy="15.5" r="2.6" style="--i:3"/><circle cx="90.0" cy="17.8" r="2.6" style="--i:4"/><circle cx="110.5" cy="13.3" r="2.6" style="--i:5"/><circle cx="131.0" cy="14.4" r="2.6" style="--i:6"/><circle cx="151.5" cy="11.0" r="2.6" style="--i:7"/></g>
+                  </svg>
+                </div>
+              </div>
+            </figure>
+
+            <div class="showcase">
+              <article class="panel panel--wide reveal">
+                <div class="panel__head">
+                  <p class="kicker">Pattern Researcher · your records only</p>
+                  <p class="quota"><b>17</b><span>left this month</span></p>
+                </div>
+                <p class="claim">
+                  Water appears in six entries and is described as calm or slow in five of them.
+                  Where it rises, the feeling you recorded is patience rather than fear.
+                </p>
+                <ul class="cites">
+                  <li class="cite">Dream · 4 Aug</li>
+                  <li class="cite">Dream · 11 Aug</li>
+                  <li class="cite">Synchronicity · 12 Aug</li>
+                  <li class="cite">Dream · 17 Aug</li>
+                  <li class="cite">Vision · 19 Aug</li>
+                  <li class="cite">Dream · 21 Aug</li>
+                </ul>
+              </article>
+
+              <div class="showcase__art reveal" data-delay="1">
+                <figure class="shot" data-phone="patterns">
+                  <img
+                    src="assets/app/03-insights-timeline.webp"
+                    alt="The Insights screen: ten entries counted by kind, and a timeline placing each one against the moon's phase."
+                    width="640"
+                    height="1391"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </figure>
+              </div>
+            </div>
+
+            <div class="evidence">
+              <figure class="panel pattern-card reveal">
+                <figcaption class="panel__head">
+                  <p class="kicker">Insights · a pattern, not a verdict</p>
+                  <span class="tag">Recurring</span>
+                </figcaption>
+                <div class="pattern-card__chart">
+                  <svg viewBox="0 0 320 150" role="img" aria-hidden="true" data-constellation>
+                    <polyline
+                      class="constellation-line"
+                      points="24,92 62,114 108,42 156,126 204,102 248,70 296,36"
+                    />
+                    <g class="constellation-nodes">
+                      <circle class="constellation-node" cx="24" cy="92" r="4.5" />
+                      <circle class="constellation-node" cx="62" cy="114" r="3.4" />
+                      <circle class="constellation-node" cx="108" cy="42" r="5.2" />
+                      <circle class="constellation-node" cx="156" cy="126" r="3.8" />
+                      <circle class="constellation-node" cx="204" cy="102" r="3.2" />
+                      <circle class="constellation-node" cx="248" cy="70" r="4.6" />
+                      <circle class="constellation-node" cx="296" cy="36" r="5.4" />
+                    </g>
+                  </svg>
+                </div>
+                <h3>Waiting without arrival</h3>
+                <p>
+                  Platforms, carriages and corridors recur, and in each of them the arrival never
+                  quite happens. The waiting itself looks like the content rather than a delay
+                  before something else.
+                </p>
+                <p class="panel__foot">
+                  <span>7 entries</span>
+                  <span>Last seen 2 days ago</span>
+                </p>
+              </figure>
+
+              <article class="panel counter reveal" data-delay="1">
+                <div class="panel__head">
+                  <p class="kicker">Counterexample</p>
+                </div>
+                <p>
+                  One entry breaks the pattern, and it stays on the card rather than being quietly
+                  dropped. A reading that only ever confirms itself is not worth keeping.
+                </p>
+                <ul class="cites">
+                  <li class="cite">Dream · 9 Aug · water described as rising fast</li>
+                </ul>
+                <p>
+                  The Skeptical Scientific perspective exists for the same reason. Sleep, memory,
+                  emotion, coincidence, and base rates get a seat at the table.
+                </p>
+              </article>
             </div>
           </div>
           <div class="wrap section-cta reveal">
@@ -336,13 +543,75 @@
               <figure class="shot">
                 <img
                   src="assets/app/01-home.webp"
-                  alt="The app's home screen: tonight's moon phase, and the four kinds of experience you can record - dream, synchronicity, vision, and reading."
+                  alt="The app's home screen: record an experience through four kinds of experience: dream, synchronicity, vision, and oracle."
                   width="640"
                   height="1391"
                   loading="lazy"
                   decoding="async"
                 />
               </figure>
+            </div>
+          </div>
+          <div class="wrap section-cta reveal">
+            <p class="section-cta__line">Start your journey free today</p>
+            <div class="store-badges">
+            <a class="store-badge store-badge--live" href="https://apps.apple.com/app/id6751279447">
+              <svg
+                class="store-badge__mark"
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  d="M17.564 12.75c-.024-2.69 2.196-3.98 2.296-4.043-1.25-1.83-3.194-2.08-3.885-2.108-1.654-.167-3.23.974-4.07.974-.837 0-2.132-.95-3.505-.924-1.803.026-3.466 1.048-4.394 2.66-1.874 3.25-.479 8.062 1.345 10.7.891 1.29 1.954 2.74 3.35 2.688 1.345-.053 1.853-.87 3.478-.87 1.626 0 2.083.87 3.505.844 1.447-.024 2.363-1.315 3.248-2.61 1.024-1.497 1.446-2.946 1.47-3.02-.032-.014-2.82-1.083-2.848-4.29zM14.95 4.9c.742-.9 1.243-2.152 1.106-3.4-1.07.043-2.365.712-3.132 1.61-.688.796-1.29 2.07-1.128 3.292 1.194.092 2.412-.607 3.154-1.502z"
+                />
+              </svg>
+              <span class="store-badge__name">App Store</span>
+            </a>
+
+            <a
+                  class="store-badge store-badge--live"
+                  href="https://play.google.com/store/apps/details?id=com.synchroneers.android"
+                >
+              <svg
+                class="store-badge__mark"
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  d="M3.32 1.7A1.62 1.62 0 0 0 3 2.67v18.66c0 .36.11.69.3.96l10.03-10.3z"
+                  fill="#00A0FF"
+                />
+                <path
+                  d="M17.02 15.3l-3.69-3.31 3.7-3.3 4.16 2.36c1.08.62 1.08 2.18 0 2.8z"
+                  fill="#FFBC00"
+                />
+                <path d="M17.03 15.3L13.33 12l-10.03 10.3c.44.43 1.11.49 1.65.18z" fill="#FF3A44" />
+                <path d="M17.03 8.7L4.95 1.83a1.23 1.23 0 0 0-1.63.17L13.33 12z" fill="#00C853" />
+              </svg>
+              <span class="store-badge__name">Google Play</span>
+                </a>
+          </div>
+          </div>
+        </section>
+
+        <!-- ============ The loop ============ -->
+        <section class="section" id="loop">
+          <div class="wrap">
+            <div class="section-head reveal">
+              <p class="kicker kicker--rule">What is a synchronicity?</p>
+              <h2>A synchronicity is a <span class="glow">meaningful coincidence</span>.</h2>
+              <div class="lines stagger">
+                <p>Glancing at the clock and seeing 11:11.</p>
+                <p>A stranger repeating a phrase from last night's dream.</p>
+                <p>A symbol that keeps appearing, again and again.</p>
+                <p>Some people ignore them.</p>
+                <p class="lands">Others take note.</p>
+              </div>
             </div>
           </div>
           <div class="wrap section-cta reveal">
@@ -635,8 +904,8 @@
               <div class="flow-node flow-node--private">
                 <b>Your entry</b>
                 <span
-                  >Private by default, and no one else can see it. AI reads it only if you turn on
-                  AI reflections.</span
+                  >Private by default, and no one else can see it. Reflections are run only if you
+                  choose to explore an entry through a lens.</span
                 >
               </div>
               <p class="flow-arrow">You choose what to share, and where</p>
@@ -858,7 +1127,7 @@
              browser without WebGL all get. When the canvas is live (the "webgl"
              class on <html>), tarot.js draws 3D cards over these exact slots and
              the images become invisible placeholders that keep the layout. -->
-        <section class="tarot" id="tarot" aria-labelledby="tarot-title">
+        <section class="tarot section--exit" id="tarot" aria-labelledby="tarot-title">
           <div class="tarot-pin">
             <div class="wrap tarot-layout">
               <div class="tarot-copy">
@@ -973,277 +1242,7 @@
                 </a>
           </div>
           </div>
-        </section>
-
-        <!-- ============ Evidence ============ -->
-        <section class="section section--exit" id="evidence">
-          <div class="wrap">
-            <div class="section-head reveal">
-              <p class="kicker kicker--rule">Analysis</p>
-              <h2>Your <span class="glow">patterns</span> are trying to tell you something.</h2>
-              <div class="lines stagger">
-                <p>
-                  Hundreds of dreams. Thousands of details. One evolving intelligence map.
-                  Synchroneers analyses the whole picture, so you can see patterns no single dream
-                  could reveal on its own.
-                </p>
-              </div>
-            </div>
-
-
-            <!-- ---- Interactive patterns and sample insights. Sample data, labelled as such. ---- -->
-            <div class="patterns reveal" id="patterns">
-              <div class="patterns-layout">
-                <div class="patterns-main">
-                  <p class="kicker">Sample journal · for illustration</p>
-                  <h3 class="patterns-title">Six themes that kept coming back</h3>
-                  <div
-                    class="patterns-stage"
-                    id="patternStage"
-                    role="group"
-                    aria-label="A constellation of six recurring themes from a sample journal. Choose a theme to read two of its entries."
-                  ></div>
-                </div>
-
-                <aside class="pattern-card" id="patternCard" aria-live="polite">
-                  <p class="pattern-card__empty" data-empty>
-                    Hover, tap, or tab to a theme to see how often it came up and the entries behind it.
-                  </p>
-                  <div data-body hidden>
-                    <p class="kicker">A pattern, not a verdict</p>
-                    <h4 class="pattern-card__title" data-title></h4>
-                    <p class="pattern-card__meta" data-meta></p>
-                    <ul class="pattern-card__entries" data-entries></ul>
-                  </div>
-                  <p class="pattern-card__note">
-                    A pattern needs at least two supporting entries, and links back to them. These
-                    entries are made up for illustration.
-                  </p>
-                </aside>
-              </div>
-            </div>
-
-            <figure class="insights reveal" id="insights">
-              <figcaption class="insights__cap">
-                <p class="kicker">Sample insights · for illustration</p>
-                <h3>Eight weeks in the journal</h3>
-              </figcaption>
-
-              <div class="insights-grid">
-                <div
-                  class="insights-panel"
-                  role="img"
-                  aria-label="Sample chart: entries per week rise from 3 in the first week to 10 in the eighth, mostly dreams, with some synchronicities, visions and readings."
-                >
-                  <p class="insights-panel__title">Entries each week</p>
-                  <ol class="insights-bars">
-                    <li class="week" style="--i:0">
-                      <span class="week__total">3</span>
-                      <span class="week__stack"><i class="k k--dream" style="--v:2"></i><i class="k k--sync" style="--v:1"></i></span>
-                      <span class="week__label">W1</span>
-                    </li>
-                    <li class="week" style="--i:1">
-                      <span class="week__total">5</span>
-                      <span class="week__stack"><i class="k k--dream" style="--v:3"></i><i class="k k--sync" style="--v:1"></i><i class="k k--vision" style="--v:1"></i></span>
-                      <span class="week__label">W2</span>
-                    </li>
-                    <li class="week" style="--i:2">
-                      <span class="week__total">4</span>
-                      <span class="week__stack"><i class="k k--dream" style="--v:2"></i><i class="k k--sync" style="--v:1"></i><i class="k k--vision" style="--v:1"></i></span>
-                      <span class="week__label">W3</span>
-                    </li>
-                    <li class="week" style="--i:3">
-                      <span class="week__total">7</span>
-                      <span class="week__stack"><i class="k k--dream" style="--v:4"></i><i class="k k--sync" style="--v:2"></i><i class="k k--vision" style="--v:1"></i></span>
-                      <span class="week__label">W4</span>
-                    </li>
-                    <li class="week" style="--i:4">
-                      <span class="week__total">6</span>
-                      <span class="week__stack"><i class="k k--dream" style="--v:3"></i><i class="k k--sync" style="--v:2"></i><i class="k k--reading" style="--v:1"></i></span>
-                      <span class="week__label">W5</span>
-                    </li>
-                    <li class="week" style="--i:5">
-                      <span class="week__total">9</span>
-                      <span class="week__stack"><i class="k k--dream" style="--v:5"></i><i class="k k--sync" style="--v:2"></i><i class="k k--vision" style="--v:1"></i><i class="k k--reading" style="--v:1"></i></span>
-                      <span class="week__label">W6</span>
-                    </li>
-                    <li class="week" style="--i:6">
-                      <span class="week__total">8</span>
-                      <span class="week__stack"><i class="k k--dream" style="--v:4"></i><i class="k k--sync" style="--v:2"></i><i class="k k--vision" style="--v:1"></i><i class="k k--reading" style="--v:1"></i></span>
-                      <span class="week__label">W7</span>
-                    </li>
-                    <li class="week" style="--i:7">
-                      <span class="week__total">10</span>
-                      <span class="week__stack"><i class="k k--dream" style="--v:5"></i><i class="k k--sync" style="--v:3"></i><i class="k k--vision" style="--v:1"></i><i class="k k--reading" style="--v:1"></i></span>
-                      <span class="week__label">W8</span>
-                    </li>
-                  </ol>
-                  <ul class="insights-key" aria-hidden="true">
-                    <li><i class="k k--dream"></i>Dream</li>
-                    <li><i class="k k--sync"></i>Synchronicity</li>
-                    <li><i class="k k--vision"></i>Vision</li>
-                    <li><i class="k k--reading"></i>Reading</li>
-                  </ul>
-                </div>
-
-                <div class="insights-panel">
-                  <p class="insights-panel__title">Symbols, week by week</p>
-                  <ul class="insights-symbols" role="img" aria-label="Sample chart: water appears in six of eight weeks, 11:11 in five, flying and keys in four, a recurring person and owls in three.">
-                    <li><span class="sym__name">Water</span><span class="sym__cells" aria-hidden="true"><i class="" style="--i:0"></i><i class="on" style="--i:1"></i><i class="on" style="--i:2"></i><i class="" style="--i:3"></i><i class="on" style="--i:4"></i><i class="on" style="--i:5"></i><i class="on" style="--i:6"></i><i class="on" style="--i:7"></i></span></li>
-                    <li><span class="sym__name">Flying</span><span class="sym__cells" aria-hidden="true"><i class="" style="--i:0"></i><i class="" style="--i:1"></i><i class="on" style="--i:2"></i><i class="" style="--i:3"></i><i class="" style="--i:4"></i><i class="on" style="--i:5"></i><i class="on" style="--i:6"></i><i class="on" style="--i:7"></i></span></li>
-                    <li><span class="sym__name">11:11</span><span class="sym__cells" aria-hidden="true"><i class="" style="--i:0"></i><i class="on" style="--i:1"></i><i class="" style="--i:2"></i><i class="on" style="--i:3"></i><i class="on" style="--i:4"></i><i class="" style="--i:5"></i><i class="on" style="--i:6"></i><i class="on" style="--i:7"></i></span></li>
-                    <li><span class="sym__name">Keys</span><span class="sym__cells" aria-hidden="true"><i class="on" style="--i:0"></i><i class="" style="--i:1"></i><i class="" style="--i:2"></i><i class="on" style="--i:3"></i><i class="" style="--i:4"></i><i class="on" style="--i:5"></i><i class="" style="--i:6"></i><i class="on" style="--i:7"></i></span></li>
-                    <li><span class="sym__name">A recurring person</span><span class="sym__cells" aria-hidden="true"><i class="on" style="--i:0"></i><i class="" style="--i:1"></i><i class="" style="--i:2"></i><i class="on" style="--i:3"></i><i class="" style="--i:4"></i><i class="" style="--i:5"></i><i class="on" style="--i:6"></i><i class="" style="--i:7"></i></span></li>
-                    <li><span class="sym__name">Owls</span><span class="sym__cells" aria-hidden="true"><i class="" style="--i:0"></i><i class="on" style="--i:1"></i><i class="" style="--i:2"></i><i class="" style="--i:3"></i><i class="on" style="--i:4"></i><i class="" style="--i:5"></i><i class="" style="--i:6"></i><i class="on" style="--i:7"></i></span></li>
-                  </ul>
-
-                  <p class="insights-panel__title insights-panel__title--mood">Mood across entries</p>
-                  <svg
-                    class="insights-mood"
-                    viewBox="0 0 168 40"
-                    role="img"
-                    aria-label="Sample chart: mood across entries trends upward over the eight weeks."
-                  >
-                    <polyline class="insights-mood__line" pathLength="1" points="8.0,24.2 28.5,20.0 49.0,22.2 69.5,15.5 90.0,17.8 110.5,13.3 131.0,14.4 151.5,11.0" />
-                    <g class="insights-mood__dots"><circle cx="8.0" cy="24.2" r="2.6" style="--i:0"/><circle cx="28.5" cy="20.0" r="2.6" style="--i:1"/><circle cx="49.0" cy="22.2" r="2.6" style="--i:2"/><circle cx="69.5" cy="15.5" r="2.6" style="--i:3"/><circle cx="90.0" cy="17.8" r="2.6" style="--i:4"/><circle cx="110.5" cy="13.3" r="2.6" style="--i:5"/><circle cx="131.0" cy="14.4" r="2.6" style="--i:6"/><circle cx="151.5" cy="11.0" r="2.6" style="--i:7"/></g>
-                  </svg>
-                </div>
-              </div>
-            </figure>
-
-            <div class="showcase">
-              <article class="panel panel--wide reveal">
-                <div class="panel__head">
-                  <p class="kicker">Pattern Researcher · your records only</p>
-                  <p class="quota"><b>17</b><span>left this month</span></p>
-                </div>
-                <p class="claim">
-                  Water appears in six entries and is described as calm or slow in five of them.
-                  Where it rises, the feeling you recorded is patience rather than fear.
-                </p>
-                <ul class="cites">
-                  <li class="cite">Dream · 4 Aug</li>
-                  <li class="cite">Dream · 11 Aug</li>
-                  <li class="cite">Synchronicity · 12 Aug</li>
-                  <li class="cite">Dream · 17 Aug</li>
-                  <li class="cite">Vision · 19 Aug</li>
-                  <li class="cite">Dream · 21 Aug</li>
-                </ul>
-              </article>
-
-              <div class="showcase__art reveal" data-delay="1">
-                <figure class="shot" data-phone="patterns">
-                  <img
-                    src="assets/app/03-insights-timeline.webp"
-                    alt="The Insights screen: ten entries counted by kind, and a timeline placing each one against the moon's phase."
-                    width="640"
-                    height="1391"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </figure>
-              </div>
-            </div>
-
-            <div class="evidence">
-              <figure class="panel pattern-card reveal">
-                <figcaption class="panel__head">
-                  <p class="kicker">Insights · a pattern, not a verdict</p>
-                  <span class="tag">Recurring</span>
-                </figcaption>
-                <div class="pattern-card__chart">
-                  <svg viewBox="0 0 320 150" role="img" aria-hidden="true" data-constellation>
-                    <polyline
-                      class="constellation-line"
-                      points="24,92 62,114 108,42 156,126 204,102 248,70 296,36"
-                    />
-                    <g class="constellation-nodes">
-                      <circle class="constellation-node" cx="24" cy="92" r="4.5" />
-                      <circle class="constellation-node" cx="62" cy="114" r="3.4" />
-                      <circle class="constellation-node" cx="108" cy="42" r="5.2" />
-                      <circle class="constellation-node" cx="156" cy="126" r="3.8" />
-                      <circle class="constellation-node" cx="204" cy="102" r="3.2" />
-                      <circle class="constellation-node" cx="248" cy="70" r="4.6" />
-                      <circle class="constellation-node" cx="296" cy="36" r="5.4" />
-                    </g>
-                  </svg>
-                </div>
-                <h3>Waiting without arrival</h3>
-                <p>
-                  Platforms, carriages and corridors recur, and in each of them the arrival never
-                  quite happens. The waiting itself looks like the content rather than a delay
-                  before something else.
-                </p>
-                <p class="panel__foot">
-                  <span>7 entries</span>
-                  <span>Last seen 2 days ago</span>
-                </p>
-              </figure>
-
-              <article class="panel counter reveal" data-delay="1">
-                <div class="panel__head">
-                  <p class="kicker">Counterexample</p>
-                </div>
-                <p>
-                  One entry breaks the pattern, and it stays on the card rather than being quietly
-                  dropped. A reading that only ever confirms itself is not worth keeping.
-                </p>
-                <ul class="cites">
-                  <li class="cite">Dream · 9 Aug · water described as rising fast</li>
-                </ul>
-                <p>
-                  The Skeptical Scientific perspective exists for the same reason. Sleep, memory,
-                  emotion, coincidence, and base rates get a seat at the table.
-                </p>
-              </article>
-            </div>
-          </div>
-          <div class="wrap section-cta reveal">
-            <p class="section-cta__line">Start your journey free today</p>
-            <div class="store-badges">
-            <a class="store-badge store-badge--live" href="https://apps.apple.com/app/id6751279447">
-              <svg
-                class="store-badge__mark"
-                width="22"
-                height="22"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  d="M17.564 12.75c-.024-2.69 2.196-3.98 2.296-4.043-1.25-1.83-3.194-2.08-3.885-2.108-1.654-.167-3.23.974-4.07.974-.837 0-2.132-.95-3.505-.924-1.803.026-3.466 1.048-4.394 2.66-1.874 3.25-.479 8.062 1.345 10.7.891 1.29 1.954 2.74 3.35 2.688 1.345-.053 1.853-.87 3.478-.87 1.626 0 2.083.87 3.505.844 1.447-.024 2.363-1.315 3.248-2.61 1.024-1.497 1.446-2.946 1.47-3.02-.032-.014-2.82-1.083-2.848-4.29zM14.95 4.9c.742-.9 1.243-2.152 1.106-3.4-1.07.043-2.365.712-3.132 1.61-.688.796-1.29 2.07-1.128 3.292 1.194.092 2.412-.607 3.154-1.502z"
-                />
-              </svg>
-              <span class="store-badge__name">App Store</span>
-            </a>
-
-            <a
-                  class="store-badge store-badge--live"
-                  href="https://play.google.com/store/apps/details?id=com.synchroneers.android"
-                >
-              <svg
-                class="store-badge__mark"
-                width="22"
-                height="22"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  d="M3.32 1.7A1.62 1.62 0 0 0 3 2.67v18.66c0 .36.11.69.3.96l10.03-10.3z"
-                  fill="#00A0FF"
-                />
-                <path
-                  d="M17.02 15.3l-3.69-3.31 3.7-3.3 4.16 2.36c1.08.62 1.08 2.18 0 2.8z"
-                  fill="#FFBC00"
-                />
-                <path d="M17.03 15.3L13.33 12l-10.03 10.3c.44.43 1.11.49 1.65.18z" fill="#FF3A44" />
-                <path d="M17.03 8.7L4.95 1.83a1.23 1.23 0 0 0-1.63.17L13.33 12z" fill="#00C853" />
-              </svg>
-              <span class="store-badge__name">Google Play</span>
-                </a>
-          </div>
-          </div>
-        </section>
+        </secton>
 
 
         <!-- ============ Closing ============ -->
@@ -1274,7 +1273,7 @@
             <p>Capture dreams and synchronicities.</p>
             <p>Explore different perspectives.</p>
             <p>Connect with fellow dreamers.</p>
-            <p>Become your own oracle.</p>
+            <p class="closing__oracle"><strong>Become your own oracle.</strong></p>
             <p>Everything together, whenever you need it.</p>
           </div>
           <div class="lede lines reveal" data-delay="1">
@@ -1332,7 +1331,7 @@
 
       <footer class="site-foot">
         <div class="wrap">
-          <p>Synchroneers · Structured reflection for non-ordinary experiences</p>
+          <p>Synchroneers · Collective research platform for non-ordinary experiences</p>
           <nav aria-label="Footer">
             <a href="/privacy">Privacy</a>
             <a href="/terms">Terms</a>
