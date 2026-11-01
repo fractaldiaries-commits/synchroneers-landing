@@ -1697,11 +1697,6 @@ p {
     border-color 0.2s ease;
 }
 
-.store-badge__mark {
-  flex: none;
-  display: block;
-}
-
 .store-badge__name {
   font-size: 1.06rem;
   font-weight: 600;
@@ -1728,10 +1723,6 @@ p {
   border-color: var(--border);
   color: var(--text-subtle);
   cursor: default;
-}
-
-.store-badge--soon .store-badge__mark {
-  opacity: 0.55;
 }
 
 .store-badge__soon-tag {
