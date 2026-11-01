@@ -34,7 +34,7 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
 
 /**
- * The five clips. `still` is the fallback screenshot, `alt` describes it (it is
+ * The four clips. `still` is the fallback screenshot, `alt` describes it (it is
  * the existing alt text for that screenshot), and `tap` is where the first tap
  * lands, as [x%, y%] of the screen.
  */
@@ -44,12 +44,6 @@ const CLIPS = {
     still: 'assets/app/04-journal.webp',
     alt: "The journal: ten entries on a timeline, each tagged by kind, with the time it happened and the time it was logged.",
     tap: [29, 46],
-  },
-  reading: {
-    label: 'Reading',
-    still: 'assets/app/07-deepdive.webp',
-    alt: 'A reading through one chosen framework, marked tentative, with the question it leaves you holding.',
-    tap: [50, 55],
   },
   tarot: {
     label: 'Tarot',
@@ -73,7 +67,7 @@ const CLIPS = {
   },
 };
 
-const ORDER = ['capture', 'reading', 'tarot', 'patterns', 'collectives'];
+const ORDER = ['capture', 'tarot', 'patterns', 'collectives'];
 const VIDEO_BASE = 'assets/app/video/';
 
 /** Resolve once an image URL has loaded, or reject. Used to prefer a poster. */
