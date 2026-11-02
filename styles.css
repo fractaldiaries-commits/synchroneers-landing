@@ -426,7 +426,7 @@ main > section:not(.hero):not(.closing) .pattern-node__label {
 
 .masthead[data-stuck='false'] .btn--primary,
 .masthead[data-stuck='false'] .btn--primary:hover {
-  background: #f0595d;
+  background: #d63a48;
   color: #fff;
   box-shadow: 0 8px 24px -10px rgba(217, 45, 106, 0.55);
 }
@@ -657,7 +657,7 @@ main > section:not(.hero):not(.closing) .pattern-node__label {
   --dusk-text: #161a45;
   --dusk-text-soft: #34386c;
   --dusk-said: #4f2f82;
-  --dusk-glow: #d92d6a;
+  --dusk-glow: #a8134f;
   --accent: var(--dusk-glow);
 }
 
