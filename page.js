@@ -15,11 +15,31 @@ import { initPatternsUI } from './patterns.js';
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-// The masthead button points at the App Store in markup; Android visitors get Play instead.
-if (/Android/i.test(navigator.userAgent)) {
-  for (const a of document.querySelectorAll('[data-store-cta]')) {
-    a.href = 'https://play.google.com/store/apps/details?id=com.synchroneers.android';
-  }
+// Every Start free button points at the App Store in markup. A phone goes
+// straight to its own store; a computer has no store to go to, so it gets a
+// small picker instead.
+const PLAY_URL = 'https://play.google.com/store/apps/details?id=com.synchroneers.android';
+const isAndroid = /Android/i.test(navigator.userAgent);
+const isApplePhone =
+  /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const storePicker = document.getElementById('store-picker');
+
+for (const a of document.querySelectorAll('[data-store-cta]')) {
+  if (isAndroid) a.href = PLAY_URL;
+  if (isAndroid || isApplePhone || !storePicker) continue;
+  a.addEventListener('click', (event) => {
+    event.preventDefault();
+    storePicker.showModal();
+  });
+}
+
+if (storePicker) {
+  storePicker.querySelector('.store-picker__close').addEventListener('click', () => storePicker.close());
+  // A click on the backdrop lands on the dialog itself; one inside lands on its content.
+  storePicker.addEventListener('click', (event) => {
+    if (event.target === storePicker) storePicker.close();
+  });
 }
 
 /* ---------------- Perspective registry ----------------
