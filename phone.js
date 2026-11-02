@@ -41,6 +41,8 @@ const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
 const CLIPS = {
   capture: {
     label: 'Capture',
+    // Still only: the recording showed the "Get a reading" switch.
+    video: false,
     still: 'assets/app/04-journal.webp',
     alt: "The journal: ten entries on a timeline, each tagged by kind, with the time it happened and the time it was logged.",
     tap: [29, 46],
@@ -227,7 +229,7 @@ function buildPhone(shot) {
       })
       .catch(() => {});
 
-    attachVideo(name, mine);
+    if (clip.video !== false) attachVideo(name, mine);
     screen.classList.remove('is-switching');
     if (reduceMotion.matches || !visible) {
       tap.classList.remove('is-on');
