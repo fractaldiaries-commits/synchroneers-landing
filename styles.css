@@ -28,8 +28,8 @@
 
   /* ---- Text ---- */
   --white: #f7f8ff;
-  --text-muted: #aeb8d8;
-  --text-subtle: #8f9bc2;
+  --text-muted: #c8d0ea;
+  --text-subtle: #aeb8d8;
 
   /* ---- Lines and surfaces ----
      Surfaces sit on top of the star canvas, so they are translucent.
@@ -37,7 +37,7 @@
   --border: #26315b;
   --border-soft: rgba(154, 124, 255, 0.18);
   --hairline: rgba(174, 184, 216, 0.14);
-  --veil: rgba(7, 11, 29, 0.42);
+  --veil: rgba(7, 11, 29, 0.4);
   --card: rgba(13, 20, 48, 0.66);
   --card-solid: rgba(13, 20, 48, 0.9);
 
@@ -249,6 +249,18 @@ p {
   background:
     radial-gradient(120% 80% at 78% 8%, rgba(154, 124, 255, 0.16), transparent 62%),
     radial-gradient(90% 70% at 12% 92%, rgba(122, 140, 240, 0.1), transparent 60%), var(--ink);
+}
+
+/* A twilight wash over the night sky, so the hero's colour carries on down the
+   page. Screen blending only ever brightens, so the stars still show through. */
+.sky-wash {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: url('assets/hero/twilight-wash.webp') center / cover no-repeat;
+  mix-blend-mode: screen;
+  opacity: 0.8;
 }
 
 /* Constellation names, positioned each frame by sky.js. */
