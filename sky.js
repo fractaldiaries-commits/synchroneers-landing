@@ -191,28 +191,20 @@ function boot(canvas) {
           float cloudA = fbm(p * 2.4 + vec2(t, -t * 0.6));
           float cloudB = fbm(p * 1.3 - vec2(t * 0.7, t * 0.35) + cloudA * 0.6);
 
-          // Midnight blue ground, dark violet and deep indigo washes: the
-          // three brand colours and nothing else.
-          vec3 deep = vec3(0.027, 0.043, 0.114);
-          vec3 violet = vec3(0.271, 0.180, 0.522);
-          vec3 indigo = vec3(0.129, 0.161, 0.451);
-
-          // fbm averages near 0.47, so the window has to sit around that or
-          // nothing clears the threshold and the wash never appears.
-          float violetMask = smoothstep(0.30, 0.72, cloudB) *
-                             smoothstep(-0.75, 0.55, p.x + p.y * 0.9);
-          float indigoMask = smoothstep(0.34, 0.74, cloudA) *
-                           smoothstep(0.7, -0.5, p.x + p.y * 1.1);
-
-          // Kept dim on purpose. The guidelines ask for dark overall
-          // exposure and for the background never to compete with the
-          // subject, and a brighter wash simply erases the fainter stars.
-          vec3 color = deep;
-          color += violet * violetMask * 0.3;
-          color += indigo * indigoMask * 0.2;
-
-          float vignette = smoothstep(1.25, 0.1, length(p * vec2(0.85, 1.0)));
-          color *= 0.42 + 0.58 * vignette;
+          // The hero's twilight, held behind the whole page: periwinkle at
+          // the top of the screen, lavender through the middle, rose at the
+          // bottom. The top stop is a little lighter than the hero's own so
+          // dark body text still reads on it. The clouds only nudge the
+          // shade, so it drifts without ever reading as weather.
+          float depth = 1.0 - uv.y;
+          vec3 periwinkle = vec3(0.557, 0.612, 0.933);
+          vec3 lilac = vec3(0.643, 0.667, 0.941);
+          vec3 lavender = vec3(0.776, 0.686, 0.941);
+          vec3 rose = vec3(0.925, 0.624, 0.733);
+          vec3 color = mix(periwinkle, lilac, smoothstep(0.0, 0.35, depth));
+          color = mix(color, lavender, smoothstep(0.3, 0.65, depth));
+          color = mix(color, rose, smoothstep(0.62, 1.0, depth));
+          color += (cloudB - 0.47) * 0.06 + (cloudA - 0.47) * 0.03;
 
           gl_FragColor = vec4(color, 1.0);
         }
