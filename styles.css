@@ -255,8 +255,8 @@ p {
    down keep the night palette and their light text. */
 main > section:not(.hero):not(.closing) {
   --white: #161a45;
-  --text-muted: #2c3064;
-  --text-subtle: #3f4478;
+  --text-muted: #24285a;
+  --text-subtle: #2c3064;
   --border: rgba(22, 26, 69, 0.2);
   --border-soft: rgba(22, 26, 69, 0.14);
   --hairline: rgba(22, 26, 69, 0.14);
@@ -284,8 +284,8 @@ main > section:not(.hero):not(.closing) {
     .voices__dream
   ) {
   --white: #f7f8ff;
-  --text-muted: #c8d0ea;
-  --text-subtle: #aeb8d8;
+  --text-muted: #dde2f4;
+  --text-subtle: #c8d0ea;
   --border: #26315b;
   --border-soft: rgba(154, 124, 255, 0.18);
   --hairline: rgba(174, 184, 216, 0.14);
@@ -297,6 +297,38 @@ main > section:not(.hero):not(.closing) {
 
 .btn.btn--start {
   color: #fff;
+}
+
+/* Emphasis in a section heading, a shade deeper than the hero's pink so it
+   holds on the lighter middle of the twilight. */
+main > section:not(.hero):not(.closing) .section-head h2 .glow {
+  color: #9e1149;
+}
+
+/* The kind icons keep their own colours on a dark tile; on the twilight the
+   tinted tile they had vanished. Each tab names its colour as
+   var(--violet-soft) and similar, so the light value is restored here. */
+main > section:not(.hero):not(.closing) .type-tab {
+  --violet-soft: #b9a4ff;
+}
+
+main > section:not(.hero):not(.closing) .type-tab__glyph {
+  border-color: transparent;
+  background: rgba(13, 20, 48, 0.88);
+}
+
+/* The tarot cards are drawn behind the copy and pass under it as they turn,
+   so the dark text carries a pale glow that holds it over the card art. */
+main > section .tarot-card__name,
+main > section .tarot-card__note,
+main > section .tarot-copy .lines p {
+  text-shadow:
+    0 0 10px rgba(236, 228, 255, 0.95),
+    0 0 4px rgba(236, 228, 255, 0.9);
+}
+
+main > section:not(.hero):not(.closing) .pattern-node__label {
+  color: var(--white);
 }
 
 /* The closing scene stays at night, where the accent is a pale violet. */
@@ -322,7 +354,12 @@ main > section:not(.hero):not(.closing) {
   font-weight: 500;
   letter-spacing: 0.16em;
   white-space: nowrap;
-  color: var(--accent);
+  /* Dark on a pale tag, so a name reads on the twilight and on the night
+     scene at the bottom alike. */
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  background: rgba(236, 228, 255, 0.7);
+  color: #24285a;
   opacity: 0;
   /* Centred on its star group, and pulled clear of the figure lines. */
   translate: -50% -2.6em;
@@ -1532,7 +1569,8 @@ main > section:not(.hero):not(.closing) {
 .site-foot {
   padding: var(--s-7) var(--gutter) var(--s-9);
   border-top: 1px solid var(--hairline);
-  background: var(--veil);
+  /* Solid night: below the closing scene the twilight shows through again. */
+  background: rgba(13, 20, 48, 0.94);
 }
 
 .site-foot .wrap {
@@ -2485,7 +2523,8 @@ main > section:not(.hero):not(.closing) {
   position: absolute;
   inset: -40px -40px -40px -60px;
   z-index: -1;
-  background: radial-gradient(70% 70% at 40% 50%, rgba(7, 11, 29, 0.62), transparent 100%);
+  /* A pale halo, so the copy stays clear of the cards drawn behind it. */
+  background: radial-gradient(70% 70% at 40% 50%, rgba(236, 228, 255, 0.6), transparent 100%);
   pointer-events: none;
 }
 
@@ -2706,8 +2745,8 @@ main > section:not(.hero):not(.closing) {
 }
 
 .phone-tab[aria-selected='true'] {
-  color: var(--white);
-  background: rgba(154, 124, 255, 0.22);
+  color: #fff;
+  background: #4f2f82;
   border-color: var(--violet);
 }
 
