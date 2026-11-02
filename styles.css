@@ -640,10 +640,6 @@ p {
   color: var(--dusk-text);
 }
 
-.hero .store-badge--live {
-  box-shadow: 0 12px 28px -14px rgba(40, 20, 90, 0.5);
-}
-
 .hero-copy {
   display: grid;
   justify-items: center;
@@ -1659,105 +1655,63 @@ p {
 }
 
 /* ============================================================
-   Store badges
-
-   The marks are Apple's and Google's, inlined as SVG rather than
-   fetched: the page ships self-contained, and a store logo that
-   fails to load is worse than no badge at all.
-
-   The reference for these is a black pill on white. This page is
-   dark, so the fill is inverted rather than copied - a black pill
-   on --ink is invisible. Android is not shipping yet, so its badge
-   is stated as unavailable rather than dressed up as a link.
+   Start free, and the store picker it opens on a computer
    ============================================================ */
 
-.store-badges {
-  display: flex;
-  flex-wrap: wrap;
+.btn--start {
+  min-height: 52px;
+  padding: 17px 40px;
+  font-size: 1.06rem;
+  box-shadow: 0 12px 28px -14px rgba(40, 20, 90, 0.5);
+}
+
+.hero .btn--start {
+  color: #fff;
+}
+
+.store-picker {
+  width: min(400px, calc(100vw - 32px));
+  padding: var(--pad-panel);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--r-lg);
+  background: var(--ink-elevated);
+  color: var(--white);
+  text-align: center;
+}
+
+.store-picker::backdrop {
+  background: rgba(7, 11, 29, 0.7);
+}
+
+.store-picker h2 {
+  margin: 0 0 var(--s-2);
+  font-size: 1.3rem;
+}
+
+.store-picker p {
+  margin: 0 0 var(--s-5);
+  color: var(--text-muted);
+}
+
+.store-picker__options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: var(--s-3);
-  align-items: stretch;
-  /* Centred at every width. Left-aligned they sat off to one side of a centred
-     block above them, and the two badges read as a ragged edge rather than a
-     pair. */
+}
+
+.store-picker__options .btn {
   justify-content: center;
 }
 
-.store-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 11px;
-  padding: 13px 22px;
-  border: 1px solid transparent;
-  border-radius: var(--r-pill);
-  text-decoration: none;
-  line-height: 1.05;
-  transition:
-    transform 0.2s ease,
-    background-color 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.store-badge__name {
-  font-size: 1.06rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-}
-
-/* Live: the one real call to action, so it carries the solid fill. */
-.store-badge--live {
-  background: var(--white);
-  color: var(--ink);
-}
-
-.store-badge--live:hover,
-.store-badge--live:focus-visible {
-  transform: translateY(-2px);
-  background: #fff;
-}
-
-/* Unavailable: outlined and muted. Not a link, and not focusable,
-   because there is nothing on the other side of it yet. */
-.store-badge--soon {
-  background: transparent;
-  border-color: var(--border);
-  color: var(--text-subtle);
-  cursor: default;
-}
-
-.store-badge__soon-tag {
-  margin-left: 3px;
-  padding: 3px 8px;
-  border: 1px solid var(--border);
-  border-radius: var(--r-pill);
-  font-size: 0.68rem;
-  font-weight: 600;
-  color: var(--text-subtle);
-  white-space: nowrap;
-}
-
-/* Stacked below 560px rather than 420px: the two badges only fit abreast on
-   the widest phones, and at 480px they wrapped to one wide and one narrow.
-   Matching widths and a shared cap keeps the pair reading as one control. */
-@media (max-width: 560px) {
-  .store-badges {
-    width: 100%;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .store-badge {
-    width: 100%;
-    max-width: 320px;
-    justify-content: center;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .store-badge:hover,
-  .store-badge:focus-visible {
-    transform: none;
-  }
+.store-picker__close {
+  margin-top: var(--s-4);
+  min-height: 44px;
+  padding: 0 var(--s-4);
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--text-muted);
+  cursor: pointer;
 }
 
 /* ============================================================
@@ -3357,20 +3311,6 @@ p {
     order: 3;
     margin-top: 8px;
   }
-
-  .hero .store-badges {
-    width: 100%;
-    flex-direction: row;
-    justify-content: center;
-    gap: 10px;
-  }
-
-  .hero .store-badge {
-    flex: 1 1 0;
-    min-width: 0;
-    max-width: 180px;
-    padding-inline: 12px;
-  }
 }
 
 
@@ -3391,28 +3331,6 @@ p {
   font-size: 1.08rem;
   font-weight: 600;
   color: var(--white);
-}
-
-/* Side by side even on a phone: stacked pairs of full-width buttons
-   would bury the page. */
-@media (max-width: 560px) {
-  .section-cta .store-badges {
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: center;
-  }
-
-  .section-cta .store-badge {
-    flex: 1 1 0;
-    max-width: 180px;
-    min-width: 0;
-    padding: 11px 12px;
-    gap: 8px;
-  }
-
-  .section-cta .store-badge__name {
-    font-size: 0.96rem;
-  }
 }
 
 /* ============================================================
