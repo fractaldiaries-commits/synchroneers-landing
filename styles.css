@@ -37,7 +37,7 @@
   --border: #26315b;
   --border-soft: rgba(154, 124, 255, 0.18);
   --hairline: rgba(174, 184, 216, 0.14);
-  --veil: rgba(7, 11, 29, 0.4);
+  --veil: rgba(7, 11, 29, 0.42);
   --card: rgba(13, 20, 48, 0.66);
   --card-solid: rgba(13, 20, 48, 0.9);
 
@@ -245,22 +245,63 @@ p {
   display: block;
   width: 100%;
   height: 100%;
-  /* Painted before the sky boots so the first frame is never white. */
-  background:
-    radial-gradient(120% 80% at 78% 8%, rgba(154, 124, 255, 0.16), transparent 62%),
-    radial-gradient(90% 70% at 12% 92%, rgba(122, 140, 240, 0.1), transparent 60%), var(--ink);
+  /* Painted before the sky boots, and kept without WebGL: the same twilight
+     the shader draws. */
+  background: linear-gradient(180deg, #8e9cee 0%, #a4aaf0 30%, #c6aff0 60%, #ec9fbb 100%);
 }
 
-/* A twilight wash over the night sky, so the hero's colour carries on down the
-   page. Screen blending only ever brightens, so the stars still show through. */
-.sky-wash {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background: url('assets/hero/twilight-wash.webp') center / cover no-repeat;
-  mix-blend-mode: screen;
-  opacity: 0.8;
+/* Below the hero the page keeps the hero's twilight (see sky.js), so text
+   that sits straight on it is dark, as in the hero. The dark panels further
+   down keep the night palette and their light text. */
+main > section:not(.hero):not(.closing) {
+  --white: #161a45;
+  --text-muted: #2c3064;
+  --text-subtle: #3f4478;
+  --border: rgba(22, 26, 69, 0.2);
+  --border-soft: rgba(22, 26, 69, 0.14);
+  --hairline: rgba(22, 26, 69, 0.14);
+  --veil: transparent;
+  --accent: #c2255f;
+  --accent-fill: #c2255f;
+  --violet-soft: #4f2f82;
+  /* Panels read as solid night glass on the twilight rather than grey. */
+  --card: rgba(13, 20, 48, 0.88);
+  --card-solid: rgba(13, 20, 48, 0.94);
+  color: var(--white);
+}
+
+:is(
+    .panel,
+    .capture-mock,
+    .flow-node,
+    .insights-panel,
+    .pattern-card,
+    .phone-screen,
+    .phone-tab,
+    .loop-step__dot,
+    .shot,
+    .voice__bubble,
+    .voices__dream
+  ) {
+  --white: #f7f8ff;
+  --text-muted: #c8d0ea;
+  --text-subtle: #aeb8d8;
+  --border: #26315b;
+  --border-soft: rgba(154, 124, 255, 0.18);
+  --hairline: rgba(174, 184, 216, 0.14);
+  --violet-soft: #b9a4ff;
+  --accent: var(--violet-soft);
+  --accent-fill: var(--violet);
+  color: var(--white);
+}
+
+.btn.btn--start {
+  color: #fff;
+}
+
+/* The closing scene stays at night, where the accent is a pale violet. */
+.closing .btn.btn--start {
+  color: #04121a;
 }
 
 /* Constellation names, positioned each frame by sky.js. */
@@ -598,10 +639,8 @@ p {
     #9ea7ef 20%,
     #c6aff0 36%,
     #ec9fbb 54%,
-    #b863a4 64%,
-    rgba(96, 50, 146, 0.94) 74%,
-    rgba(48, 28, 98, 0.75) 86%,
-    rgba(7, 11, 29, 0) 100%
+    rgba(214, 160, 220, 0.7) 74%,
+    rgba(198, 175, 240, 0) 100%
   );
 }
 
@@ -1677,10 +1716,6 @@ p {
   box-shadow: 0 12px 28px -14px rgba(40, 20, 90, 0.5);
 }
 
-.hero .btn--start {
-  color: #fff;
-}
-
 .store-picker {
   width: min(400px, calc(100vw - 32px));
   padding: var(--pad-panel);
@@ -2045,7 +2080,7 @@ p {
    carries emphasis through the whole page rather than each section inventing
    its own. */
 .section-head h2 .glow {
-  color: var(--violet-soft);
+  color: var(--accent);
 }
 
 /* ============================================================
