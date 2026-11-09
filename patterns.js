@@ -124,22 +124,28 @@ const smooth = (a, b, x) => {
 
 /* ---------------- Interaction layer (always) ---------------- */
 
+/** The panel is never empty: it opens on the theme that came up most. */
+const DEFAULT_ID = THEMES.reduce((top, theme) => (theme.count > top.count ? theme : top)).id;
+
 const shared = {
-  active: null,
+  active: DEFAULT_ID,
   listeners: new Set(),
 };
 
 function setActive(id) {
+  if (!id || id === shared.active) return;
   shared.active = id;
   for (const listener of shared.listeners) listener(id);
 }
+
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const EASE = 'cubic-bezier(0.23, 1, 0.32, 1)';
+const svgNS = 'http://www.w3.org/2000/svg';
 
 export function initPatternsUI() {
   const stage = document.getElementById('patternStage');
   const card = document.getElementById('patternCard');
   if (!stage || !card) return;
-
-  const svgNS = 'http://www.w3.org/2000/svg';
 
   /* ---------- Plain SVG constellation: the fallback drawing ---------- */
 
@@ -191,13 +197,17 @@ export function initPatternsUI() {
     dot.className = 'pattern-node__dot';
     dot.setAttribute('aria-hidden', 'true');
 
+    // The name and the count are two things: the count is a quiet tag beside
+    // the name, so "11:11" and "5" never read as one number.
     const label = document.createElement('span');
     label.className = 'pattern-node__label';
     label.setAttribute('aria-hidden', 'true');
-    label.textContent = theme.label;
+    const name = document.createElement('span');
+    name.textContent = theme.label;
     const count = document.createElement('small');
+    count.className = 'pattern-node__count';
     count.textContent = String(theme.count);
-    label.append(' ', count);
+    label.append(name, count);
 
     button.append(dot, label);
     item.append(button);
@@ -205,7 +215,8 @@ export function initPatternsUI() {
     buttons.set(theme.id, button);
 
     // Hover previews on a mouse; a tap or a click pins. Focus previews too,
-    // so keyboard users get the same card without a second key press.
+    // so keyboard users get the same card without a second key press. Leaving
+    // the stage keeps the last theme: the card is never empty.
     button.addEventListener('pointerenter', (event) => {
       if (event.pointerType === 'mouse') setActive(theme.id);
     });
@@ -214,40 +225,26 @@ export function initPatternsUI() {
   }
   stage.append(list);
 
-  stage.addEventListener('pointerleave', (event) => {
-    if (event.pointerType === 'mouse' && !stage.contains(document.activeElement)) setActive(null);
-  });
-
   /* ---------- The card ---------- */
 
-  const empty = card.querySelector('[data-empty]');
   const body = card.querySelector('[data-body]');
   const title = card.querySelector('[data-title]');
+  const countOut = card.querySelector('[data-count]');
   const meta = card.querySelector('[data-meta]');
   const entries = card.querySelector('[data-entries]');
+  const announce = card.querySelector('[data-announce]');
 
-  function show(id) {
-    const theme = id ? byId[id] : null;
+  let current = null;
+  let heightAnimation = null;
+  let fadeAnimation = null;
+  let ghost = null;
+  let countFrame = 0;
+  let countShown = 0;
 
-    for (const [key, button] of buttons) {
-      button.setAttribute('aria-pressed', String(key === id));
-      button.dataset.state = !id ? '' : key === id ? 'active' : 'dim';
-    }
-    for (const line of lines) {
-      const touches = id && (line.dataset.a === id || line.dataset.b === id);
-      line.dataset.state = !id ? '' : touches ? 'active' : 'dim';
-    }
-
-    if (!theme) {
-      empty.hidden = false;
-      body.hidden = true;
-      return;
-    }
-
-    empty.hidden = true;
-    body.hidden = false;
+  function fill(theme) {
     title.textContent = theme.label;
-    meta.textContent = `${theme.count} entries in this sample journal`;
+    meta.textContent = 'entries in this sample journal';
+    announce.textContent = `${theme.label}, ${theme.count} entries in this sample journal.`;
     entries.replaceChildren(
       ...theme.entries.map((entry) => {
         const li = document.createElement('li');
@@ -260,13 +257,250 @@ export function initPatternsUI() {
         return li;
       }),
     );
-    card.dataset.live = '';
-    void card.offsetWidth;
-    card.dataset.live = 'true';
+  }
+
+  /** Count to its new value from wherever it is now, so a second change mid-way carries on smoothly. */
+  function tweenCount(to, instant) {
+    window.cancelAnimationFrame(countFrame);
+    if (instant) {
+      countShown = to;
+      countOut.textContent = String(to);
+      return;
+    }
+    const from = countShown;
+    const started = performance.now();
+    const step = (now) => {
+      const t = Math.min(1, (now - started) / 380);
+      const eased = 1 - Math.pow(1 - t, 3);
+      countShown = from + (to - from) * eased;
+      countOut.textContent = String(Math.round(countShown));
+      if (t < 1) countFrame = window.requestAnimationFrame(step);
+    };
+    countFrame = window.requestAnimationFrame(step);
+  }
+
+  function settleStates(id) {
+    for (const [key, button] of buttons) {
+      button.setAttribute('aria-pressed', String(key === id));
+      button.dataset.state = key === id ? 'active' : 'dim';
+    }
+    for (const line of lines) {
+      const touches = line.dataset.a === id || line.dataset.b === id;
+      line.dataset.state = touches ? 'active' : 'dim';
+    }
+  }
+
+  function show(id) {
+    const theme = byId[id];
+    if (!theme || id === current) return;
+    const first = current === null;
+    current = id;
+    settleStates(id);
+
+    if (first || reduceMotion.matches) {
+      heightAnimation?.cancel();
+      fadeAnimation?.cancel();
+      ghost?.remove();
+      ghost = null;
+      fill(theme);
+      tweenCount(theme.count, true);
+      return;
+    }
+
+    // Read where everything is now, mid-animation or not, before cancelling:
+    // a second change picks up from what is on screen, so nothing jumps.
+    const cardBox = card.getBoundingClientRect();
+    const bodyBox = body.getBoundingClientRect();
+    const fromHeight = cardBox.height;
+    const fromOpacity = Number.parseFloat(getComputedStyle(body).opacity);
+
+    heightAnimation?.cancel();
+    fadeAnimation?.cancel();
+    ghost?.remove();
+
+    // The old text stays behind as a copy, fading out over the new text
+    // fading in, so the content changes in place instead of blinking.
+    ghost = body.cloneNode(true);
+    ghost.classList.add('pattern-card__ghost');
+    ghost.setAttribute('aria-hidden', 'true');
+    ghost.removeAttribute('data-body');
+    ghost.style.cssText = `position:absolute;pointer-events:none;margin:0;left:${
+      bodyBox.left - cardBox.left - card.clientLeft
+    }px;top:${bodyBox.top - cardBox.top - card.clientTop}px;width:${bodyBox.width}px`;
+    card.append(ghost);
+    const mine = ghost;
+    mine
+      .animate([{ opacity: fromOpacity }, { opacity: 0 }], { duration: 160, easing: 'linear', fill: 'forwards' })
+      .finished.then(() => {
+        mine.remove();
+        if (ghost === mine) ghost = null;
+      })
+      .catch(() => {});
+    window.setTimeout(() => {
+      mine.remove();
+      if (ghost === mine) ghost = null;
+    }, 400);
+
+    fill(theme);
+    tweenCount(theme.count, false);
+
+    const toHeight = card.getBoundingClientRect().height;
+    card.classList.add('is-morphing');
+    heightAnimation = card.animate(
+      [{ height: `${fromHeight}px` }, { height: `${toHeight}px` }],
+      { duration: 300, easing: EASE },
+    );
+    const done = () => card.classList.remove('is-morphing');
+    heightAnimation.onfinish = done;
+    heightAnimation.oncancel = done;
+
+    fadeAnimation = body.animate(
+      [
+        { opacity: Math.min(fromOpacity, 0.2), transform: 'translateY(4px)' },
+        { opacity: 1, transform: 'none' },
+      ],
+      { duration: 240, easing: EASE },
+    );
   }
 
   shared.listeners.add(show);
-  show(null);
+
+  /* ---------- Connectors: a thin line from the star to its entries ---------- */
+
+  const layout = card.closest('.patterns-layout');
+  const overlay = document.createElementNS(svgNS, 'svg');
+  overlay.setAttribute('class', 'patterns-links');
+  overlay.setAttribute('aria-hidden', 'true');
+  layout.append(overlay);
+
+  const makeGroup = () => {
+    const group = document.createElementNS(svgNS, 'g');
+    const paths = [0, 1].map(() => {
+      const path = document.createElementNS(svgNS, 'path');
+      path.setAttribute('pathLength', '1');
+      return path;
+    });
+    const dots = [0, 1].map(() => {
+      const dot = document.createElementNS(svgNS, 'circle');
+      dot.setAttribute('r', '2.5');
+      return dot;
+    });
+    group.append(...paths, ...dots);
+    overlay.append(group);
+    return { group, paths, dots, id: null, animations: [] };
+  };
+  const groups = [makeGroup(), makeGroup()];
+  let live = 0;
+
+  /** Place one group's lines for its theme. Called every frame while on screen. */
+  function place(entry) {
+    if (!entry.id) return;
+    const button = buttons.get(entry.id);
+    const dotBox = button.querySelector('.pattern-node__dot').getBoundingClientRect();
+    const base = layout.getBoundingClientRect();
+    const cardBox = card.getBoundingClientRect();
+    const sx = dotBox.left + dotBox.width / 2 - base.left;
+    const sy = dotBox.top + dotBox.height / 2 - base.top;
+    const rows = Array.from(entries.querySelectorAll('li'));
+    const beside = cardBox.left > dotBox.right + 24;
+
+    entry.paths.forEach((path, i) => {
+      const row = rows[i];
+      let ex;
+      let ey;
+      if (beside && row) {
+        const box = row.querySelector('.cite').getBoundingClientRect();
+        ex = cardBox.left - base.left;
+        ey = box.top + box.height / 2 - base.top;
+      } else {
+        ex = cardBox.left - base.left + 28 + i * 36;
+        ey = cardBox.top - base.top;
+      }
+      const dx = ex - sx;
+      const dy = ey - sy;
+      const d = beside
+        ? `M${sx.toFixed(1)} ${sy.toFixed(1)}C${(sx + dx * 0.55).toFixed(1)} ${sy.toFixed(1)} ${(ex - dx * 0.35).toFixed(1)} ${ey.toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`
+        : `M${sx.toFixed(1)} ${sy.toFixed(1)}C${sx.toFixed(1)} ${(sy + dy * 0.5).toFixed(1)} ${ex.toFixed(1)} ${(ey - dy * 0.35).toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`;
+      path.setAttribute('d', d);
+      entry.dots[i].setAttribute('cx', ex.toFixed(1));
+      entry.dots[i].setAttribute('cy', ey.toFixed(1));
+    });
+  }
+
+  function connect(id, first) {
+    const outgoing = groups[live];
+    live = 1 - live;
+    const incoming = groups[live];
+
+    // The old lines let go: they fade where they are while the new ones draw.
+    for (const animation of outgoing.animations) animation.cancel();
+    outgoing.animations = [];
+    if (outgoing.id && !reduceMotion.matches) {
+      outgoing.animations.push(
+        outgoing.group.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160, easing: 'linear', fill: 'forwards' }),
+      );
+    } else {
+      outgoing.group.style.opacity = '0';
+    }
+
+    for (const animation of incoming.animations) animation.cancel();
+    incoming.animations = [];
+    incoming.id = id;
+    incoming.group.style.opacity = '';
+    place(incoming);
+
+    if (reduceMotion.matches || first) {
+      if (!reduceMotion.matches) {
+        incoming.animations.push(
+          incoming.group.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, easing: EASE, delay: 200, fill: 'backwards' }),
+        );
+      }
+      return;
+    }
+    incoming.paths.forEach((path, i) => {
+      incoming.animations.push(
+        path.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], {
+          duration: 340,
+          delay: 40 + i * 60,
+          easing: EASE,
+          fill: 'backwards',
+        }),
+      );
+      incoming.animations.push(
+        incoming.dots[i].animate([{ opacity: 0 }, { opacity: 1 }], {
+          duration: 160,
+          delay: 260 + i * 60,
+          easing: 'linear',
+          fill: 'backwards',
+        }),
+      );
+    });
+  }
+
+  shared.listeners.add((id) => connect(id, false));
+
+  // Keep the lines on the stars while they drift, and on the card while the
+  // page scrolls or the card's height settles. One loop, only while visible.
+  let visible = false;
+  let frame = 0;
+  const follow = () => {
+    place(groups[live]);
+    if (groups[1 - live].id) place(groups[1 - live]);
+    frame = visible ? window.requestAnimationFrame(follow) : 0;
+  };
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(
+      (items) => {
+        visible = items.some((item) => item.isIntersecting);
+        if (visible && !frame) frame = window.requestAnimationFrame(follow);
+      },
+      { rootMargin: '80px 0px' },
+    ).observe(layout);
+  }
+  window.addEventListener('resize', () => place(groups[live]));
+
+  show(DEFAULT_ID);
+  connect(DEFAULT_ID, true);
 }
 
 /* ---------------- Three.js layer (on demand) ---------------- */
@@ -526,7 +760,8 @@ export function createPatterns(THREE, { stage }) {
       const appear = smooth(0.1 + i * 0.045, 0.28 + i * 0.045, p);
       nodeAppear[i] = appear;
 
-      const target = active === theme.id ? 1 : 0;
+      // The selected star swells; the others sit back.
+      const target = active === theme.id ? 1 : active ? -0.45 : 0;
       hot[i] += (target - hot[i]) * 0.12;
       nodeHot[i] = hot[i];
     });
