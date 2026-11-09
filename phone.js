@@ -44,27 +44,25 @@ const CLIPS = {
     // Still only: the recording showed the "Get a reading" switch.
     video: false,
     still: 'assets/app/04-journal.webp',
-    alt: "The journal: ten entries on a timeline, each tagged by kind, with the time it happened and the time it was logged.",
-    tap: [29, 46],
+    alt: "The journal: entries on a timeline, each tagged by kind, with the time it happened and the time it was written.",
+    tap: [50, 89],
   },
   tarot: {
     label: 'Tarot',
-    // The lead's dedicated tarot capture, if it has been dropped in.
-    prefer: 'assets/app/08-tarot.webp',
-    still: 'assets/app/05-perspectives.webp',
+    still: 'assets/app/08-tarot.webp',
     alt: 'A three-card tarot draw for a dream: the Queen of Pentacles, the Hermit and the Hanged Man, for what is emerging, hidden and invited.',
     tap: [17, 49],
   },
   patterns: {
     label: 'Patterns',
     still: 'assets/app/03-insights-timeline.webp',
-    alt: "The Insights screen: ten entries counted by kind, and a timeline placing each one against the moon's phase.",
+    alt: "The Insights screen: entries counted by kind, and a timeline placing each one against the moon's phase.",
     tap: [70, 90],
   },
   collectives: {
     label: 'Collectives',
     still: 'assets/app/02-follow-filled-heart.webp',
-    alt: 'The Social screen: people you can follow in the shared sky, each row a name and a follow control.',
+    alt: 'The Collectives tab: groups to discover, each with a short description, its member count and a Join button.',
     tap: [90, 90],
   },
 };
