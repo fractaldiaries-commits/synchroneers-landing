@@ -261,8 +261,8 @@ main > section:not(.hero):not(.closing) {
   --border-soft: rgba(22, 26, 69, 0.14);
   --hairline: rgba(22, 26, 69, 0.14);
   --veil: transparent;
-  --accent: #c2255f;
-  --accent-fill: #c2255f;
+  --accent: #5a24a8;
+  --accent-fill: #5a24a8;
   --violet-soft: #4f2f82;
   /* Panels read as solid night glass on the twilight rather than grey. */
   --card: rgba(13, 20, 48, 0.88);
@@ -299,10 +299,10 @@ main > section:not(.hero):not(.closing) {
   color: #fff;
 }
 
-/* Emphasis in a section heading, a shade deeper than the hero's pink so it
+/* Emphasis in a section heading, a shade deeper than the hero's purple so it
    holds on the lighter middle of the twilight. */
 main > section:not(.hero):not(.closing) .section-head h2 .glow {
-  color: #9e1149;
+  color: #4c1d95;
 }
 
 /* The kind icons keep their own colours on a dark tile; on the twilight the
@@ -426,9 +426,9 @@ main > section:not(.hero):not(.closing) .pattern-node__label {
 
 .masthead[data-stuck='false'] .btn--primary,
 .masthead[data-stuck='false'] .btn--primary:hover {
-  background: #d63a48;
+  background: #6d28d9;
   color: #fff;
-  box-shadow: 0 8px 24px -10px rgba(217, 45, 106, 0.55);
+  box-shadow: 0 8px 24px -10px rgba(109, 40, 217, 0.5);
 }
 
 .brand {
@@ -657,7 +657,7 @@ main > section:not(.hero):not(.closing) .pattern-node__label {
   --dusk-text: #161a45;
   --dusk-text-soft: #34386c;
   --dusk-said: #4f2f82;
-  --dusk-glow: #a8134f;
+  --dusk-glow: #5b21b6;
   --accent: var(--dusk-glow);
 }
 
@@ -1237,7 +1237,8 @@ main > section:not(.hero):not(.closing) .pattern-node__label {
 
 .evidence {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 720px;
   gap: clamp(16px, 2vw, 24px);
   align-items: start;
   margin-top: clamp(16px, 2vw, 24px);
@@ -1316,28 +1317,6 @@ main > section:not(.hero):not(.closing) .pattern-node__label {
     border-color: var(--accent-fill);
     color: var(--white);
   }
-}
-
-.counter {
-  border-color: rgba(242, 185, 103, 0.3);
-}
-
-.counter .panel__head {
-  border-bottom-color: rgba(242, 185, 103, 0.2);
-}
-
-.counter .kicker {
-  color: var(--amber);
-}
-
-.counter p:not(.kicker) {
-  color: var(--text-muted);
-  font-size: 0.96rem;
-  line-height: 1.55;
-}
-
-.counter .cite::before {
-  background: var(--amber);
 }
 
 /* The Insights pattern card, rebuilt in markup so its chart draws. */
