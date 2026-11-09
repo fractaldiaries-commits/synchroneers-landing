@@ -211,9 +211,15 @@ function buildRegistry() {
 
 /* ---------------- Capture tabs ----------------
    A tablist rather than four cards, because picking a kind of experience is
-   exactly the choice the capture screen asks for. Switching is a high-frequency
-   action inside the app, so the panel crossfades in one press-length step and
-   nothing waits on it. */
+   exactly the choice the capture screen asks for. It drives the composer card
+   beside it: one highlight slides between the rows, and the card's dot, name
+   and placeholder change in place. Saving sends the card's content into the
+   phone's journal as its newest row.
+
+   Everything here is interruptible. A new pick while the highlight is moving
+   just retargets it; a second Save while one is flying finishes the first. */
+
+const EASE_OUT = 'cubic-bezier(0.23, 1, 0.32, 1)';
 
 function initTabs() {
   const tablist = document.getElementById('typeTabs');
@@ -221,24 +227,45 @@ function initTabs() {
   if (!tablist || !panel) return;
 
   const tabs = Array.from(tablist.querySelectorAll('[role="tab"]'));
+  const highlight = tablist.querySelector('.type-list__highlight');
   const promptTarget = panel.querySelector('[data-capture-prompt]');
   const nameTarget = panel.querySelector('[data-capture-name]');
+  const saveButton = panel.querySelector('[data-capture-save]');
+  let selected = tabs[0];
 
   // Each kind carries its own accent from ENTRY_TYPE_PRESENTATION. Without
   // this every glyph and selected row rendered in the dream violet.
   for (const tab of tabs) tab.style.setProperty('--accent', tab.dataset.accent);
 
+  /** Park the one highlight behind the selected row. Position and size only. */
+  function moveHighlight() {
+    if (!highlight) return;
+    highlight.style.setProperty('--accent', selected.dataset.accent);
+    highlight.style.transform = `translate3d(0, ${selected.offsetTop}px, 0)`;
+    highlight.style.height = `${selected.offsetHeight}px`;
+  }
+
+  /** Change a piece of text in place: the new words fade up where the old ones were. */
+  function settle(node, text) {
+    if (!node || node.textContent === text) return;
+    node.textContent = text;
+    if (reduceMotion.matches) return;
+    node.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 220, easing: EASE_OUT });
+  }
+
   function select(tab, { focus = false } = {}) {
+    selected = tab;
     for (const other of tabs) {
-      const selected = other === tab;
-      other.setAttribute('aria-selected', String(selected));
-      other.tabIndex = selected ? 0 : -1;
+      const on = other === tab;
+      other.setAttribute('aria-selected', String(on));
+      other.tabIndex = on ? 0 : -1;
     }
 
     panel.style.setProperty('--accent', tab.dataset.accent);
     panel.setAttribute('aria-labelledby', tab.id);
-    if (nameTarget) nameTarget.textContent = tab.dataset.name;
-    if (promptTarget) promptTarget.textContent = tab.dataset.prompt;
+    settle(nameTarget, tab.dataset.name);
+    settle(promptTarget, tab.dataset.prompt);
+    moveHighlight();
 
     if (focus) tab.focus();
   }
@@ -265,6 +292,120 @@ function initTabs() {
   });
 
   select(tabs[0]);
+  // The first placement is not animated; the transition is switched on after it.
+  window.requestAnimationFrame(() => highlight?.classList.add('is-ready'));
+  if ('ResizeObserver' in window) new ResizeObserver(moveHighlight).observe(tablist);
+  document.fonts?.ready.then(moveHighlight);
+
+  /* ---------- Save: the card flies into the journal ---------- */
+
+  const stageShot = document.querySelector('#kinds .phone-screen');
+  if (!saveButton || !stageShot) return;
+
+  const row = document.createElement('div');
+  row.className = 'journal-row';
+  row.setAttribute('aria-hidden', 'true');
+  row.innerHTML =
+    '<span class="journal-row__glyph"></span><span class="journal-row__text">' +
+    '<span class="journal-row__meta"><span data-row-kind></span><span>Just now</span></span>' +
+    '<span class="journal-row__title" data-row-title></span></span>';
+  stageShot.append(row);
+
+  let flight = null;
+
+  /** End a flight now: row shown, clone gone, card back to its resting state. */
+  function land() {
+    if (!flight) return;
+    const { clone, animations } = flight;
+    flight = null;
+    for (const animation of animations) animation.cancel();
+    clone.remove();
+    row.classList.add('is-on');
+    panel.classList.remove('is-sending');
+    if (promptTarget && selected) promptTarget.textContent = selected.dataset.prompt;
+    promptTarget?.classList.remove('is-typed');
+    for (const child of panel.children) {
+      child.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 240, easing: EASE_OUT });
+    }
+  }
+
+  saveButton.addEventListener('click', () => {
+    land();
+
+    const tab = selected;
+    row.style.setProperty('--accent', tab.dataset.accent);
+    row.querySelector('.journal-row__glyph').textContent = tab.dataset.glyph;
+    row.querySelector('[data-row-kind]').textContent = tab.dataset.name;
+    row.querySelector('[data-row-title]').textContent = tab.dataset.sample;
+
+    // The card shows what was written, so what flies is the entry.
+    promptTarget.textContent = tab.dataset.sample;
+    promptTarget.classList.add('is-typed');
+
+    const from = panel.getBoundingClientRect();
+    row.classList.remove('is-on');
+    const to = row.getBoundingClientRect();
+
+    const onScreen = to.width > 0 && to.bottom > 0 && to.top < window.innerHeight && to.right > 0 && to.left < window.innerWidth;
+
+    if (reduceMotion.matches) {
+      row.classList.add('is-on');
+      promptTarget.textContent = tab.dataset.prompt;
+      promptTarget.classList.remove('is-typed');
+      return;
+    }
+
+    const clone = panel.cloneNode(true);
+    clone.removeAttribute('id');
+    clone.removeAttribute('role');
+    clone.removeAttribute('tabindex');
+    clone.setAttribute('aria-hidden', 'true');
+    clone.classList.add('capture-mock--flying');
+    clone.style.cssText += `;position:fixed;left:${from.left}px;top:${from.top}px;width:${from.width}px;height:${from.height}px;margin:0;z-index:60;pointer-events:none;transform-origin:0 0`;
+    document.body.append(clone);
+    panel.classList.add('is-sending');
+
+    // Scale and move are one transform from the card's rect to the row's rect.
+    // When the phone is off screen there is nowhere to fly to, so the card
+    // sinks and fades towards it instead.
+    const end = onScreen
+      ? `translate(${to.left - from.left}px, ${to.top - from.top}px) scale(${to.width / from.width}, ${to.height / from.height})`
+      : `translate(0, ${Math.min(120, window.innerHeight - from.top)}px) scale(0.92, 0.92)`;
+
+    const animations = [
+      clone.animate([{ transform: 'none' }, { transform: end }], {
+        duration: 560,
+        easing: 'cubic-bezier(0.32, 0.72, 0, 1)',
+        fill: 'forwards',
+      }),
+      // The words go first; the shape carries on and becomes the row.
+      ...Array.from(clone.children, (child) =>
+        child.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, easing: 'linear', fill: 'forwards' }),
+      ),
+      clone.animate([{ opacity: 1 }, { opacity: 1, offset: 0.7 }, { opacity: 0 }], {
+        duration: 560,
+        easing: 'linear',
+        fill: 'forwards',
+      }),
+    ];
+    flight = { clone, animations };
+
+    if (onScreen) {
+      animations.push(
+        row.animate([{ opacity: 0 }, { opacity: 0, offset: 0.55 }, { opacity: 1 }], {
+          duration: 560,
+          easing: 'linear',
+          fill: 'forwards',
+        }),
+      );
+    }
+
+    const mine = flight;
+    // The timer is the backstop: a page that is not being painted may never
+    // finish its animations, and the card must still come back.
+    animations[0].finished.then(() => flight === mine && land()).catch(() => {});
+    window.setTimeout(() => flight === mine && land(), 700);
+  });
 }
 
 /* ---------------- Spoken readings ----------------
@@ -561,9 +702,10 @@ function initDepth() {
 /* ---------------- Boot ---------------- */
 
 buildRegistry();
+// Phones first: the capture card sends its entry into the phone's screen.
+initPhones();
 initTabs();
 initVoices();
-initPhones();
 initPatternsUI();
 initInsights();
 initMasthead();
