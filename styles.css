@@ -3059,7 +3059,7 @@ main > section:not(.hero):not(.closing) .pattern-node__label {
 }
 
 .pattern-node[data-state='dim'] .pattern-node__label {
-  opacity: 0.5;
+  opacity: 0.75;
 }
 
 .pattern-node__label {
