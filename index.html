@@ -217,21 +217,24 @@
                   <div
                     class="patterns-stage"
                     id="patternStage"
+                    data-sky-mask
                     role="group"
                     aria-label="A constellation of six recurring themes from a sample journal. Choose a theme to read two of its entries."
                   ></div>
                 </div>
 
-                <aside class="pattern-card" id="patternCard" aria-live="polite">
-                  <p class="pattern-card__empty" data-empty>
-                    Hover, tap, or tab to a theme to see how often it came up and the entries behind it.
-                  </p>
-                  <div data-body hidden>
+                <aside class="pattern-card" id="patternCard" data-sky-mask>
+                  <p class="pattern-card__announce" data-announce aria-live="polite"></p>
+                  <div class="pattern-card__body" data-body>
                     <p class="kicker">A pattern, not a verdict</p>
                     <h4 class="pattern-card__title" data-title></h4>
-                    <p class="pattern-card__meta" data-meta></p>
+                    <p class="pattern-card__meta" aria-hidden="true">
+                      <span class="pattern-card__count" data-count>6</span>
+                      <span data-meta>entries in this sample journal</span>
+                    </p>
                     <ul class="pattern-card__entries" data-entries></ul>
                   </div>
+                  <p class="pattern-card__hint">Hover, tap, or tab to another theme to read its entries.</p>
                   <p class="pattern-card__note">
                     A pattern needs at least two supporting entries, and links back to them. These
                     entries are made up for illustration.
@@ -249,7 +252,7 @@
                 <div
                   class="insights-panel"
                   role="img"
-                  aria-label="Sample chart: entries per week rise from 3 in the first week to 10 in the eighth, mostly dreams, with some synchronicities, visions and readings."
+                  aria-label="Sample chart: entries per week rise from 3 in the first week to 10 in the eighth, mostly dreams, with some synchronicities, visions and oracle entries."
                 >
                   <p class="insights-panel__title">Entries each week</p>
                   <ol class="insights-bars">
@@ -298,7 +301,7 @@
                     <li><i class="k k--dream"></i>Dream</li>
                     <li><i class="k k--sync"></i>Synchronicity</li>
                     <li><i class="k k--vision"></i>Vision</li>
-                    <li><i class="k k--reading"></i>Reading</li>
+                    <li><i class="k k--reading"></i>Oracle</li>
                   </ul>
                 </div>
 
@@ -448,117 +451,128 @@
         <section class="section" id="kinds">
           <div class="wrap">
             <div class="types">
-              <div class="type-list" role="tablist" aria-label="Kinds of experience" id="typeTabs">
-                <button
-                  class="type-tab"
-                  role="tab"
-                  id="tab-dream"
-                  aria-controls="capturePanel"
-                  aria-selected="true"
-                  data-accent="var(--violet-soft)"
-                  data-glyph="☾"
-                  data-prompt="What do you remember? Start anywhere…"
-                  data-name="Dream"
-                >
-                  <span class="type-tab__glyph" aria-hidden="true">☾</span>
-                  <span class="type-tab__name">Dream</span>
-                  <span class="type-tab__tag">Catch it before it fades.</span>
-                </button>
-
-                <button
-                  class="type-tab"
-                  role="tab"
-                  id="tab-synchronicity"
-                  aria-controls="capturePanel"
-                  aria-selected="false"
-                  tabindex="-1"
-                  data-accent="var(--amber)"
-                  data-glyph="✦"
-                  data-prompt="What happened, and what made it feel meaningful?"
-                  data-name="Synchronicity"
-                >
-                  <span class="type-tab__glyph" aria-hidden="true">✦</span>
-                  <span class="type-tab__name">Synchronicity</span>
-                  <span class="type-tab__tag">A coincidence that landed.</span>
-                </button>
-
-                <button
-                  class="type-tab"
-                  role="tab"
-                  id="tab-vision"
-                  aria-controls="capturePanel"
-                  aria-selected="false"
-                  tabindex="-1"
-                  data-accent="var(--indigo-light)"
-                  data-glyph="◉"
-                  data-prompt="What came through, and what were you doing when it did?"
-                  data-name="Vision"
-                >
-                  <span class="type-tab__glyph" aria-hidden="true">◉</span>
-                  <span class="type-tab__name">Vision</span>
-                  <span class="type-tab__tag">Sit with a vision or download.</span>
-                </button>
-
-                <button
-                  class="type-tab"
-                  role="tab"
-                  id="tab-reading"
-                  aria-controls="capturePanel"
-                  aria-selected="false"
-                  tabindex="-1"
-                  data-accent="var(--violet)"
-                  data-glyph="✧"
-                  data-prompt="Add details of tarot, passages from sacred texts, or any other readings you have taken."
-                  data-name="Reading"
-                >
-                  <span class="type-tab__glyph" aria-hidden="true">✧</span>
-                  <span class="type-tab__name">Reading</span>
-                  <span class="type-tab__tag">Tarot, passages, and more.</span>
-                </button>
-              </div>
-
-              <div
-                class="capture-mock"
-                id="capturePanel"
-                role="tabpanel"
-                aria-labelledby="tab-dream"
-                tabindex="0"
-              >
-                <div class="capture-mock__head">
-                  <span class="capture-mock__title">
-                    <span class="dot" aria-hidden="true"></span>
-                    <span data-capture-name>Dream</span>
-                  </span>
-                  <span class="mono" data-capture-state>Saved · 21:04</span>
-                </div>
-
-                <p class="capture-mock__prompt">
-                  <span data-capture-prompt>What do you remember? Start anywhere…</span
-                  ><span class="caret" aria-hidden="true"></span>
-                </p>
-
-                <div class="capture-mock__controls">
-                  <span class="chip">Analyse</span>
-                  <span class="chip">Share</span>
-                  <span class="chip chip--on">Keep private</span>
-                  <span class="btn btn--ghost btn--sm capture-mock__save" aria-hidden="true"
-                    >Save entry</span
+              <div class="types__compose">
+                <div class="type-list" role="tablist" aria-label="Kinds of experience" id="typeTabs">
+                  <span class="type-list__highlight" aria-hidden="true"></span>
+                  <button
+                    class="type-tab"
+                    role="tab"
+                    type="button"
+                    id="tab-dream"
+                    aria-controls="capturePanel"
+                    aria-selected="true"
+                    data-accent="var(--violet-soft)"
+                    data-glyph="☾"
+                    data-prompt="What do you remember? Start anywhere…"
+                    data-name="Dream"
+                    data-sample="The river ran the other way, slow and wide."
                   >
+                    <span class="type-tab__glyph" aria-hidden="true">☾</span>
+                    <span class="type-tab__name">Dream</span>
+                    <span class="type-tab__tag">Catch it before it fades.</span>
+                  </button>
+
+                  <button
+                    class="type-tab"
+                    role="tab"
+                    type="button"
+                    id="tab-synchronicity"
+                    aria-controls="capturePanel"
+                    aria-selected="false"
+                    tabindex="-1"
+                    data-accent="var(--amber)"
+                    data-glyph="✦"
+                    data-prompt="What happened, and what made it feel meaningful?"
+                    data-name="Synchronicity"
+                    data-sample="11:11 on the oven clock just as the phone rang."
+                  >
+                    <span class="type-tab__glyph" aria-hidden="true">✦</span>
+                    <span class="type-tab__name">Synchronicity</span>
+                    <span class="type-tab__tag">A coincidence that landed.</span>
+                  </button>
+
+                  <button
+                    class="type-tab"
+                    role="tab"
+                    type="button"
+                    id="tab-vision"
+                    aria-controls="capturePanel"
+                    aria-selected="false"
+                    tabindex="-1"
+                    data-accent="var(--indigo-light)"
+                    data-glyph="◉"
+                    data-prompt="What came through, and what were you doing when it did?"
+                    data-name="Vision"
+                    data-sample="Lifted above the town, no fear, only quiet."
+                  >
+                    <span class="type-tab__glyph" aria-hidden="true">◉</span>
+                    <span class="type-tab__name">Vision</span>
+                    <span class="type-tab__tag">Sit with a vision or download.</span>
+                  </button>
+
+                  <button
+                    class="type-tab"
+                    role="tab"
+                    type="button"
+                    id="tab-oracle"
+                    aria-controls="capturePanel"
+                    aria-selected="false"
+                    tabindex="-1"
+                    data-accent="var(--violet)"
+                    data-glyph="✧"
+                    data-prompt="Details of scripture, tarot, oracle, or other readings you've received."
+                    data-name="Oracle"
+                    data-sample="The Hermit, drawn twice this week."
+                  >
+                    <span class="type-tab__glyph" aria-hidden="true">✧</span>
+                    <span class="type-tab__name">Oracle</span>
+                    <span class="type-tab__tag">Tarot, passages, and more.</span>
+                  </button>
+                </div>
+
+                <div
+                  class="capture-mock"
+                  id="capturePanel"
+                  role="tabpanel"
+                  aria-labelledby="tab-dream"
+                  tabindex="0"
+                >
+                  <div class="capture-mock__head">
+                    <span class="capture-mock__title">
+                      <span class="dot" aria-hidden="true"></span>
+                      <span data-capture-name>Dream</span>
+                    </span>
+                    <span class="mono" data-capture-state>Saved · 21:04</span>
+                  </div>
+
+                  <p class="capture-mock__prompt">
+                    <span data-capture-prompt>What do you remember? Start anywhere…</span
+                    ><span class="caret" aria-hidden="true"></span>
+                  </p>
+
+                  <div class="capture-mock__controls">
+                    <span class="chip">Analyse</span>
+                    <span class="chip">Share</span>
+                    <span class="chip chip--on">Keep private</span>
+                    <button class="btn btn--ghost btn--sm capture-mock__save" type="button" data-capture-save>
+                      Save
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div class="showcase__art reveal" data-delay="2">
-              <figure class="shot" data-phone="capture">
-                <img
-                  src="assets/app/04-journal.webp"
-                  alt="The journal: entries on a timeline, each tagged by kind, with the time it happened and the time it was written."
-                  width="640"
-                  height="1391"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </figure>
+              <div class="showcase__art reveal" data-delay="2">
+                <figure class="shot" data-phone="capture">
+                  <img
+                    src="assets/app/04-journal.webp"
+                    alt="The journal: entries on a timeline, each tagged by kind, with the time it happened and the time it was written."
+                    width="640"
+                    height="1391"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </figure>
+              </div>
             </div>
           </div>
           <div class="wrap section-cta reveal">
