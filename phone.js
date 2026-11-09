@@ -212,6 +212,7 @@ function buildPhone(shot) {
     }
 
     current = name;
+    screen.dataset.clip = name;
     lastTime = 0;
     dropVideo();
     image.alt = clip.alt;
@@ -219,7 +220,8 @@ function buildPhone(shot) {
     // Prefer the real poster, then a dedicated capture; keep the existing
     // still if neither is there yet.
     image.src = clip.still;
-    const candidates = [`${VIDEO_BASE}${name}.webp`, clip.prefer].filter(Boolean);
+    // A stills-only clip has no poster to look for; asking would only log a 404.
+    const candidates = [clip.video === false ? null : `${VIDEO_BASE}${name}.webp`, clip.prefer].filter(Boolean);
     candidates
       .reduce((chain, url) => chain.catch(() => probe(url)), Promise.reject())
       .then((url) => {
