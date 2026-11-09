@@ -457,6 +457,10 @@ function boot(canvas) {
         uColor: { value: new THREE.Color('#9a7cff') },
         uForward: { value: new THREE.Vector3(0, 0, -1) },
         uOpacity: { value: 0 },
+        // Screen rectangles (device pixels, x0 y0 x1 y1) the figures fade
+        // behind: the pattern chart and its panel. Empty rects are 0,0,0,0.
+        uMask: { value: [new THREE.Vector4(), new THREE.Vector4(), new THREE.Vector4()] },
+        uFeather: { value: 60 },
       },
       vertexShader: /* glsl */ `
         uniform vec3 uForward;
@@ -472,9 +476,23 @@ function boot(canvas) {
         precision mediump float;
         uniform vec3 uColor;
         uniform float uOpacity;
+        uniform vec4 uMask[3];
+        uniform float uFeather;
         varying float vFade;
         void main() {
-          float alpha = vFade * uOpacity;
+          // Fade to a trace inside a masked rectangle, easing back to full
+          // strength over uFeather pixels outside it.
+          float keep = 1.0;
+          for (int i = 0; i < 3; i++) {
+            vec4 r = uMask[i];
+            vec2 centre = (r.xy + r.zw) * 0.5;
+            vec2 hs = (r.zw - r.xy) * 0.5;
+            vec2 q = abs(gl_FragCoord.xy - centre) - hs;
+            float outside = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0);
+            float hole = 1.0 - smoothstep(0.0, uFeather, outside);
+            keep *= 1.0 - hole * 0.92 * step(1.0, hs.x);
+          }
+          float alpha = vFade * uOpacity * keep;
           if (alpha < 0.004) discard;
           gl_FragColor = vec4(uColor, alpha);
         }
@@ -512,6 +530,53 @@ function boot(canvas) {
   const forward = new THREE.Vector3();
   const candidates = [];
 
+  /* ---------------- Masks ----------------
+     Elements marked data-sky-mask (the pattern chart and its panel) sit in
+     front of the figures. The figures fade out behind them and the names
+     step aside, so a name such as Monoceros never lands on a chart label.
+     Rectangles are in CSS pixels for the labels, in device pixels for the
+     shader. */
+
+  const MASK_SLOTS = 3;
+  const maskElements = Array.from(document.querySelectorAll('[data-sky-mask]')).slice(0, MASK_SLOTS);
+  const maskRects = [];
+  const FEATHER = 60;
+
+  function updateMasks(width, height, pixelRatio) {
+    maskRects.length = 0;
+    const slots = figures.material.uniforms.uMask.value;
+    slots.forEach((slot, i) => {
+      const element = maskElements[i];
+      const box = element && element.getBoundingClientRect();
+      if (!box || box.width === 0 || box.bottom < -FEATHER || box.top > height + FEATHER) {
+        slot.set(0, 0, 0, 0);
+        return;
+      }
+      maskRects.push(box);
+      slot.set(
+        box.left * pixelRatio,
+        (height - box.bottom) * pixelRatio,
+        box.right * pixelRatio,
+        (height - box.top) * pixelRatio,
+      );
+    });
+    figures.material.uniforms.uFeather.value = FEATHER * pixelRatio;
+  }
+
+  /** 0 inside a masked rectangle (and a label's width beyond it), 1 clear of it. */
+  function maskClear(x, y) {
+    let clear = 1;
+    for (const box of maskRects) {
+      const dx = Math.max(box.left - 70 - x, 0, x - box.right - 70);
+      const dy = Math.max(box.top - 24 - y, 0, y - box.bottom - 24);
+      const outside = Math.hypot(dx, dy);
+      const inside = x > box.left && x < box.right && y > box.top && y < box.bottom;
+      const t = inside ? 0 : Math.min(1, outside / FEATHER);
+      clear = Math.min(clear, t * t * (3 - 2 * t));
+    }
+    return clear;
+  }
+
   function updateLabels(width, height) {
     camera.getWorldDirection(forward);
     candidates.length = 0;
@@ -547,7 +612,9 @@ function boot(canvas) {
       node.textContent = entry.label.name;
       node.style.transform = `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
       const strength = Math.min(0.5, (entry.alignment - 0.9) * 6);
-      node.style.opacity = String(strength * figureOpacity * (1 - director.state.film));
+      // The tag is drawn 2.6em above its star; test where it actually sits.
+      const clear = maskClear(x, y - 36);
+      node.style.opacity = String(strength * figureOpacity * (1 - director.state.film) * clear);
     }
   }
 
@@ -684,7 +751,18 @@ function boot(canvas) {
     pointerTarget.y = -((event.clientY / window.innerHeight) * 2 - 1);
   }
 
+  let stillQueued = false;
+
   function onScroll() {
+    // Reduced motion draws one still frame, so the fade behind the pattern
+    // chart has to be redrawn by hand as the page moves under it.
+    if (reduceMotion.matches && raf === 0 && maskElements.length && !stillQueued) {
+      stillQueued = true;
+      requestAnimationFrame(() => {
+        stillQueued = false;
+        if (raf === 0) drawFrame(0);
+      });
+    }
     const total = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
     scrollTarget = Math.min(1, window.scrollY / total);
   }
@@ -741,6 +819,7 @@ function boot(canvas) {
   function drawFrame(time) {
     aim(time);
 
+    updateMasks(window.innerWidth, window.innerHeight, renderer.getPixelRatio());
     camera.getWorldDirection(forward);
     figures.material.uniforms.uForward.value.copy(forward);
     figures.material.uniforms.uOpacity.value = figureOpacity;
