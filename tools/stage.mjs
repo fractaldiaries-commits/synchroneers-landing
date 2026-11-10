@@ -44,6 +44,8 @@ for (const file of [
   'patterns.js',
   'privacy.html',
   'terms.html',
+  'robots.txt',
+  'sitemap.xml',
 ]) {
   cpSync(join(root, file), join(out, file));
 }
