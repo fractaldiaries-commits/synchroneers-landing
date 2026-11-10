@@ -2504,8 +2504,7 @@ main > section:not(.hero):not(.closing) .pattern-node__label {
    If the 3D module fails, tarot--failed puts the plain section back. */
 @media (prefers-reduced-motion: no-preference) {
   html.webgl .tarot:not(.tarot--failed) {
-    height: 290vh;
-    padding: 0;
+    padding: 0 0 var(--section-y);
     background: linear-gradient(
       180deg,
       var(--veil) 0,
@@ -2515,8 +2514,14 @@ main > section:not(.hero):not(.closing) .pattern-node__label {
     );
   }
 
+  /* The track is the scroll the pin stays stuck for. The phone comes after
+     it, so it never passes over the cards while they are turning. */
+  html.webgl .tarot:not(.tarot--failed) .tarot-track {
+    height: 290vh;
+  }
+
   @supports (height: 100svh) {
-    html.webgl .tarot:not(.tarot--failed) {
+    html.webgl .tarot:not(.tarot--failed) .tarot-track {
       height: 290svh;
     }
   }
