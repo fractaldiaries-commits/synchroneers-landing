@@ -34,6 +34,13 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
 
 /**
+ * Appended to every screenshot and clip URL. Files under /assets are cached
+ * for a long time, so a replaced screenshot keeps its old picture for returning
+ * visitors unless the URL changes. Bump this whenever a file here is replaced.
+ */
+const ASSET_VERSION = '?v=20261110';
+
+/**
  * The four clips. `still` is the fallback screenshot, `alt` describes it (it is
  * the existing alt text for that screenshot), and `tap` is where the first tap
  * lands, as [x%, y%] of the screen.
@@ -43,25 +50,25 @@ const CLIPS = {
     label: 'Capture',
     // Still only: the recording showed the "Get a reading" switch.
     video: false,
-    still: 'assets/app/04-journal.webp',
+    still: `assets/app/04-journal.webp${ASSET_VERSION}`,
     alt: "The journal: entries on a timeline, each tagged by kind, with the time it happened and the time it was written.",
     tap: [50, 89],
   },
   tarot: {
     label: 'Tarot',
-    still: 'assets/app/08-tarot.webp',
+    still: `assets/app/08-tarot.webp${ASSET_VERSION}`,
     alt: 'A three-card tarot draw for a dream: the Queen of Pentacles, the Hermit and the Hanged Man, for what is emerging, hidden and invited.',
     tap: [17, 49],
   },
   patterns: {
     label: 'Patterns',
-    still: 'assets/app/03-insights-timeline.webp',
+    still: `assets/app/03-insights-timeline.webp${ASSET_VERSION}`,
     alt: "The Insights screen: entries counted by kind, and a timeline placing each one against the moon's phase.",
     tap: [70, 90],
   },
   collectives: {
     label: 'Collectives',
-    still: 'assets/app/02-follow-filled-heart.webp',
+    still: `assets/app/02-follow-filled-heart.webp${ASSET_VERSION}`,
     alt: 'The Collectives tab: groups to discover, each with a short description, its member count and a Join button.',
     tap: [90, 90],
   },
@@ -185,7 +192,7 @@ function buildPhone(shot) {
       lastTime = element.currentTime;
     });
 
-    element.src = `${VIDEO_BASE}${name}.mp4`;
+    element.src = `${VIDEO_BASE}${name}.mp4${ASSET_VERSION}`;
     screen.insertBefore(element, tap);
     video = element;
 
@@ -221,7 +228,7 @@ function buildPhone(shot) {
     // still if neither is there yet.
     image.src = clip.still;
     // A stills-only clip has no poster to look for; asking would only log a 404.
-    const candidates = [clip.video === false ? null : `${VIDEO_BASE}${name}.webp`, clip.prefer].filter(Boolean);
+    const candidates = [clip.video === false ? null : `${VIDEO_BASE}${name}.webp${ASSET_VERSION}`, clip.prefer].filter(Boolean);
     candidates
       .reduce((chain, url) => chain.catch(() => probe(url)), Promise.reject())
       .then((url) => {
