@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "installCommand": "",
-  "buildCommand": "node tools/stage.mjs https://synchroneers.com",
+  "buildCommand": "node tools/stage.mjs https://www.synchroneers.com",
   "outputDirectory": "dist/site",
   "cleanUrls": true,
   "trailingSlash": false,
