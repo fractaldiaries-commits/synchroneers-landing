@@ -201,6 +201,9 @@ function drawBack(ctx, w, h, logo) {
  *                 captions: the three caption elements, shown as cards turn
  */
 export function createTarot(THREE, renderer, { section, slots, extras, captions }) {
+  // The pinned part of the section. The phone below it is not part of the
+  // animation, so progress and the fade are measured on the track alone.
+  const track = section.querySelector('.tarot-track') || section;
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(30, 1, 10, 6000);
   const FOV_TAN = Math.tan((30 * Math.PI) / 360);
@@ -458,15 +461,16 @@ export function createTarot(THREE, renderer, { section, slots, extras, captions 
       return false;
     }
 
-    // Progress through the pin. The section is taller than the screen by
+    // Progress through the pin. The track is taller than the screen by
     // exactly the scroll the pin consumes.
-    const travel = Math.max(1, bounds.height - H);
-    const p = Math.min(1, Math.max(0, -bounds.top / travel));
+    const pinned = track.getBoundingClientRect();
+    const travel = Math.max(1, pinned.height - H);
+    const p = Math.min(1, Math.max(0, -pinned.top / travel));
 
-    // Fade with the section's position, so the deck arrives and the spread
+    // Fade with the track's position, so the deck arrives and the spread
     // leaves rather than being cut by the viewport edge.
     const visible =
-      smooth(H, H * 0.45, bounds.top) * smooth(0, H * 0.5, bounds.bottom);
+      smooth(H, H * 0.45, pinned.top) * smooth(0, H * 0.5, pinned.bottom);
 
     const t = director.time;
     const slotRects = slots.map((image) => image.getBoundingClientRect());
